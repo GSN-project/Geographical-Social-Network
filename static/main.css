@@ -1,0 +1,205 @@
+﻿
+/*стили шапки*/
+body{
+    font-size: 1em;
+    margin: 0;
+-   padding: 0;
+    background-size: 100%;
+    background-color: #E7EBF0;
+}
+header {
+    width: 100%;
+    height: 55px;
+    background: #3B3B3B;
+}
+
+header .title {
+  width: 25%;
+  float: left;
+  padding: 10px;
+}
+
+header .title a{
+  display: block;
+  text-decoration: none;
+  font-size: 25px;
+  color: #fff;
+}
+
+#main-menu {
+    list-style: none;
+    float: right;
+    margin: 8px 70px 8px 0;
+}
+
+#main-menu li a {
+    width: 200px;
+    display: block;
+    padding: 10px;
+    color: #fff;
+    background: #525252;
+    text-decoration: none;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+#main-menu ul {
+    list-style: none;
+    position: absolute;
+    display: none;
+}
+
+#main-menu li a:hover {
+    background: rgba(89,95,189,0.85);
+}
+
+
+
+#main-menu li:hover ul {
+    display: block;
+}
+
+header .logo {
+  float: right;
+  margin-top: 5px;
+}
+/*стили друзей*/
+.list {
+    width: 930px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 3px #999999;
+    background: #F3F3F1;
+}
+
+.list-1{
+    width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 3px #999999;
+    background: #F3F3F1;
+}
+
+.list a{
+    text-decoration: none;
+    font-size: 16px;
+}
+
+h2{
+    display: inline;
+    font-size: 25px;
+    font-family: "Century Gothic", serif;
+    background: #F3F3F1;
+    color: #3B3B3B;
+}
+
+.friends{
+    border-top: 1.5px solid #E3E3E3;
+    width: 100%;
+    height: 80px;
+    border-radius: 4px;
+}
+
+.avatar {
+    float: left;
+    width: 80px;
+    height: 80px;
+}
+
+.avatar img{
+    width: 100%;
+    height: 100%;
+}
+
+.friend-menu a{
+    float:right;
+    widht:10px;
+    margin-right: 10px;
+    color: #444444;
+}
+
+.message a{
+    width: 170px;
+    height: 25px;
+    font-size: 16px;
+    border: 1px solid #444444;
+    border-radius: 5px;
+    background-color: #74D27F;
+    text-align: center;
+    float: left;
+    margin: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.name a{
+    color: #444444;
+}
+
+
+/*стили таблицы профилей*/
+
+caption{
+   color: #525252;
+   text-transform: uppercase;
+   font-weight: bolder;
+   font-size: 200%;
+   margin-top: 30px;
+ }
+
+ .name{
+   color: maroon;
+}
+
+.round{
+   border-radius: 100px; /* Радиус скругления */
+}
+
+/*стили заметок*/
+
+.notes{
+    width: 930px;
+    margin: 2px auto;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 0 3px #999999;
+    background: #F3F3F1;
+}
+.photo{
+    display: inline-block;
+    width: 250px;
+    height: 250px;
+    margin: 35px 15px;
+}
+
+.photo-1{
+    width: 240px;
+    height: 240px;
+   }
+.image {
+    border-radius: 10px;
+    box-shadow: 0 0 12px #999999;
+}
+
+figcaption{
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 0 18px #999999;
+    border-radius: 5px;
+}
+
+h3 {
+    display: inline;
+    margin-left: 250px;
+    font-size: 25px;
+    color: #3B3B3B;
+    font-family: "Century Gothic", serif;
+}
+
+h4 {
+    display: inline;
+    margin: 250px;
+
+    font-size: 20px;
+    color: #3B3B3B;
+    font-family: "Century Gothic", serif;
+}
