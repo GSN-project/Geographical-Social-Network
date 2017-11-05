@@ -2,7 +2,7 @@
 body{
     font-size: 1em;
     margin: 0;
-    padding: 0;
+-   padding: 0;
     background-size: 100%;
     background-color: #E7EBF0;
 }
@@ -50,13 +50,12 @@ header .title a{
 
 #main-menu li a:hover {
     background: rgba(89,95,189,0.85);
-
 }
+
+
 
 #main-menu li:hover ul {
     display: block;
-    z-index: 2;
-    position: absolute;
 }
 
 header .logo {
@@ -79,7 +78,7 @@ header .logo {
 	font-family: Comic Sans MS;
 }
 #aut:hover, #reg:hover {
-
+    cursor: pointer;
 	text-decoration: none;
 	color: #6C87F3;
 	background: transparent;
@@ -103,18 +102,27 @@ header .logo {
 	background-image: none;
 	background-color: #FFFFFF;
 	background-size: auto 60%;
-	display: none;
 }
-.input{
-	font-size:20px;
+.input {
+    padding-left: 2px;
+    width: 250px;
+    height: 20px;
+	font-size:14px;
 	background: #FFFFFF;
 	text-overflow:ellipsis;
 	padding-bottom: 10px;
 	background-color: #FAFAFA;
 	border: 1px solid silver;
 }
+.input:valid{
+    border-color: silver;
+}
+.input:required:invalid{
+    border-color: silver;
+}
+
 .input::-webkit-input-placeholder { font-size: 14px;
-padding-left: 5px;}
+}
 .input:focus::-webkit-input-placeholder {color: transparent;}
 
 #firstpageavatar{
@@ -153,11 +161,11 @@ padding-left: 5px;}
     margin-top: 0;
     padding-right: 5px;
 }
-#asidepanel{
-    padding: 5px;
+#asidepanel{ 
+    padding: 5px; 
     margin-left: 200px;
-    float: left;
-    width: 650px;
+    float: left; 
+    width: 650px; 
     background-color: transparent;
   }
 
@@ -185,9 +193,9 @@ padding-left: 5px;
 }
 #asidepanel2{
     background-color: #FFFFFF;
-    padding: 5px;
+    padding: 5px; 
     width: 250px;
-    float: left;
+    float: left; 
     border-right: 1px solid #E9EBED;
     border-bottom: 1px solid #E9EBED;
     margin-top:5px;
@@ -195,25 +203,30 @@ padding-left: 5px;
     height: 100%;
 }
 /*сообщения*/
+
 #asidepanel3{
   background-color: #FFFFFF; /* Цвет фона слоя */
     padding: 5px; /* Поля вокруг текста */
     margin-left: 200px;
-    padding-bottom: 30%;
+    padding-bottom: 32.15%;
     float: left; /* Обтекание по правому краю */
     width: 250px; /* Ширина слоя */
-    border-right: 1px solid #E9EBED;
-
+    border-right: 1px solid #DFE5EC;
   }
 #asidepanel4{
     background-color: #FFFFFF; /* Цвет фона слоя */
     padding: 5px; /* Поля вокруг текста */
-    padding-bottom: 2%;
     width: 600px; /* Ширина слоя */
-    float: left; /* Обтекание по правому краю */
-    border-right: 1px solid #E9EBED;
-    border-bottom: 1px solid #E9EBED;
+    float: left; /* Обтекание по правому краю */   
+    border-right: 1px solid #DFE5EC;
+    border-bottom: 1px solid #DFE5EC;
 
+}
+#sendButton{
+    float:right;
+    width: 20%;
+    margin-right: 10px;
+    margin-top: 4px;
 }
 .messagepanel{
   width: 100%;
@@ -230,12 +243,12 @@ padding-left: 5px;
 }
 .inputMessage{
     float:left;
-    margin-top: 80%;
-    font-size:20px;
+    margin-top: 82%;
+    font-size:14px;
     background: #FFFFFF;
     text-overflow:ellipsis;
-    padding-bottom: 10px;
-    padding-right: 300px;
+    padding-bottom: 18px;
+    padding-right: 350px;
     background-color: #FAFAFA;
     border: 1px solid silver;
 }
@@ -245,6 +258,12 @@ padding-left: 5px;}
 .time{
   float:right;
 }
+#messagePhoto{
+    float:left;
+    margin-top: 80%;
+    width: 60px;
+    height: auto;
+}
 .img{
     margin-left: 20%;
     float: left;
@@ -252,13 +271,4 @@ padding-left: 5px;}
     width: 40px;
     height: 40px;
     margin-top: 0;
-}
-/*Карта*/
-#map {
- position: relative;
- z-index: 1;
-  width: 80%;
-  margin: 0 auto;
-  height: 550px;
-
 }
