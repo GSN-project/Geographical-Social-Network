@@ -1,45 +1,46 @@
-
+/*стили шапки*/
 body{
-    font-size: 1em;
-    margin: 0;
-    padding: 0;
-    background-size: 100%;
-    background-color: #E7EBF0;
+  margin: 0;
+  padding: 0;
 }
+
 header {
     width: 100%;
-    height: 55px;
-    background: #3B3B3B;
+    background-color: #3D3D45;
+    position: fixed;
+    top: 0;
+    box-shadow: 0 0 15px rgba(0,0,0,0.8);
+    z-index: 2;
 }
 
-header .title {
-  width: 25%;
+.title a {
   float: left;
-  padding: 10px;
-}
-
-header .title a{
-  display: block;
   text-decoration: none;
-  font-size: 25px;
+  font-size: 1.7em;
   color: #fff;
+  text-shadow: 1px 1px 2px #1E1E22;
+  margin-left: 30px;
+  margin-top: 3px;
+  font-family: "Garamond", Arial, sans-serif;
 }
 
 #main-menu {
     list-style: none;
     float: right;
-    margin: 8px 70px 8px 0;
+    margin: 0 90px 0 0;
 }
 
 #main-menu li a {
-    width: 200px;
+    width: 150px;
     display: block;
-    padding: 10px;
+    padding: 5px;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    font-size: 1.1em;
     color: #fff;
-    background: #525252;
+    background: #4B4B55;
     text-decoration: none;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    text-shadow: 1px 1px 2px #1E1E22;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 #main-menu ul {
@@ -49,25 +50,18 @@ header .title a{
 }
 
 #main-menu li a:hover {
-    background: rgba(89,95,189,0.85);
+    background: rgba(75, 75, 85, 0.8);
 
 }
 
 #main-menu li:hover ul {
     display: block;
-    z-index: 2;
     position: absolute;
 }
 
-header .logo {
-  float: right;
-  margin-top: 5px;
-}
 /*главная страница*/
 .firstpage{
 	font-size: 1em;
-	margin: 0;
--	padding: 0;
 	background-image: url('img/background.jpg');
 	background-size: 100%;
 }
@@ -77,29 +71,29 @@ header .logo {
 	background: transparent;
 	font-size:1.5em;
 	font-family: Comic Sans MS;
+  position: absolute;
 }
 #aut:hover, #reg:hover {
-
 	text-decoration: none;
 	color: #6C87F3;
 	background: transparent;
 	transition: all.6s ease;
 }
 #reg{
-	margin-left: 30%;
+  margin: 160px 100px;
 }
 #aut{
-	margin-left: 25%;
+  margin: 100px 100px;
 }
+
 #RegBlock,#AutBlock {
 	width: 400px; /* Ширина слоя */
-	margin: 7px; /* Значение отступов */
+	margin:80px auto; /* Значение отступов */
 	text-align: center;
 	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 	color: #273159;
 	font-size: 14px;
-    line-height: 18px;
-	margin: auto;
+  line-height: 18px;
 	background-image: none;
 	background-color: #FFFFFF;
 	background-size: auto 60%;
@@ -195,6 +189,9 @@ padding-left: 5px;
     height: 100%;
 }
 /*сообщения*/
+#wrapper{
+  margin-top: 100px;
+}
 #asidepanel3{
   background-color: #FFFFFF; /* Цвет фона слоя */
     padding: 5px; /* Поля вокруг текста */
@@ -255,10 +252,143 @@ padding-left: 5px;}
 }
 /*Карта*/
 #map {
- position: relative;
- z-index: 1;
-  width: 80%;
-  margin: 0 auto;
-  height: 550px;
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  margin-top: 60px;
+  height: 600px;
 
+}
+/*стили друзей*/
+.list {
+    width: 930px;
+    margin: 60px auto;
+    padding: 20px;
+    box-shadow: 0 0 3px #999999;
+    background: #F3F3F1;
+}
+
+.list-1{
+    width: 1000px;
+    margin: 60px auto;
+    padding: 20px;
+    box-shadow: 0 0 3px #999999;
+    background: #F3F3F1;
+}
+
+.list a{
+    text-decoration: none;
+    font-size: 16px;
+}
+
+h2{
+    display: inline;
+    font-size: 25px;
+    font-family: "Century Gothic", serif;
+    background: #F3F3F1;
+    color: #3B3B3B;
+}
+
+.friends{
+    border-top: 1.5px solid #E3E3E3;
+    width: 100%;
+    height: 80px;
+    border-radius: 4px;
+}
+
+.avatar {
+    float: left;
+    width: 80px;
+    height: 80px;
+}
+
+.avatar img{
+    width: 100%;
+    height: 100%;
+}
+
+.friend-menu a{
+    float:right;
+    widht:10px;
+    margin-right: 10px;
+    color: #444444;
+}
+
+.message a{
+    width: 170px;
+    height: 25px;
+    font-size: 16px;
+    border: 1px solid #444444;
+    border-radius: 5px;
+    background-color: #74D27F;
+    text-align: center;
+    float: left;
+    margin: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.name a{
+    color: #444444;
+}
+/*стили заметок*/
+.notes{
+    width: 930px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 0 3px #999999;
+    background: #F3F3F1;
+}
+.photo{
+    display: inline-block;
+    width: 250px;
+    height: 250px;
+    margin: 35px 15px;
+}
+
+.photo-1{
+    width: 240px;
+    height: 240px;
+   }
+.image {
+    border-radius: 10px;
+    box-shadow: 0 0 12px #999999;
+}
+
+figcaption{
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 0 18px #999999;
+    border-radius: 5px;
+}
+
+h3 {
+    margin: 60px 0 0 250px;
+    font-size: 25px;
+    color: #3B3B3B;
+    font-family: "Century Gothic", serif;
+}
+
+h4 {
+    margin: 0 100px 0 0;
+    font-size: 20px;
+    color: #3B3B3B;
+    font-family: "Century Gothic", serif;
+}
+/*стили таблицы профилей*/
+
+caption{
+   color: #525252;
+   text-transform: uppercase;
+   font-weight: bolder;
+   font-size: 200%;
+   margin-top: 30px;
+ }
+
+ .name{
+   color: maroon;
+}
+
+.round{
+   border-radius: 100px; /* Радиус скругления */
 }

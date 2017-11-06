@@ -6,7 +6,8 @@ body{
 header {
     width: 100%;
     background-color: #3D3D45;
-    position: absolute;
+    position: fixed;
+    top: 0;
     box-shadow: 0 0 15px rgba(0,0,0,0.8);
 }
 

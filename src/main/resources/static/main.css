@@ -1,46 +1,46 @@
 ﻿
 /*стили шапки*/
 body{
-    font-size: 1em;
-    margin: 0;
--   padding: 0;
-    background-size: 100%;
-    background-color: #E7EBF0;
+  margin: 0;
+  padding: 0;
 }
+
 header {
     width: 100%;
-    height: 55px;
-    background: #3B3B3B;
+    background-color: #3D3D45;
+    position: fixed;
+    top: 0;
+    box-shadow: 0 0 15px rgba(0,0,0,0.8);
 }
 
-header .title {
-  width: 25%;
+.title a {
   float: left;
-  padding: 10px;
-}
-
-header .title a{
-  display: block;
   text-decoration: none;
-  font-size: 25px;
+  font-size: 1.7em;
   color: #fff;
+  text-shadow: 1px 1px 2px #1E1E22;
+  margin-left: 30px;
+  margin-top: 3px;
+  font-family: "Garamond", Arial, sans-serif;
 }
 
 #main-menu {
     list-style: none;
     float: right;
-    margin: 8px 70px 8px 0;
+    margin: 0 90px 0 0;
 }
 
 #main-menu li a {
-    width: 200px;
+    width: 150px;
     display: block;
-    padding: 10px;
+    padding: 5px;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    font-size: 1.1em;
     color: #fff;
-    background: #525252;
+    background: #4B4B55;
     text-decoration: none;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    text-shadow: 1px 1px 2px #1E1E22;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 #main-menu ul {
@@ -50,19 +50,16 @@ header .title a{
 }
 
 #main-menu li a:hover {
-    background: rgba(89,95,189,0.85);
+    background: rgba(75, 75, 85, 0.8);
+
 }
-
-
 
 #main-menu li:hover ul {
     display: block;
+    z-index: 2;
+    position: absolute;
 }
 
-header .logo {
-  float: right;
-  margin-top: 5px;
-}
 /*стили друзей*/
 .list {
     width: 930px;
