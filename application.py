@@ -1,37 +1,50 @@
+import os
 import smtplib
+from flask_mail import Mail, Message
 from flask import Flask, render_template, request, g, redirect, session, url_for
 from flask_mysqldb import MySQL
 from werkzeug import check_password_hash, generate_password_hash
 #from flask_session import Session
 
-# For session
-#SECRET_KEY = b'_5#y2L"F4Q8z\n\xec]/'
 
 #COnfigure app
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = 'sql11.freemysqlhosting.net'
-app.config['MYSQL_USER'] = 'sql11202817'
-app.config['MYSQL_PASSWORD'] = 'VjJvatfyw2'
-app.config['MYSQL_DB'] = 'sql11202817'
+app.config['MYSQL_HOST'] = 'x3ztd854gaa7on6s.cbetxkdyhwsb.us-east-1.rds.amazonaws.com'
+app.config['MYSQL_USER'] = 'r01bghd36z2ld54q'
+app.config['MYSQL_PASSWORD'] = 'i0kfbhifxcnyrf0r'
+app.config['MYSQL_DB'] = 'lreehpo3s6bwktzb'
 mysql = MySQL(app)
 
+#mail configs
+mail = Mail(app)
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'geosocnetwork@gmail.com'
+app.config['MAIL_PASSWORD'] = 'GeographicalSocialNetwork'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
+
 #Config cookies
-#app.config["SESSION_PERMANENT"] = False
-#app.config["SESSION_TYPE"] = "filesystem"
-#Session(app)
+app.secret_key = os.urandom(24)
+
+
 
 @app.before_request
 def before_request():
     g.user = None
     if 'user_id' in session:
         cur = mysql.connection.cursor()
-        cur.execute('''SELECT * FROM users WHERE user_id = %s''', (session['user_id']))
-        g.user = cur.fetchall()
+        cur.execute('''SELECT * FROM users WHERE user_id = %s''', [session['user_id']])
+        g.user = make_dicts(cur)
 
 #Mapping on localhost
 @app.route("/")
 def index():
-    return render_template("Registration.html")
+    if g.user:
+        return render_template("Map.html")
+    else:
+        return render_template("Registration.html")
 
 # Handling post request
 @app.route("/registration", methods = ["POST"])
@@ -41,7 +54,7 @@ def registration():
     password = request.form.get("password")
     email = request.form.get("email")
 
-    # Checking if email and login is unique
+    # Checking if email and login are unique
     cur = mysql.connection.cursor()
     cur.execute('''SELECT * FROM users WHERE login = %s''', [login])
     used = cur.fetchall()
@@ -55,14 +68,12 @@ def registration():
         return render_template("Registration.html", error=error)
     
     # Insert into database
+    cur = mysql.connection.cursor()
     cur.execute('''INSERT INTO users (name, login, email, password) VALUES (%s , %s , %s , %s)''', (name, login, email, generate_password_hash(password) ))
     mysql.connection.commit()
-#Send massage (Error)
-#    massage = "You are registrated!"
-#    server = smtplib.SMTP("smtp.gmail.com", 587)
-#    server.starttls()
-#    server.login("jharvard@cs50.net", os.getenv("PASSWORD"))
-#    server.sendmail("jharvard@cs50.net", email, massage)
+    
+    # Send massage 
+    send_email('Hello', 'geosocnetwork@gmail.com',[email], render_template("msg.html", user = name))
     return render_template("success.html")
 
 @app.route("/login", methods = ["GET", "POST"])
@@ -74,20 +85,20 @@ def login():
         login = request.form.get("login")
         cur = mysql.connection.cursor()
         cur.execute('''SELECT * FROM users WHERE login = %s''', [login])
-        user = cur.fetchall()
-        if user is ():
+        user = make_dicts(cur)
+        print(user)
+        if user is None:
             error = 'Invalid username'
-        elif not check_password_hash(user[0][4], request.form.get("password")):
+        elif not check_password_hash(user["password"], request.form.get("password")):
             error = 'Invalid password'
         else :
             error = 'You were logged in'
-#            session['user_id'] = user[0][0]
+            session['user_id'] = user['user_id']
     return render_template('login.html', error=error) 
 
 
 @app.route("/all", methods = ["GET"])
 def showAll():
-#    print(session['user_id'])
     cur = mysql.connection.cursor()
     cur.execute('''SELECT * FROM users''')
     users = cur.fetchall()
@@ -96,5 +107,25 @@ def showAll():
         toShow += str(user) + "<br>"
     return toShow
 
+# There is helper function, which takes as cursor from request
+# and return dictionary. Keys are column's name
+def make_dicts(cursor):
+    row = cursor.fetchall()
+    if row is ():
+        return None
+    else:
+        return dict((cursor.description[idx][0], value)
+                    for idx, value in enumerate(row[0]))
+
+def send_email(subject, sender, recipients, html_body):
+    msg = Message(subject, sender = sender, recipients = recipients)
+    msg.html = html_body
+    mail.send(msg)
+
+
+#if __name__ == '__main__':
+   # app.run(debug=True)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
