@@ -40,8 +40,21 @@ def registration():
     login = request.form.get("login")
     password = request.form.get("password")
     email = request.form.get("email")
-    # Insert into database
+
+    # Checking if email and login is unique
     cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM users WHERE login = %s''', [login])
+    used = cur.fetchall()
+    if used is not ():
+        error = ' Login is already used '
+        return render_template("Registration.html", error=error)
+    cur.execute('''SELECT * FROM users WHERE email = %s''', [email])
+    used = cur.fetchall()
+    if used is not ():
+        error = ' Email is already used '
+        return render_template("Registration.html", error=error)
+    
+    # Insert into database
     cur.execute('''INSERT INTO users (name, login, email, password) VALUES (%s , %s , %s , %s)''', (name, login, email, generate_password_hash(password) ))
     mysql.connection.commit()
 #Send massage (Error)
