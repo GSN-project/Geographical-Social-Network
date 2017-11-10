@@ -4,15 +4,22 @@ from flask_mail import Mail, Message
 from flask import Flask, render_template, request, g, redirect, session, url_for
 from flask_mysqldb import MySQL
 from werkzeug import check_password_hash, generate_password_hash
+import random
+import string
 #from flask_session import Session
 
 
 #COnfigure app
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = 'x3ztd854gaa7on6s.cbetxkdyhwsb.us-east-1.rds.amazonaws.com'
-app.config['MYSQL_USER'] = 'r01bghd36z2ld54q'
-app.config['MYSQL_PASSWORD'] = 'i0kfbhifxcnyrf0r'
-app.config['MYSQL_DB'] = 'lreehpo3s6bwktzb'
+#app.config['MYSQL_HOST'] = 'x3ztd854gaa7on6s.cbetxkdyhwsb.us-east-1.rds.amazonaws.com'
+#app.config['MYSQL_USER'] = 'r01bghd36z2ld54q'
+#app.config['MYSQL_PASSWORD'] = 'i0kfbhifxcnyrf0r'
+#app.config['MYSQL_DB'] = 'lreehpo3s6bwktzb'
+
+app.config['MYSQL_HOST'] = 'sql11.freemysqlhosting.net'
+app.config['MYSQL_USER'] = 'sql11202817'
+app.config['MYSQL_PASSWORD'] = 'VjJvatfyw2'
+app.config['MYSQL_DB'] = 'sql11202817'
 mysql = MySQL(app)
 
 #mail configs
@@ -60,21 +67,23 @@ def registration():
     used = cur.fetchall()
     if used is not ():
         error = ' Login is already used '
-        return render_template("Registration.html", error=error)
+        return render_template("Registration.html", error=error,pname=name,plogin=login,pemail=email)
     cur.execute('''SELECT * FROM users WHERE email = %s''', [email])
     used = cur.fetchall()
     if used is not ():
         error = ' Email is already used '
-        return render_template("Registration.html", error=error)
+        return render_template("Registration.html", error=error,pname=name,plogin=login,pemail=email)
     
     # Insert into database
+    token = "".join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for x in range(16))
     cur = mysql.connection.cursor()
-    cur.execute('''INSERT INTO users (name, login, email, password) VALUES (%s , %s , %s , %s)''', (name, login, email, generate_password_hash(password) ))
+    cur.execute('''INSERT INTO users (name, login, email, password,activation_link) VALUES (%s , %s , %s , %s,%s)''', (name, login, email, generate_password_hash(password),token ))
     mysql.connection.commit()
     
-    # Send massage 
-    send_email('Hello', 'geosocnetwork@gmail.com',[email], render_template("msg.html", user = name))
+    # Send message
+    send_email('Hello', 'geosocnetwork@gmail.com',[email], render_template("msg.html", user = name,login=login,link=token))
     return render_template("success.html")
+
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():
@@ -91,6 +100,8 @@ def login():
             error = 'Invalid username'
         elif not check_password_hash(user["password"], request.form.get("password")):
             error = 'Invalid password'
+        elif not user["activation_link"] ==NULL:
+            error='Unactivated profile'
         else :
             error = 'You were logged in'
             session['user_id'] = user['user_id']
@@ -122,10 +133,27 @@ def send_email(subject, sender, recipients, html_body):
     msg.html = html_body
     mail.send(msg)
 
+@app.route("/activate/")
+def activation():
+    login = request.args.get('username')
+    link= request.args.get('link')
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM users WHERE login = %s AND activation_link = %s''', (login,link))
+    user = make_dicts(cur)
+    if user is None:
+        error = 'Invalid activation link'
+    else :
+        error = 'You were logged in'
+        session['user_id'] = user['user_id']
+        #cur = mysql.connection.cursor()
+        mysql.connection.cursor().execute('''UPDATE users SET activation_link =NULL WHERE login = %s AND activation_link = %s''',(login,link))
+        mysql.connection.commit()
+    return render_template('login.html', error=error) 
 
-#if __name__ == '__main__':
-   # app.run(debug=True)
 
 if __name__ == '__main__':
-    port = int(environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
+
+#if __name__ == '__main__':
+ #   port = int(environ.get('PORT', 5000))
+ #   app.run(host='0.0.0.0', port=port)

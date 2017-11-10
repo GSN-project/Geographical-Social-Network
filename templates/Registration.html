@@ -16,9 +16,9 @@
 		 				</br>
 		 					<img id='firstpageavatar' src ="../static/img/avatar1.png"></br>Добавьте фото</br></br>
 		 					<div>Зарегистрируйтесь, чтобы смотреть фото ваших друзей.</div></br>
-		         			<input id = 'regname' class="input" type="text" name="name" placeholder="Имя" required="" pattern="^[_a-zA-Zа-яА-Я ]+$" /><br /><br />
-		         			<input id = 'reglogin' class="input" type="text" name="login"  placeholder="Логин" required="" pattern="^[a-zA-Z]+([-_]?[a-zA-Z0-9]+){0,2}$"/><br /><br />
-		      				<input id = 'regemail' class="input" type="text" name="email" placeholder="Электронная почта" title="В email должны присутствовать символы '@' и '.'" required=""  pattern="^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$" /><br /><br />
+		         			<input id = 'regname' class="input" type="text" name="name" placeholder="Имя" {% if pname %}value={{pname}} {% endif %} title = "Имя пользователя может содержать только буквы латинского или киррилического алфавитов" required="" pattern="^[_a-zA-Zа-яА-Я ]+$" /><br /><br />
+		         			<input id = 'reglogin' class="input" type="text" name="login"  placeholder="Логин" {% if plogin %}value={{plogin}} {% endif %} title = "Логин может содержать цифры и буквы латинского алфавита" required="" pattern="^[a-zA-Z]+([-_]?[a-zA-Z0-9]+){0,2}$" /><br /><br />
+		      				<input id = 'regemail' class="input" type="text" name="email" placeholder="Электронная почта" {% if pemail %}value={{pemail}} {% endif %} title="В email должны присутствовать символы '@' и '.'" required=""  pattern="^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$" /><br /><br />
 		      				<input id = 'regpass' class="input" type="password" name="password" placeholder="Пароль" title = "Используйте минимум 1 строчную и 1 заглавную букву, 1 цифру, не менее 8 символов" required="" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*" /><br /><br />
 		      				<input id = 'regpasscheck' class="input" type="password" name="passwordcheck" placeholder="Подтверждение пароля" required="" /><br /><br />
 		      				{% if error %}<div class="error"><strong>Message:</strong> {{ error }}</div>{% endif %}
