@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="../static/style.css">
+      <title>Geographical social network (GSN)</title>
+    </head>
+    <body>
+      {% block header %}
+      <header>
+        <div>
+          <div class="title"><img src="../static/img/logo.png" height="45">Geographic social network</div>
+            <ul id="main-menu">
+              <li>
+                <a href="MyProfile.html"><img src="../static/img/avatar.png" height="45"></a>
+                  <ul>
+                    <li><a href="Map.html">Карта</a></li>
+                    <li><a href="Friends.html">Друзья</a></li>
+                    <li><a href="Message.html">Сообщения</a></li>
+                    <li><a href="MySettings.html">Настройки</a></li>
+                    <li><a href="Main.html">Выход</a></li>
+                  </ul>
+              </li>
+            </ul>
+        </div>
+      </header>
+      {% endblock %}
+    </body>
+</html>

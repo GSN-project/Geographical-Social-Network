@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="../static/style.css">
+</head>
+<body >
+	<header>
+		<div>
+			 <div class="title"><img src="../static/img/logo.png" height="45">Geographic social network</div>
+				<ul id="main-menu">
+					<li>
+						<a href="MyProfile.html"><img src="../static/img/avatar.png" height="45"></a>
+						<ul>
+							<li><a href="Map.html">Карта</a></li>
+							<li><a href="Friends.html">Друзья</a></li>
+							<li><a href="Message.html">Сообщения</a></li>
+							<li><a href="#">Комментарии</a></li>
+							<li><a href="MySettings.html">Настройки</a></li>
+							<li><a href="Main.html">Выход</a></li>
+						</ul>
+					</li>
+				</ul>
+		</div>
+</header>
+	<section class="list-1">
+		<form enctype="multipart/form-data" method="post" action="">
+			<img src="../static/img/avatar.png" width="150" height="150"/>
+			<input type="file" name="photo" required="" accept="image/*">
+		</form>
+		<form method="post" name="contact_form" class="contact_form" action="">
+   		<ul>
+				<li>
+					<li>
+						<label for="name">Имя пользователя</label>
+						<input type="text" name="name" required="">
+					</li>
+					<li>
+						<label for="surname">Фамилия</label>
+						<input type="text" value="Иванов" onfocus="clearContents(this);">
+					</li>
+					<li>
+						<label for="email">E-mail</label>
+						<input type="email" name="email" maxlength="30">
+					</li>
+					<li>
+					<label for="sex">Пол</label>
+							<input type="radio" class="radio" name="sex" value="man" checked>
+							мужской
+							<input type="radio" class="radio" name="sex" value="woman">
+							женский
+					</li>
+					<li>
+						<label for="country">Страна</label>
+						<input type="text" value="Украина" onfocus="clearContents(this);">
+					</li>
+					<li>
+						<label for="city">Город</label>
+						<input type="text" value="Одесса" onfocus="clearContents(this);">
+					</li>
+					<li>
+						<label>Дата рождения</label>
+						<input type="date" id="date" name="date" value="">
+					</li>
+					<li>
+						<label for="tel">Номер телефона</label>
+						<input type="tel" name="tel" id="tel" maxlength="20" value="+38(063)-000-00-00" onfocus="clearContents(this);">
+					</li>
+					<li>
+						<label for="about">О себе</label>
+						<textarea name="about" rows="4" cols="40" maxlength="200" onfocus="clearContents(this);">Хобби,учеба,работа</textarea>
+					</li>
+					<li>
+					<button class="submit" type="submit">Отправить</button>
+					</li>
+				</li>
+   		</ul>
+		</form>
+		<script>
+				function clearContents(element) {
+		  element.value = '';
+		}
+		</script>
+	</section>
+	</body>
+</html>
