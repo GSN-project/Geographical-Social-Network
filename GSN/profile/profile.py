@@ -17,12 +17,13 @@ mod = Blueprint('profile', __name__, template_folder='templates')
 def mypofget():
    if g.user is None:
            return redirect(url_for('login'))
-   aref = database.Users.query.filter_by(user_id=g.user.user_id).first().ava_ref
-   if aref is not None:
-       ref_ava = mod.config['UPLOADED_PHOTOS_DEST'] + '/' + aref
+   user = database.Users.query.filter_by(user_id=g.user.user_id).first()
+   user_info = database.UsersInfo.query.filter_by(user_id=g.user.user_id).first()
+   if user_info.ava_ref is not None:
+       ref_ava = mod.config['UPLOADED_PHOTOS_DEST'] + '/' + user_info.ava_ref
    else:
        ref_ava = 'static/img/avatar.png'
-   return render_template('MyProfileSettings.html', ava=ref_ava, name=g.user.name, surname=g.user.surname, email=g.user.email, country=g.user.country, city=g.user.city,date=g.user.date,sex=g.user.sex,telephone=g.user.telephone, about=g.user.about)
+   return render_template('MyProfileSettings.html', ava=ref_ava, name=user.name, surname=user_info.surname, email=user.email, country=user_info.country, city=user_info.city,date=user_info.date,sex=user_info.sex,telephone=user_info.telephone, about=user_info.about)
 
 
 @mod.route("/myprofile", methods = ['POST'])
