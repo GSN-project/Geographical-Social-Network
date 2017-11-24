@@ -1,0 +1,149 @@
+  {% extends "Header.html" %}
+  {% block content %}
+        <section>
+        <div id="panel"> 
+          <form id="hidden_panel">
+              <span class="close" onclick="closePanel()"></span>
+              <p>Название вашей метки: </p>
+              <input id="titleIn" class="input" type="text" name="markerTitle" placeholder="Введите название вашей метки" required="">
+              <p>Кто может видеть вашу метку:</p>
+              <div id="privacyList">
+              <select  id="privacyListSelect">
+                <option value="2">Все</option>
+                <option  value="1">Только друзья</option>
+                <option value="0">Только я</option>
+              </select>
+              </div>
+              <p>Описание вашей метки:</p>
+              <input class="input" id="descriptionInput" type="text" name="markerDescription" placeholder="Введите описание вашей метки">
+              <button class="button">Добавить</button>
+          </form>
+        </div>
+	       </div>
+            <form id = "markerHiddenPanel">
+              <span class="close" onclick="closeMarkerPanel()"></span>
+              <p id="sName">Название метки: </p>
+              <p id="sDsp">Описание метки:</p>
+               <button class="button" id= "showCommentsButton">Показать комметарии</button>
+                <button class="button" id= "showPostsButton">Показать посты</button>
+            </form>
+        </div>
+          <div id="map"></div>
+              <script type="text/javascript">
+			  
+
+		function closePanel(){
+			$('#hidden_panel').animate({'left':'-320px'},100);
+			$("input#titleIn").val("");
+			$('#privacyListSelect').val(2);
+			$("input#descriptionInput").val("");
+		}
+		function closeMarkerPanel(){
+			$('#markerHiddenPanel').animate({'left':'-320px'},100);
+    }
+				
+		var markers=[];
+        var map;
+		var markerCluster;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 3,
+          center: {lat: 46.024, lng: 40.887}
+        });
+		
+		getMarkers();
+		
+		
+		function getMarkers() {
+		$.ajax({
+					
+                    type: 'GET',
+                    url: "/get_locations/",
+					async:false,
+                    success: function(data) {
+						markers=[];
+						data=JSON.parse(data);
+						for(var i=0;i<data.length;i++){
+							var loc=data[i];
+							var marker=new google.maps.Marker({
+							position: {
+							lat: loc.lat, 
+							lng: loc.lng},
+							title: loc.title,
+							description: loc.description,
+							id: loc.post_id,
+							map: map
+							});			
+							markers.push(marker);
+						}
+                    }
+				});
+
+				 addMarkerListeners();
+
+				//Add a marker clusterer to manage the markers.
+                markerCluster = new MarkerClusterer(map, markers,
+				{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});				
+				
+		};
+		
+		function addMarkerListeners() {
+		  if (markers.length > 0) {
+			for (var i = 0; i < markers.length; i++) {
+
+			  // function closure on the "i" variable
+			  google.maps.event.addListener(markers[i], 'click', (function(i) {
+			  return function() {
+							$("#sName").text("Название метки: "+markers[i].title);
+							$("#sDsp").text("Описание метки: "+markers[i].description);
+							$("#markerHiddenPanel").animate({'left':'0'},100);
+			  }})(i));
+			}
+		  }
+		}
+
+		
+      	var addLocation;  //work around: problem with coord lose when input form appears 
+			
+        google.maps.event.addListener(map, 'rightclick', function(event) {
+		        $('#hidden_panel').animate({'left':'0'},100);
+                map.setCenter(event.latLng);
+				addLocation=event.latLng;	
+				closeMarkerPanel();
+		});
+
+
+		//write in backend and refresh map 
+		document.getElementById("hidden_panel").onsubmit=placeMarker;
+		function placeMarker() {
+			closePanel();
+			var marker=new google.maps.Marker({
+					position: addLocation});
+			$.ajax({
+                    type: 'POST',
+                    url: "/add_pin/",
+					async: false,
+				    data: {  "c1": marker.getPosition().lat(), "c2": marker.getPosition().lng(),"title":$("input#titleIn").val(),"priv":$('#privacyListSelect').val(),"dsp":$("input#descriptionInput").val()},
+                    success: function(data) {
+                    }});
+			addLocation=null;
+			$("input#titleIn").val("");
+			$('#privacyListSelect').val(2);
+			$("input#descriptionInput").val("");
+			getMarkers(); 
+			return false;
+		};
+	  		
+	}
+    </script>
+	
+	<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+          <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYtyRt73Xs-p8BreI0yAC259MGWn5pQx4&callback=initMap">
+    </script>
+        </section>
+      </body>
+</html>
+{% endblock %}
