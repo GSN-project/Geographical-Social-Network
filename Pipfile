@@ -14,7 +14,7 @@ pymysql = "*"
 flask-mysqldb = "*"
 flask-mail = "*"
 flask-uploads = "*"
-sqlalchemy = "*"
+flask-sqlalchemy = "*"
 
 
 [dev-packages]
