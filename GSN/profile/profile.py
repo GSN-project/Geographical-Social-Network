@@ -15,26 +15,26 @@ mod = Blueprint('profile', __name__, template_folder='templates')
 
 @mod.route("/myprofile", methods = ['GET'])
 def mypofget():
-   if g.user['user_id'] is None:
+   if g.user is None:
            return redirect(url_for('login'))
-   aref = database.Users.query.filter_by(user_id=g.user['user_id']).first().ava_ref
+   aref = database.Users.query.filter_by(user_id=g.user.user_id).first().ava_ref
    if aref is not None:
        ref_ava = mod.config['UPLOADED_PHOTOS_DEST'] + '/' + aref
    else:
        ref_ava = 'static/img/avatar.png'
-   return render_template('MyProfileSettings.html', ava=ref_ava, name=g.user['name'], surname=g.user['surname'], email=g.user['email'], country=g.user['country'], city=g.user['city'],date=g.user['date'],sex=g.user['sex'],telephone=g.user['telephone'], about=g.user['about'])
+   return render_template('MyProfileSettings.html', ava=ref_ava, name=g.user.name, surname=g.user.surname, email=g.user.email, country=g.user.country, city=g.user.city,date=g.user.date,sex=g.user.sex,telephone=g.user.telephone, about=g.user.about)
 
 
 @mod.route("/myprofile", methods = ['POST'])
 def myprofpost():
    
-   if g.user['user_id'] is None:
+   if g.user is None:
        return redirect(url_for('login'))
 
-   user = database.Users.query.filter_by(user_id=g.user['user_id']).first()
-   user_info = database.UsersInfo.query.filter_by(user_id=g.user['user_id']).first()
+   user = database.Users.query.filter_by(user_id=g.user.user_id).first()
+   user_info = database.UsersInfo.query.filter_by(user_id=g.user.user_id).first()
    if user_info is None:
-       user_info = database.UsersInfo(user_id=g.user['user_id'])
+       user_info = database.UsersInfo(user_id=g.user.user_id)
        database.db.session.add(user_info)
    
 
@@ -68,23 +68,23 @@ def myprofpost():
    database.db.session.commit()
    return redirect(url_for('myprofget'))
 
-@mod.route('/upload', methods=['POST'])
-def upload():
-   if 'photo' in request.files:
-       cur_id = g.user['user_id']
-       cur = mysql.connection.cursor()
+# @mod.route('/upload', methods=['POST'])
+# def upload():
+#    if 'photo' in request.files:
+#        cur_id = g.user['user_id']
+#        cur = mysql.connection.cursor()
        
-       #if user already has an avatar - delete
-       if (g.user['ava_ref'] is not None):
-           os.remove(mod.config['UPLOADED_PHOTOS_DEST'] + '/' + g.user['ava_ref'])
+#        #if user already has an avatar - delete
+#        if (g.user['ava_ref'] is not None):
+#            os.remove(mod.config['UPLOADED_PHOTOS_DEST'] + '/' + g.user['ava_ref'])
 
-       fname = photos.save(request.files['photo'])
-       #appending random prefix to name of the file to prevent name collision
-       rand_prefix = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(15))
-       os.rename(mod.config['UPLOADED_PHOTOS_DEST'] + '/' + fname, 
-                 mod.config['UPLOADED_PHOTOS_DEST'] + '/' + rand_prefix + fname)
+#        fname = photos.save(request.files['photo'])
+#        #appending random prefix to name of the file to prevent name collision
+#        rand_prefix = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(15))
+#        os.rename(mod.config['UPLOADED_PHOTOS_DEST'] + '/' + fname, 
+#                  mod.config['UPLOADED_PHOTOS_DEST'] + '/' + rand_prefix + fname)
        
-       cur.execute('''UPDATE users SET ava_ref = %s WHERE user_id = %s''', (rand_prefix + fname, cur_id))
-       mysql.connection.commit()
-   return redirect(url_for('myprofget'))
+#        cur.execute('''UPDATE users SET ava_ref = %s WHERE user_id = %s''', (rand_prefix + fname, cur_id))
+#        mysql.connection.commit()
+#    return redirect(url_for('myprofget'))
 
