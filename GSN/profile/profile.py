@@ -67,7 +67,7 @@ def myprofpost():
    user_info.about = fabout
 
    database.db.session.commit()
-   return redirect(url_for('myprofget'))
+   return redirect(url_for('profile.myprofget'))
 
 # @mod.route('/upload', methods=['POST'])
 # def upload():
