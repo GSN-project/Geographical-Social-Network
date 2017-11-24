@@ -64,7 +64,7 @@ def myprofile():
         user_info.about = fabout
 
         database.db.session.commit()
-        return render_template('MyProfileSettings.html', ava=user_info.ref_ava, name=user.name, surname=user_info.surname, email=user.email, country=user_info.country, city=user_info.city,date=user_info.date,sex=user_info.sex,telephone=user_info.telephone, about=user_info.about)
+        return render_template('MyProfileSettings.html', ava=user_info.ava_ref, name=user.name, surname=user_info.surname, email=user.email, country=user_info.country, city=user_info.city,date=user_info.date,sex=user_info.sex,telephone=user_info.telephone, about=user_info.about)
 
 
 # @mod.route('/upload', methods=['POST'])
