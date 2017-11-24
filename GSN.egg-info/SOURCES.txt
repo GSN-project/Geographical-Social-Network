@@ -1,7 +1,0 @@
-GSN/__init__.py
-GSN/application.py
-GSN.egg-info/PKG-INFO
-GSN.egg-info/SOURCES.txt
-GSN.egg-info/dependency_links.txt
-GSN.egg-info/requires.txt
-GSN.egg-info/top_level.txt
