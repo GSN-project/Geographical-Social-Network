@@ -12,80 +12,76 @@ from MySQLdb.cursors import DictCursor
 from GSN import database
 
 mod = Blueprint('profile', __name__, template_folder='templates')
-#
-#@mod.route("/myprofile", methods = ['GET'])
-#def mypofget():
-#    return render_template('MyProfileSetting.html')
-#    # TODO
-#
-#
-#@mod.route("/myprofile", methods = ['GET'])
-#def myprofget():
-#    if not g.user:
-#        return redirect(url_for('login.login'))
-#
-#    #if g.user.ava_ref is not None:
-#    #    ref_ava = mod.config['UPLOADED_PHOTOS_DEST'] + '/' + g.user.ava_ref
-#    #else:
-#    #    ref_ava = 'static/img/avatar.png'
-#
-#    #user_info = database.UsersInfo.query.filter_by(user_id=g.user.user_id).first()
-#    return render_template('MyProfileSetting.html', ava=g.user_info.ava_ref, name=g.user.name, surname=g.user_info.surname, email=g.user.email, 
-#    country=g.user_info.country, city=g.user_info.city,date=g.user_info.date,sex=g.user_info.sex,telephone=g.user_info.telephone,about=g.user_info.about)
+
+@mod.route("/myprofile", methods = ['GET'])
+def mypofget():
+   if not ('user_id'in session):
+           return redirect(url_for('login'))
+   aref = database.Users.query.filter_by(user_id=g.user['user_id']).first().ava_ref
+   if aref is not None:
+       ref_ava = mod.config['UPLOADED_PHOTOS_DEST'] + '/' + aref
+   else:
+       ref_ava = 'static/img/avatar.png'
+   return render_template('MyProfileSettings.html', ava=ref_ava, name=g.user['name'], surname=g.user['surname'], email=g.user['email'], country=g.user['country'], city=g.user['city'],date=g.user['date'],sex=g.user['sex'],telephone=g.user['telephone'], about=g.user['about'])
 
 
-@mod.route("/myprofile", methods = ['GET', 'POST'])
+@mod.route("/myprofile", methods = ['POST'])
 def myprofpost():
-    
+   
+   if not ('user_id'in session):
+       return redirect(url_for('login'))
 
-    if request.method == 'POST':
-        if g.user:
-            return redirect(url_for('login.login'))
-    
-            cur_id = g.user.user_id
-            user_info = database.UsersInfo.query.filter_by(user_id=g.user.user_id).first()
-    
-    #        fname = request.form.get("name")
-    #        cur.execute('''UPDATE users SET name = %s WHERE user_id = %s''', (fname, cur_id))
-    #       Other table (users)
-    #        user_info.name = request.form.get("name")
-            fsurname = request.form.get("surname")
-    #        cur.execute('''UPDATE users SET surname = %s WHERE user_id = %s''', (fsurname, cur_id))
-            user_info.surname = fsurname
-            print(fsurname)
-            femail = request.form.get("email")
-    #        cur.execute('''UPDATE users SET email = %s WHERE user_id = %s''', (femail, cur_id))
-            g.user.email = femail
-            print(femail)
-            fsex = request.form.get("sex")
-    #        cur.execute('''UPDATE users SET sex = %s WHERE user_id = %s''', (fsex, cur_id))
-            user_info.sex = fsex
-            print(fsex)
-            fcountry = request.form.get("country")
-    #        cur.execute('''UPDATE users SET country = %s WHERE user_id = %s''', (fcountry, cur_id))
-            user_info.country = fcountry
-            print(fcountry)
-            fcity = request.form.get("city")
-    #        cur.execute('''UPDATE users SET city = %s WHERE user_id = %s''', (fcity, cur_id))
-            user_info.city = fcity
-            print(fcity)
-            fdate = request.form.get("date")
-    #        cur.execute('''UPDATE users SET date = %s WHERE user_id = %s''', (fdate, cur_id))
-            user_info.date = fdate
-            print(fdate)
-            ftelephone = request.form.get("telephone")
-    #        cur.execute('''UPDATE users SET telephone = %s WHERE user_id = %s''', (ftelephone, cur_id))
-            user_info.telephone = ftelephone
-            print(ftelephone)
-            fabout = request.form.get("about")
-    #        cur.execute('''UPDATE users SET about = %s WHERE user_id = %s''', (fabout, cur_id))
-            user_info.about = fabout
-            print(fabout)
-            database.db.session.commit()
-            #TODO Make cole page
-        return redirect(url_for('myprofget'))
-    else:
-        if not g.user:
-            return redirect(url_for('login.login'))
-        return render_template('MyProfileSetting.html', ava=g.user_info.ava_ref, name=g.user.name, surname=g.user_info.surname, email=g.user.email, 
-            country=g.user_info.country, city=g.user_info.city,date=g.user_info.date,sex=g.user_info.sex,telephone=g.user_info.telephone,about=g.user_info.about)
+   user = database.Users.query.filter_by(user_id=g.user['user_id']).first()
+   user_info = database.UsersInfo.query.filter_by(user_id=g.user['user_id']).first()
+   
+
+   fname = request.form.get("name")
+   user.name = fname
+
+   fsurname = request.form.get("surname")
+   user_info.surname = fsurname
+          
+   femail = request.form.get("email")
+   user.email = femail
+          
+   fsex = request.form.get("sex")
+   user_info.sex = fsex
+          
+   fcountry = request.form.get("country")
+   user_info.country = fcountry
+
+   fcity = request.form.get("city")
+   user_info.city = fcity
+
+   fdate = request.form.get("date")
+   user_info.date = fdate
+
+   ftelephone = request.form.get("telephone")
+   user_info.telephone = ftelephone
+
+   fabout = request.form.get("about")
+   user_info.about = fabout
+
+   database.db.session.commit()
+   return redirect(url_for('myprofget'))
+
+@mod.route('/upload', methods=['POST'])
+def upload():
+   if 'photo' in request.files:
+       cur_id = g.user['user_id']
+       cur = mysql.connection.cursor()
+       
+       #if user already has an avatar - delete
+       if (g.user['ava_ref'] is not None):
+           os.remove(mod.config['UPLOADED_PHOTOS_DEST'] + '/' + g.user['ava_ref'])
+
+       fname = photos.save(request.files['photo'])
+       #appending random prefix to name of the file to prevent name collision
+       rand_prefix = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(15))
+       os.rename(mod.config['UPLOADED_PHOTOS_DEST'] + '/' + fname, 
+                 mod.config['UPLOADED_PHOTOS_DEST'] + '/' + rand_prefix + fname)
+       
+       cur.execute('''UPDATE users SET ava_ref = %s WHERE user_id = %s''', (rand_prefix + fname, cur_id))
+       mysql.connection.commit()
+   return redirect(url_for('myprofget'))
+

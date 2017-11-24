@@ -5,35 +5,35 @@
 		<img src="../static/img/avatar.png" width="150" height="150"/>
 		<input type="file" name="photo" required="" accept="image/*">
 	</form>
-	<form method="post" name="contact_form" class="contact_form" action="/myprofile">
+	<form method="post" name="contact_form" class="contact_form" action="">
    	<ul>
 			<li>
 				<li>
 					<label for="name">Имя пользователя</label>
-					<input type="text" name="name" required="" value= {{name}}>
+					<input type="text" name="name" value={{name}} required="">
 				</li>
 				<li>
 					<label for="surname">Фамилия</label>
-					<input type="text" value={{surname}}  onfocus="clearContents(this);">
+					<input type="text" value={{surname}} placeholder="Иванов" onfocus="clearContents(this);">
 				</li>
 				<li>
 					<label for="email">E-mail</label>
-					<input type="email" name="email" maxlength="30" value={{email}}>
+					<input type="email" value={{email}} name="email" maxlength="30">
 				</li>
 				<li>
 				<label for="sex">Пол</label>
-						<input type="radio" class="radio" name="sex" value="man" checked>
+						<input type="radio" class="radio" name="sex" value="man"{% if sex=='man' %}checked{% endif %}>
 						мужской
-						<input type="radio" class="radio" name="sex" value="woman">
+						<input type="radio" class="radio" name="sex" value="woman" {% if sex=='woman' %}checked{% endif %}>
 						женский
 				</li>
 				<li>
 					<label for="country">Страна</label>
-					<input type="text" value={{country}} onfocus="clearContents(this);">
+					<input type="text" placeholder="Украина" value={{country}} onfocus="clearContents(this);">
 				</li>
 				<li>
 					<label for="city">Город</label>
-					<input type="text" value={{city}} onfocus="clearContents(this);">
+					<input type="text" placeholder="Одесса" value={{city}} onfocus="clearContents(this);">
 				</li>
 				<li>
 					<label>Дата рождения</label>
@@ -41,11 +41,11 @@
 				</li>
 				<li>
 					<label for="tel">Номер телефона</label>
-					<input type="tel" name="tel" id="tel" maxlength="20" value={{telephone}} onfocus="clearContents(this);">
+					<input type="tel" name="tel" id="tel" value={{telephone}} maxlength="20" value="+38(063)-000-00-00" onfocus="clearContents(this);">
 				</li>
 				<li>
 					<label for="about">О себе</label>
-					<textarea name="about" rows="4" cols="40" value={{about}} maxlength="200" onfocus="clearContents(this);">Хобби,учеба,работа</textarea>
+					<textarea name="about" rows="4" cols="40" maxlength="200" onfocus="clearContents(this);">{{about}}</textarea>
 				</li>
 				<li>
 				<button class="submit" type="submit">Отправить</button>
