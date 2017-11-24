@@ -19,7 +19,7 @@ class Users(db.Model):
 
 class UsersInfo(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True, )
-    surname = db.Column(db.Integer)
+    surname = db.Column(db.String(30))
     sex = db.Column(db.String(6))
     country = db.Column(db.String(30))
     city= db.Column(db.String(30))
