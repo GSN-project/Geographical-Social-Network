@@ -14,7 +14,7 @@ from GSN import database
 mod = Blueprint('profile', __name__, template_folder='templates')
 
 @mod.route("/myprofile", methods = ['GET'])
-def mypofget():
+def myprofget():
    if g.user is None:
            return redirect(url_for('login'))
    user = database.Users.query.filter_by(user_id=g.user.user_id).first()
