@@ -15,7 +15,7 @@ mod = Blueprint('profile', __name__, template_folder='templates')
 
 @mod.route("/myprofile", methods = ['GET'])
 def mypofget():
-   if not ('user_id'in session):
+   if g.user['user_id'] is None:
            return redirect(url_for('login'))
    aref = database.Users.query.filter_by(user_id=g.user['user_id']).first().ava_ref
    if aref is not None:
@@ -28,11 +28,14 @@ def mypofget():
 @mod.route("/myprofile", methods = ['POST'])
 def myprofpost():
    
-   if not ('user_id'in session):
+   if g.user['user_id'] is None:
        return redirect(url_for('login'))
 
    user = database.Users.query.filter_by(user_id=g.user['user_id']).first()
    user_info = database.UsersInfo.query.filter_by(user_id=g.user['user_id']).first()
+   if user_info is None:
+       user_info = database.UsersInfo(user_id=g.user['user_id'])
+       database.db.session.add(user_info)
    
 
    fname = request.form.get("name")
