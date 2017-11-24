@@ -16,7 +16,7 @@ mod = Blueprint('profile', __name__, template_folder='templates')
 @mod.route("/myprofile", methods = ['GET'])
 def myprofget():
    if g.user is None:
-           return redirect(url_for('login'))
+           return redirect(url_for('login.login'))
    user = database.Users.query.filter_by(user_id=g.user.user_id).first()
    user_info = database.UsersInfo.query.filter_by(user_id=g.user.user_id).first()
    if user_info.ava_ref is not None:
@@ -30,7 +30,7 @@ def myprofget():
 def myprofpost():
    
    if g.user is None:
-       return redirect(url_for('login'))
+       return redirect(url_for('login.login'))
 
    user = database.Users.query.filter_by(user_id=g.user.user_id).first()
    user_info = database.UsersInfo.query.filter_by(user_id=g.user.user_id).first()
