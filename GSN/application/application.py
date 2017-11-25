@@ -1,12 +1,14 @@
-
 import os
 import smtplib
+import random
+import string
 from flask_mail import Mail, Message
 from flask import Flask, render_template, request, g, redirect, session, url_for, Blueprint
 from flask_mysqldb import MySQL
 from werkzeug import check_password_hash, generate_password_hash
 # Database
 from GSN import database
+from flask_uploads import UploadSet, configure_uploads, IMAGES
 
 
 mod = Blueprint('application', __name__, template_folder='templates')
@@ -30,4 +32,6 @@ def showAll():
     if users is None:
         return None
     return toShow
+
+
 

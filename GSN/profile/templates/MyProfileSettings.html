@@ -1,9 +1,10 @@
 {% extends "Header.html" %}
 {% block content %}
 <section class="list-1">
-	<form enctype="multipart/form-data" method="post" action="">
-		<img src="../static/img/avatar.png" width="150" height="150"/>
+	<form enctype="multipart/form-data" method="post" action="{{ url_for('profile.upload') }}">
+		<img src="{{ava}}" width="150" height="150"/>
 		<input type="file" name="photo" required="" accept="image/*">
+		<button class="submit" type="submit">Отправить</button>
 	</form>
 	<form method="post" name="contact_form" class="contact_form" action="">
    	<ul>
@@ -14,7 +15,7 @@
 				</li>
 				<li>
 					<label for="surname">Фамилия</label>
-					<input type="text" value={{surname}} placeholder="Иванов" onfocus="clearContents(this);">
+					<input type="text" name="surname" value={{surname}} placeholder="Иванов">
 				</li>
 				<li>
 					<label for="email">E-mail</label>
@@ -29,11 +30,11 @@
 				</li>
 				<li>
 					<label for="country">Страна</label>
-					<input type="text" placeholder="Украина" value={{country}} onfocus="clearContents(this);">
+					<input type="text" name="country" placeholder="Украина" value={{country}}>
 				</li>
 				<li>
 					<label for="city">Город</label>
-					<input type="text" placeholder="Одесса" value={{city}} onfocus="clearContents(this);">
+					<input type="text" name="city" placeholder="Одесса" value={{city}}>
 				</li>
 				<li>
 					<label>Дата рождения</label>
@@ -41,11 +42,11 @@
 				</li>
 				<li>
 					<label for="tel">Номер телефона</label>
-					<input type="tel" name="tel" id="tel" value={{telephone}} maxlength="20" value="+38(063)-000-00-00" onfocus="clearContents(this);">
+					<input type="tel" name="telephone" id="tel" value={{telephone}} maxlength="20" value="+38(063)-000-00-00">
 				</li>
 				<li>
 					<label for="about">О себе</label>
-					<textarea name="about" rows="4" cols="40" maxlength="200" onfocus="clearContents(this);">{{about}}</textarea>
+					<textarea name="about" rows="4" cols="40" maxlength="200">{{about}}</textarea>
 				</li>
 				<li>
 				<button class="submit" type="submit">Отправить</button>
@@ -53,10 +54,5 @@
 			</li>
    	</ul>
 	</form>
-	<script>
-			function clearContents(element) {
-	  element.value = '';
-	}
-	</script>
 </section>
 {% endblock %}

@@ -52,7 +52,7 @@ def activation():
         user.activation_link = None
         database.db.session.commit()
         # Create info about user
-        user_info = database.UsersInfo(user_id=cur_id, surname=None, sex= None, country=None, city=None, date= None, telephone = None, about = None)
+        user_info = database.UsersInfo(user_id=cur_id)
         database.db.session.add(user_info)
         database.db.session.commit()
         return redirect(url_for('profile.myprofget'))
