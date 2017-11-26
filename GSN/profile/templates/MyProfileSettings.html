@@ -2,7 +2,7 @@
 {% block content %}
 <section class="list-1">
 	<form enctype="multipart/form-data" method="post" action="{{ url_for('profile.upload') }}">
-		<img src="{{ava}}" width="150" height="150"/>
+		<img src={{ava}} width="150" height="150"/>
 		<input type="file" name="photo" required="" accept="image/*">
 		<button class="submit" type="submit">Отправить</button>
 	</form>

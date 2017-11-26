@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import random
 import string
-from flask_uploads import UploadSet, configure_uploads, IMAGES
+from flask_uploads import configure_uploads
 # Database
 from GSN import database
 # Mail
@@ -17,6 +17,7 @@ from GSN.profile.profile import mod
 from GSN.map.map import mod
 from GSN.logout.logout import mod
 from GSN.profile.profile import mod
+from .config import photos
 
 
 
@@ -45,7 +46,7 @@ def create_app(config = None):
 
 	#photos = UploadSet('photos', IMAGES)
 	
-	app.config['UPLOADED_PHOTOS_DEST'] = 'static/img/user'
+	app.config['UPLOADED_PHOTOS_DEST'] = 'GSN/static/img/user'
 	
 	# Blueprints
 	app.register_blueprint(application.application.mod)
@@ -58,7 +59,6 @@ def create_app(config = None):
 	app.secret_key = os.urandom(24)
 	
 	
-	photos = UploadSet('photos', IMAGES)
 	configure_uploads(app, photos)
 
 # This route takes place before any request
@@ -68,7 +68,6 @@ def create_app(config = None):
 		if 'user_id' in session:
 			g.user = database.Users.query.filter_by(user_id=session['user_id']).first()
 			g.user_info = database.UsersInfo.query.filter_by(user_id=session['user_id']).first()
-		g.photo = photos
 		
 	
 	return app
