@@ -26,7 +26,7 @@ class UsersInfo(db.Model):
     date = db.Column(db.Date)
     telephone = db.Column(db.String(15))
     about = db.Column(db.String(200))
-    ava_ref = db.Column(db.String(50))
+    ava_ref = db.Column(db.String(100))
 
 class Posts(db.Model):
 	post_id = db.Column(db.Integer, primary_key=True)
