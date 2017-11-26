@@ -16,6 +16,9 @@ from ..config import photos
 
 mod = Blueprint('profile', __name__, template_folder='templates')
 
+#not beautiful solution
+PHOTOS_DEST = 'static/img/user'
+
 @mod.route("/myprofile", methods = ['POST'])
 def myprofpost():
     if g.user is None:
@@ -47,9 +50,10 @@ def myprofget():
     user = database.Users.query.filter_by(user_id=g.user.user_id).first()
     user_info = database.UsersInfo.query.filter_by(user_id=g.user.user_id).first()
     if user_info.ava_ref is not None:
-        ref_ava = current_app.config['UPLOADED_PHOTOS_DEST'] + '/' + user_info.ava_ref
+        ref_ava = PHOTOS_DEST + '/' + user_info.ava_ref
     else:
         ref_ava = 'static/img/avatar.png'
+    print(ref_ava)
     return render_template('MyProfileSettings.html', ava=ref_ava, name=user.name, surname=user_info.surname, email=user.email, country=user_info.country, city=user_info.city,date=user_info.date,sex=user_info.sex,telephone=user_info.telephone, about=user_info.about)
 
         
@@ -64,7 +68,7 @@ def upload():
 
         #appending random prefix to name of the file to prevent name collision
         rand_prefix = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(15))
-        os.rename(current_app.config['UPLOADED_PHOTOS_DEST'] + '/' + fname, current_app.config['UPLOADED_PHOTOS_DEST'] + '/' + rand_prefix + fname) 
+        os.rename(current_app.config['UPLOADED_PHOTOS_DEST'], current_app.config['UPLOADED_PHOTOS_DEST'] + '/' + rand_prefix + fname) 
         user_info.ava_ref = rand_prefix + fname
         database.db.session.commit()
     return redirect(url_for('profile.myprofget'))

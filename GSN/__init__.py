@@ -46,7 +46,7 @@ def create_app(config = None):
 
 	#photos = UploadSet('photos', IMAGES)
 	
-	app.config['UPLOADED_PHOTOS_DEST'] = 'static/img/user'
+	app.config['UPLOADED_PHOTOS_DEST'] = 'GSN/static/img/user'
 	
 	# Blueprints
 	app.register_blueprint(application.application.mod)
