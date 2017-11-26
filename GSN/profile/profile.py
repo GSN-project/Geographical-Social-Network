@@ -67,5 +67,26 @@ def upload():
         os.rename(UPLOADED_PHOTOS_DEST + '/' + fname, UPLOADED_PHOTOS_DEST + '/' + rand_prefix + fname) 
         user_info.ava_ref = rand_prefix + fname
         database.db.session.commit()
-    return redirect(url_for('profile.myprofget'))
+        return redirect(url_for('profile.myprofile'))
+
+
+# @mod.route('/upload', methods=['POST'])
+# def upload():
+#    if 'photo' in request.files:
+#        cur_id = g.user['user_id']
+#        cur = mysql.connection.cursor()
+       
+#        #if user already has an avatar - delete
+#        if (g.user['ava_ref'] is not None):
+#            os.remove(mod.config['UPLOADED_PHOTOS_DEST'] + '/' + g.user['ava_ref'])
+
+#        fname = photos.save(request.files['photo'])
+#        #appending random prefix to name of the file to prevent name collision
+#        rand_prefix = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(15))
+#        os.rename(mod.config['UPLOADED_PHOTOS_DEST'] + '/' + fname, 
+#                  mod.config['UPLOADED_PHOTOS_DEST'] + '/' + rand_prefix + fname)
+       
+#        cur.execute('''UPDATE users SET ava_ref = %s WHERE user_id = %s''', (rand_prefix + fname, cur_id))
+#        mysql.connection.commit()
+#    return redirect(url_for('myprofget'))
 
