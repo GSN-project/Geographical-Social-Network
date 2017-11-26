@@ -68,7 +68,7 @@ def upload():
 
         #appending random prefix to name of the file to prevent name collision
         rand_prefix = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(15))
-        os.rename(current_app.config['UPLOADED_PHOTOS_DEST']+fname, current_app.config['UPLOADED_PHOTOS_DEST'] + '/' + rand_prefix + fname) 
+        os.rename(current_app.config['UPLOADED_PHOTOS_DEST']+'/'+fname, current_app.config['UPLOADED_PHOTOS_DEST'] + '/' + rand_prefix + fname) 
         user_info.ava_ref = rand_prefix + fname
         database.db.session.commit()
     return redirect(url_for('profile.myprofget'))
