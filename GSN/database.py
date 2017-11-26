@@ -18,15 +18,15 @@ class Users(db.Model):
     activation_link = db.Column(db.String(20))
 
 class UsersInfo(db.Model):
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True, )
-    surname = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
+    surname = db.Column(db.String(30))
     sex = db.Column(db.String(6))
     country = db.Column(db.String(30))
     city= db.Column(db.String(30))
     date = db.Column(db.Date)
     telephone = db.Column(db.String(15))
     about = db.Column(db.String(200))
-    ava_ref = db.Column(db.String(50))
+    ava_ref = db.Column(db.String(100))
 
 class Posts(db.Model):
 	post_id = db.Column(db.Integer, primary_key=True)
