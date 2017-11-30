@@ -28,7 +28,7 @@ def showAll():
     users = database.Users.query.all()
     toShow = ""
     for user in users:
-        toShow += str(user.user_id) + "||" + str(user.name) + "||" + str(user.login) + "||" + str(user.email) + "||" + str(user.password) + "||" + str(user.activation_link) + "<br>"
+        toShow += str(user.user_id)  + "||" + str(user.login) + "||" + str(user.email) + "||" + str(user.password) + "||" + str(user.activation_link) + "<br>"
     if users is None:
         return None
     return toShow

@@ -1,0 +1,62 @@
+{% extends "Header.html" %}
+{% block content %}
+<section class="list-1">
+	<form enctype="multipart/form-data" method="post" action="">
+		<img src="../static/img/avatar.png" width="150" height="150"/>
+		<input type="file" name="photo" required="" accept="image/*">
+	</form>
+	<form method="post" name="contact_form" class="contact_form" action="/myprofile">
+   	<ul>
+			<li>
+				<li>
+					<label for="name">Имя пользователя</label>
+					<input type="text" name="name" required="" value= {{name}}>
+				</li>
+				<li>
+					<label for="surname">Фамилия</label>
+					<input type="text" name="surname" value={{surname}}  onfocus="clearContents(this);">
+				</li>
+				<li>
+					<label for="email">E-mail</label>
+					<input type="email" name="email" maxlength="30" value={{email}}>
+				</li>
+				<li>
+				<label for="sex">Пол</label>
+						<input type="radio" class="radio" name="sex" value="man" checked>
+						мужской
+						<input type="radio" class="radio" name="sex" value="woman">
+						женский
+				</li>
+				<li>
+					<label for="country">Страна</label>
+					<input type="text" name="country" value={{country}} onfocus="clearContents(this);">
+				</li>
+				<li>
+					<label for="city">Город</label>
+					<input type="text" name="city" value={{city}} onfocus="clearContents(this);">
+				</li>
+				<li>
+					<label>Дата рождения</label>
+					<input type="date" id="date" name="date" value={{date}}>
+				</li>
+				<li>
+					<label for="tel">Номер телефона</label>
+					<input type="tel" name="telephone" id="tel" maxlength="20" value={{telephone}} onfocus="clearContents(this);">
+				</li>
+				<li>
+					<label for="about">О себе</label>
+					<textarea name="about" rows="4" cols="40" value={{about}} maxlength="200" onfocus="clearContents(this);"></textarea>
+				</li>
+				<li>
+				<button class="submit" type="submit">Отправить</button>
+				</li>
+			</li>
+   	</ul>
+	</form>
+	<script>
+			function clearContents(element) {
+	  element.value = '';
+	}
+	</script>
+</section>
+{% endblock %}

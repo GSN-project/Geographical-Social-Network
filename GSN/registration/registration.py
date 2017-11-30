@@ -20,7 +20,6 @@ mod = Blueprint('registration', __name__, template_folder='templates')
 def registration():
     if request.method == 'POST':
         # Take info from form on registration page
-        name = request.form.get("name")
         login = request.form.get("login")
         password = request.form.get("password")
         email = request.form.get("email")
@@ -29,20 +28,20 @@ def registration():
         # Checking if email is unique
         if used is not None:
             error = ' Login is already used '
-            return render_template("Registration.html", error=error,pname=name,plogin=login,pemail=email)
+            return render_template("Registration.html", error=error,plogin=login,pemail=email)
         # Selecting from database login for checking
         used = database.Users.query.filter_by(email=email).first()
         # Checking if email and login are unique
         if used is not None:
             error = ' Email is already used '
-            return render_template("Registration.html", error=error,pname=name,plogin=login,pemail=email)
+            return render_template("Registration.html", error=error,plogin=login,pemail=email)
         # Insert into database
         activation_link = "".join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for x in range(16))
-        user = database.Users(name=name,login=login,email=email,password=generate_password_hash(password), activation_link = activation_link)
+        user = database.Users(login=login,email=email,password=generate_password_hash(password), activation_link = activation_link)
         database.db.session.add(user)
         database.db.session.commit()
         # Send massage 
-        send_email('Hello', 'geosocnetwork@gmail.com',[email], render_template("msg.html", user = name,login=login,link=activation_link))
+        send_email('Hello', 'geosocnetwork@gmail.com',[email], render_template("msg.html", user = 'User',login=login,link=activation_link))
         return render_template("emailConfirmation.html")
     elif request.method == 'GET':
         if g.user:
