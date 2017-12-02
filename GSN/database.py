@@ -39,24 +39,25 @@ class Posts(db.Model):
 	lng = db.Column(db.Float)
 	privacy = db.Column(db.Integer)
 	description = db.Column(db.Text)
-
+	#date = db.Column(db.DateTime, default=datetime.datetime.utcnow)	
 	author = db.relationship('Users', backref=db.backref('Posts', lazy=True))
-
-class Chat(db.Model):
-    chat_id = db.Column(db.Integer, primary_key=True)
-    member = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
-    chat_name = db.Column(db.String(150))
-    memb = db.relationship('Users', backref=db.backref('Chat', lazy=True))
-
-
-class Massages(db.Model):
-    massage_id = db.Column(db.Integer, primary_key=True)
+	
+	
+class Comments(db.Model):
+    comment_id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))    
-    chat_id = db.Column(db.Integer, db.ForeignKey('chat.chat_id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.posts_id'))
+    photo_id = db.Column(db.Integer, db.ForeignKey('photos.photo_id'))
     text = db.Column(db.Text) 
     date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    author = db.relationship('Users', backref=db.backref('Massages', lazy=True))
+    likes = db.Column(db.Integer)
+    author = db.relationship('Users', backref=db.backref('Comments', lazy=True))
 
-# To Create databese like this run this:
-# db.create_all()
-# Таня, возможно чтобы поднять на heroku такую бд нужно раскоментить строчку и запустить проект. Вдруг сработает
+
+	
+	
+	
+	
+	
+	
+	

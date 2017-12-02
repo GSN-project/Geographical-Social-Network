@@ -5,41 +5,58 @@
           <form id="hidden_panel">
               <span class="close" onclick="closePanel()"></span>
               <p>Название вашей метки: </p>
-              <input id="titleIn" class="input" type="text" name="markerTitle" placeholder="Введите название вашей метки" required="">
+              <input id="tIn" class="input" type="text" name="markerTitle" placeholder="Введите название вашей метки" required="">
               <p>Кто может видеть вашу метку:</p>
               <div id="privacyList">
-              <select  id="privacyListSelect">
+              <select  id="prIn">
                 <option value="2">Все</option>
                 <option  value="1">Только друзья</option>
                 <option value="0">Только я</option>
               </select>
               </div>
               <p>Описание вашей метки:</p>
-              <input class="input" id="descriptionInput" type="text" name="markerDescription" placeholder="Введите описание вашей метки">
+              <input class="input" id="dIn" type="text" name="markerDescription" placeholder="Введите описание вашей метки">
               <button class="button">Добавить</button>
           </form>
         </div>
 	       </div>
-            <form id = "markerHiddenPanel">
-              <span class="close" onclick="closeMarkerPanel()"></span>
-              <p id="sName">Название метки: </p>
-              <p id="sDsp">Описание метки:</p>
-               <button class="button" id= "showCommentsButton">Показать комметарии</button>
-                <button class="button" id= "showPostsButton">Показать посты</button>
-            </form>
+            <div id = "markerHiddenPanel">
+			<span class="close" onclick="closeMarkerPanel()"></span>
+			  <p id="Aut">Автор метки: </p>
+			  <p id="Crt">Создана: </p>
+              <p id="Lbl">Название метки: </p>
+              <p id="Dsp">Описание метки:</p>
+               <button class="button" id= "showCommentsButton">Показать комметарии</button>  
+                <button class="button" id= "showPostsButton">Показать посты</button><!--TODO: add panel-->
+
+            </div>
         </div>
+        <form id = "mCP">
+                <span class="close" onclick="closeMarkerCommentPanel()"></span>
+				<input id="cIn" class="input" type="text" name="markerTitle" placeholder="Введите название вашей метки" required="">
+				<button class="button" id= "addCommentsButton">Добавить коментарий</button>
+				<div id="mCP1">
+				</div>
+            </form>
           <div id="map"></div>
               <script type="text/javascript">
 			  
 
+
+			
+		var focusOn;	  
+
 		function closePanel(){
 			$('#hidden_panel').animate({'left':'-320px'},100);
-			$("input#titleIn").val("");
-			$('#privacyListSelect').val(2);
-			$("input#descriptionInput").val("");
+			$("#tIn").val("");
+			$('#prIn').val(2);
+			$("#dIn").val("");
 		}
 		function closeMarkerPanel(){
 			$('#markerHiddenPanel').animate({'left':'-320px'},100);
+    }
+     function closeMarkerCommentPanel(){
+      $('#mCP').animate({'left':'-320px'},100);
     }
 				
 		var markers=[];
@@ -52,7 +69,6 @@
         });
 		
 		getMarkers();
-		
 		
 		function getMarkers() {
 		$.ajax({
@@ -71,14 +87,16 @@
 							lng: loc.lng},
 							title: loc.title,
 							description: loc.description,
-							id: loc.post_id,
-							map: map
+							id: loc.id,
+							map: map,
+							author: loc.author
+							//,dateTime:loc.dateTime
 							});			
+														
 							markers.push(marker);
-						}
-                    }
+						} 
+                    } 
 				});
-
 				 addMarkerListeners();
 
 				//Add a marker clusterer to manage the markers.
@@ -94,16 +112,19 @@
 			  // function closure on the "i" variable
 			  google.maps.event.addListener(markers[i], 'click', (function(i) {
 			  return function() {
-							$("#sName").text("Название метки: "+markers[i].title);
-							$("#sDsp").text("Описание метки: "+markers[i].description);
+							$("#Aut").text("Автор метки: "+markers[i].author);
+							$("#Crt").text("Создана: "+markers[i].dateTime);
+							$("#Lbl").text("Название метки: "+markers[i].title);
+							$("#Dsp").text("Описание метки: "+markers[i].description);
 							$("#markerHiddenPanel").animate({'left':'0'},100);
+							focusOn=markers[i];				
 			  }})(i));
 			}
 		  }
 		}
 
 		
-      	var addLocation;  //work around: problem with coord lose when input form appears 
+      	var addLocation; 
 			
         google.maps.event.addListener(map, 'rightclick', function(event) {
 		        $('#hidden_panel').animate({'left':'0'},100);
@@ -116,26 +137,81 @@
 		//write in backend and refresh map 
 		document.getElementById("hidden_panel").onsubmit=placeMarker;
 		function placeMarker() {
-			closePanel();
+			
 			var marker=new google.maps.Marker({
 					position: addLocation});
 			$.ajax({
                     type: 'POST',
                     url: "/add_pin/",
 					async: false,
-				    data: {  "c1": marker.getPosition().lat(), "c2": marker.getPosition().lng(),"title":$("input#titleIn").val(),"priv":$('#privacyListSelect').val(),"dsp":$("input#descriptionInput").val()},
+				    data: {  
+						"c1": marker.getPosition().lat(), 	
+						"c2": marker.getPosition().lng(),	
+						"title":$("#tIn").val(),	
+						"priv":$('#prIn').val(),	
+						"dsp":$("#dIn").val()
+						},
                     success: function(data) {
                     }});
+			closePanel();
 			addLocation=null;
-			$("input#titleIn").val("");
-			$('#privacyListSelect').val(2);
-			$("input#descriptionInput").val("");
+			$("#tIn").val("");
+			$('#prIn').val(2);
+			$("#dIn").val("");
 			getMarkers(); 
 			return false;
 		};
 	  		
 	}
-    </script>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		document.getElementById("showCommentsButton").onclick=function() {     //TODO: when form will be ready, replace with onscroll query   
+		//TODO: show form
+			$.ajax({
+                    type: 'GET',
+                    url: "/get_comments/",
+					async: false,
+				    data: {  
+						"id": focusOn.id	
+						},
+                    success: function(data) {
+
+						data = JSON.parse(data);
+						for(var i = 0; i<data.length; i++ ){
+							info = data[i];
+							var newLi = document.createElement('li');
+          					newLi.innerHTML ="<div>" + "<li>" + info.author + "</li>" +"<li>" +  info.text +"</li>" + "</div>";
+          					document.getElementById('mCP1').appendChild(newLi);
+						}
+						$('#mCP').animate({'left':'0'},100);
+                    }});
+					
+			closeMarkerPanel();
+		};		
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		document.getElementById("mCP").onsubmit=addComment;
+		function addComment(){
+
+			//closeMarkerCommentPanel();
+			$.ajax({
+                    type: 'POST',
+                    url: "/add_pin_comment/",
+					async: false,
+				    data: {  
+						"text": $("#cIn").val(),
+						"id":focusOn.id
+						},
+					success: function(data) {
+						info=JSON.parse(data);
+						var newLi = document.createElement('li');
+						newLi.innerHTML ="<div>" + "<li>" + info.author + "</li>" +"<li>" +  info.text +"</li>" + "</div>";
+						document.getElementById('mCP1').appendChild(newLi);
+                    }
+			});
+			
+			return false;
+		}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	</script>
 	
 	<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script>

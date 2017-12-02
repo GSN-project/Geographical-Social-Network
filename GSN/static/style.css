@@ -268,18 +268,17 @@ padding-left: 5px;}
 }
 /*Карта*/
 /* Скрытый блок */
-#hidden_panel, #markerHiddenPanel {
+#hidden_panel, #markerHiddenPanel, #mCP {
   position: fixed; 
   top: 100px; 
   left: -320px; 
   background: lavender; 
   color: #000; 
   width: 300px; 
-  height: 90%; 
+  height: 81%; 
   padding: 10px; 
   text-align: left; 
   z-index: 100;
-
 
   -webkit-transition-duration: 0.3s; 
   -moz-transition-duration: 0.3s;
@@ -289,6 +288,13 @@ padding-left: 5px;}
   -webkit-border-radius: 0 5px 5px 0; 
   -moz-border-radius: 0 5px 5px 0;
   border-radius: 0 5px 5px 0;
+}
+#mCP1 {
+	max-height: 95%;
+	overflow: auto;
+	display: flex;
+  flex-direction: column-reverse;
+  list-style:none;
 }
 /*Закрытие*/
 .close {
@@ -320,18 +326,19 @@ padding-left: 5px;}
     margin-top: 2%;
     width: 90%;
 }
-#descriptionInput{
+#dIn{
   padding-bottom: 50%;
 }
 #hidden_panel .button{
     margin-top: 10%;
 }
-#hidden_panel p , #markerHiddenPanel{
+#hidden_panel p , #markerHiddenPanel p ,#markerCommentsHiddenPanel p {
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   margin: 0;
   margin-top: 7%;
 }
+
 #privacyList{
   
   font-family: "Roboto", sans-serif;
@@ -340,7 +347,7 @@ padding-left: 5px;}
     margin-top: 2%;
          
 }
-#privacyListSelect{
+#prIn{
    border: none;
    width: 80%;\
   background-color: #fff;
@@ -353,7 +360,7 @@ padding-left: 5px;}
   border: 1px solid silver;
    line-height: 2;
 }
-#privacyListSelect option : hover{
+#prIn option : hover{
   background-color: #000;
 }
      

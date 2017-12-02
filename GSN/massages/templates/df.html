@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+ 	<head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="../static/style.css">
+        <title>Geographical social network (GSN)</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    </head>
+ 	<body>
+ 	<header>
+          <div>
+             <div class="title"><a href="MyProfile.html"><img src="../static/img/logo.png" height="45">Geographic social network</a></div>
+              <ul id="main-menu">
+                <li>
+                  <a href="MyProfile.html"><img src="../static/img/avatar.png" height="45"></a>
+                  <ul>
+                    <li><a href="Map.html">Карта</a></li>
+                    <li><a href="Friends.html">Друзья</a></li>
+                    <li><a href="Message.html">Сообщения</a></li>
+                    <li><a href="MySettings.html">Настройки</a></li>
+                    <li><a href="Main.html">Выход</a></li>
+                  </ul>
+                </li>
+              </ul>
+          </div>
+      </header>
+    <div id = 'lll'>
+      <div  id = 'sideDialogPanel'>
+
+      </div>
+  		<div id="msg-box" >
+   		   <li>wefwe</li>
+         <form id="t-box" action="">
+              <input type="text" class='msg'>
+              <button onClick="initDialogs()" class= "button" type="submit"  value= "отправить" >Отправить</button>
+        </form>
+  	  </div>
+    </div>
+		
+    <script type="text/javascript">
+      initDialogs();
+      var inform;
+      function initDialog(name){
+      $.ajax({
+        type: 'GET',
+        url: "/get_messages/" + name ,
+        async:false,
+        success: function(data) {
+        data = JSON.parse(data);
+        for(var i=0; i<data.length;i++){
+          var info = data[i];
+          var newLi = document.createElement('li');
+          newLi.innerHTML ="<div>" + "<li>" +info.author_fullname+ "</li>" +"<li>" +info.text+"</li>" + "</div>";
+          document.getElementById('msg').appendChild(newLi);
+        }
+
+      }
+      });
+    }
+      function initDialogs(){
+        event.preventDefault();
+      $.ajax({
+        type: 'GET',
+        url: "/get_chats/",
+        async:false,
+        success: function(data) {
+        data = JSON.parse(data);
+        for(var i=0; i<data.length;i++){
+          var info = data[i];
+          var newLi = document.createElement('li');
+		  inform.push(newLi);
+          newLi.innerHTML ="<div>" + "<li>" + info.member + "</li>" +"<li>" +  info.last_message_body +"</li>" + "</div>";
+          newLi.setAttribute('name', info.chat_id);
+          //newLi.setAttribute(onclick , initDialog(this.getAttribute(name)));
+          document.getElementById('sideDialogPanel').appendChild(newLi);
+				}
+			}
+      });
+      addListeneres();
+    }
+	
+    function addListeneres(){
+      for (var i = 0; i < inform.length; i++) {
+		var newLi=inform[i];
+        newLi.setAttribute(onclick , (function(i) {
+        return function() {
+              initDialog(newLi.getAttribute(name));
+        }})(i));
+      }
+    }
+</script>
+</body>
+</html>

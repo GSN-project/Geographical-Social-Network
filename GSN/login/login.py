@@ -34,6 +34,7 @@ def login():
     return render_template('login.html', error=error, congrads=congrads)
 
 
+
 @mod.route("/activate/")
 def activation():
     login = request.args.get('username')
@@ -51,7 +52,7 @@ def activation():
         user.activation_link = None
         database.db.session.commit()
         # Create info about user
-        user_info = database.UsersInfo(user_id=cur_id)
+        user_info = database.UsersInfo(user_id=cur_id, surname=None, sex= None, country=None, city=None, date= None, telephone = None, about = None)
         database.db.session.add(user_info)
         database.db.session.commit()
         return redirect(url_for('profile.myprofget'))
