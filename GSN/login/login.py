@@ -34,7 +34,6 @@ def login():
     return render_template('login.html', error=error, congrads=congrads)
 
 
-
 @mod.route("/activate/")
 def activation():
     login = request.args.get('username')

@@ -27,7 +27,7 @@ def myprofpost():
     user = database.Users.query.filter_by(user_id=g.user.user_id).first()
     user_info = database.UsersInfo.query.filter_by(user_id=g.user.user_id).first()
 
-    user.name = request.form.get("name")
+    user_info.name = request.form.get("name")
     user_info.surname = request.form.get("surname")
     user.email = request.form.get("email")
     user_info.sex = request.form.get("sex")
@@ -54,7 +54,7 @@ def myprofget():
     else:
         ref_ava = 'static/img/avatar.png'
     print(ref_ava)
-    return render_template('MyProfileSettings.html', ava=ref_ava, name=user.name, surname=user_info.surname, email=user.email, country=user_info.country, city=user_info.city,date=user_info.date,sex=user_info.sex,telephone=user_info.telephone, about=user_info.about)
+    return render_template('MyProfileSettings.html', ava=ref_ava, name=user_info.name, surname=user_info.surname, email=user.email, country=user_info.country, city=user_info.city,date=user_info.date,sex=user_info.sex,telephone=user_info.telephone, about=user_info.about)
 
         
 @mod.route('/upload', methods=['POST'])
