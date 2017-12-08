@@ -1,58 +1,104 @@
   {% extends "Header.html" %}
   {% block content %}
         <section>
+		<!--
+		    <div id = "ph">
+                <span class="close" ></span>
+				<p id="pinInfo">hsrtxhxrth<p>
+				<div id="ws">
+				</div>
+            </div>-->
+		<div id= "ph">
+				<span class="close" onclick="closePostsPanel()"></span>
+				<button class="button" id= "addPostButton">Добавить пост</button>
+				<div id="ws">
+				</div>
+        </div>
+		
         <div id="panel"> 
+		    <form id="loadImg" enctype=multipart/form-data>
+			<span class="close" onclick="closeLoadPostPanel()"></span>
+				<input id="uploadName" class="input" type="text" name="markerTitle" placeholder="Введите название" required="">
+				<input id="uploadimage" type=file name=file>
+				<input id="uploadText" class="input" type="text" name="markerTitle" placeholder="Введите текст" required="">
+				<input id="addPost" type=submit value=Upload>
+			</form>
+				
           <form id="hidden_panel">
               <span class="close" onclick="closePanel()"></span>
               <p>Название вашей метки: </p>
-              <input id="titleIn" class="input" type="text" name="markerTitle" placeholder="Введите название вашей метки" required="">
+              <input id="tIn" class="input" type="text" name="markerTitle" placeholder="Введите название вашей метки" required="">
               <p>Кто может видеть вашу метку:</p>
               <div id="privacyList">
-              <select  id="privacyListSelect">
+              <select  id="prIn">
                 <option value="2">Все</option>
                 <option  value="1">Только друзья</option>
                 <option value="0">Только я</option>
               </select>
               </div>
               <p>Описание вашей метки:</p>
-              <input class="input" id="descriptionInput" type="text" name="markerDescription" placeholder="Введите описание вашей метки">
+              <input class="input" id="dIn" type="text" name="markerDescription" placeholder="Введите описание вашей метки">
               <button class="button">Добавить</button>
           </form>
         </div>
 	       </div>
-            <form id = "markerHiddenPanel">
-              <span class="close" onclick="closeMarkerPanel()"></span>
-              <p id="sName">Название метки: </p>
-              <p id="sDsp">Описание метки:</p>
-               <button class="button" id= "showCommentsButton">Показать комметарии</button>
-                <button class="button" id= "showPostsButton">Показать посты</button>
-            </form>
+            <div id = "markerHiddenPanel">
+			<span class="close" onclick="closeMarkerPanel()"></span>
+			  <p id="Aut">Автор метки: </p>
+			  <p id="Crt">Создана: </p>
+              <p id="Lbl">Название метки: </p>
+              <p id="Dsp">Описание метки:</p>
+               <button class="button" id= "showCommentsButton">Показать комметарии</button>  
+			   <button class="button" id= "showPostsButton">Показать посты</button>
+               </div>
         </div>
+        <form id = "mCP">
+                <span class="close" onclick="closeMarkerCommentPanel()"></span>
+				<input id="cIn" class="input" type="text" name="markerTitle" placeholder="Введите текст комментария" required="">
+				<button class="button" id= "addCommentsButton">Добавить коментарий</button>
+				<div id="mCP1">
+				</div>
+            </form>
           <div id="map"></div>
               <script type="text/javascript">
 			  
 
+
+			
+		var focusOn;	  
+		function closePostsPanel(){
+			$('#ph').animate({'left':'-720px'},100);
+		}
 		function closePanel(){
 			$('#hidden_panel').animate({'left':'-320px'},100);
-			$("input#titleIn").val("");
-			$('#privacyListSelect').val(2);
-			$("input#descriptionInput").val("");
+			$("#tIn").val("");
+			$('#prIn').val(2);
+			$("#dIn").val("");
 		}
 		function closeMarkerPanel(){
 			$('#markerHiddenPanel').animate({'left':'-320px'},100);
     }
-				
+		function closeMarkerCommentPanel(){
+			$('#mCP').animate({'left':'-320px'},100);
+    }
+		function closeLoadPostPanel(){
+		$('#uploadName').val("");
+		$('#uploadText').val("");
+		$('#uploadimage').val("");
+        $('#loadImg').animate({'left':'-320px'},100);
+    }
+	
+		
 		var markers=[];
         var map;
 		var markerCluster;
-      function initMap() {
+        function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 3,
           center: {lat: 46.024, lng: 40.887}
         });
 		
 		getMarkers();
-		
 		
 		function getMarkers() {
 		$.ajax({
@@ -71,14 +117,16 @@
 							lng: loc.lng},
 							title: loc.title,
 							description: loc.description,
-							id: loc.post_id,
-							map: map
+							id: loc.id,
+							map: map,
+							author: loc.author
+							//,dateTime:loc.dateTime
 							});			
+														
 							markers.push(marker);
-						}
-                    }
+						} 
+                    } 
 				});
-
 				 addMarkerListeners();
 
 				//Add a marker clusterer to manage the markers.
@@ -94,16 +142,29 @@
 			  // function closure on the "i" variable
 			  google.maps.event.addListener(markers[i], 'click', (function(i) {
 			  return function() {
-							$("#sName").text("Название метки: "+markers[i].title);
-							$("#sDsp").text("Описание метки: "+markers[i].description);
-							$("#markerHiddenPanel").animate({'left':'0'},100);
+							$("#Aut").text("Автор метки: "+markers[i].author);
+							$("#Crt").text("Создана: "+markers[i].dateTime);
+							$("#Lbl").text("Название метки: "+markers[i].title);
+							$("#Dsp").text("Описание метки: "+markers[i].description);
+							$("#markerHiddenPanel").animate({'left':'0'},100
+							focusOn=markers[i];	
+							$.ajax({
+							type: 'POST',
+							url: "/focus_pin/",
+							async: false,
+							data: {  
+								"id":focusOn.id
+								},
+							success: function(data) {
+							}});
+										
 			  }})(i));
 			}
 		  }
 		}
 
 		
-      	var addLocation;  //work around: problem with coord lose when input form appears 
+      	var addLocation; 
 			
         google.maps.event.addListener(map, 'rightclick', function(event) {
 		        $('#hidden_panel').animate({'left':'0'},100);
@@ -116,26 +177,240 @@
 		//write in backend and refresh map 
 		document.getElementById("hidden_panel").onsubmit=placeMarker;
 		function placeMarker() {
-			closePanel();
+			
 			var marker=new google.maps.Marker({
 					position: addLocation});
 			$.ajax({
                     type: 'POST',
                     url: "/add_pin/",
 					async: false,
-				    data: {  "c1": marker.getPosition().lat(), "c2": marker.getPosition().lng(),"title":$("input#titleIn").val(),"priv":$('#privacyListSelect').val(),"dsp":$("input#descriptionInput").val()},
+				    data: {  
+						"c1": marker.getPosition().lat(), 	
+						"c2": marker.getPosition().lng(),	
+						"title":$("#tIn").val(),	
+						"priv":$('#prIn').val(),	
+						"dsp":$("#dIn").val()
+						},
                     success: function(data) {
                     }});
+			closePanel();
 			addLocation=null;
-			$("input#titleIn").val("");
-			$('#privacyListSelect').val(2);
-			$("input#descriptionInput").val("");
+			$("#tIn").val("");
+			$('#prIn').val(2);
+			$("#dIn").val("");
 			getMarkers(); 
 			return false;
 		};
 	  		
 	}
-    </script>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		document.getElementById("showCommentsButton").onclick=function() {    
+			$('#mCP').animate({'left':'0'},100);
+			document.getElementById('mCP1').innerHTML='';
+			document.getElementById('cIn').innerHTML='';
+			$.ajax({
+                    type: 'GET',
+                    url: "/get_comments/",
+					async: false,
+				    data: {  
+						"id": focusOn.id	
+						},
+                    success: function(data) {
+
+						data = JSON.parse(data);
+						for(var i = 0; i<data.length; i++ ){
+							info = data[i];
+							var id=info.id;
+							var newLi = document.createElement('li');
+							
+          					newLi.innerHTML ="<div class=\"border\">" +  "<li class=\"postData\">" + info.date + "</li>" + "<li>" + info.author + "</li>" +"<li>" +  info.text + "</li>" + 
+							"<li><div class = \"likes\" id= \"LikeC"+id+"\">"+"<img class=\"limg\"  src=\"../static/img/like.png\">"+info.likes+"</div> </li>"+"</div>";
+							
+          					document.getElementById('mCP1').appendChild(newLi);
+							
+							document.getElementById('LikeC'+id).addEventListener('click', function(id) {
+								return function() { addLikeComment(id); }
+							}(id));
+						}
+						
+                    }});
+					
+			closeMarkerPanel();
+		};		
+		
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		document.getElementById("mCP").onsubmit=addComment;
+		function addComment(){
+
+			//closeMarkerCommentPanel();
+			$.ajax({
+                    type: 'POST',
+                    url: "/add_pin_comment/",
+					async: false,
+				    data: {  
+						"text": $("#cIn").val(),
+						"id":focusOn.id
+						},
+					success: function(data) {
+						info=JSON.parse(data);
+						var id=info.id;
+						var newLi = document.createElement('li');
+							
+          				newLi.innerHTML ="<div class=\"border\">"+ "<li class=\"postData\">" + info.date + "</li>" + "<li>" + info.author + "</li>" +"<li>" +  info.text +"</li>" + 
+						"<li><div class = \"likes\" id= \"LikeC"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li>"+"</div>";
+						
+          				document.getElementById('mCP1').appendChild(newLi);
+						document.getElementById('LikeC'+id).addEventListener('click', function(id) {
+							return function() {   addLikeComment(id); }
+						}(id));
+                    }
+			});
+			return false;
+		}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			document.getElementById("addPostButton").onclick=function(){
+			closePostsPanel();
+			$('#loadImg').animate({'left':'0'},100);
+		}
+		
+		document.getElementById("addPost").onclick=setImage;
+		    function setImage() {
+				event.stopPropagation(); // Stop stuff happening
+				event.preventDefault();
+				//var $input = $("#uploadimage");
+				var fd = new FormData;
+				var mtd;
+				
+				fd.append('title', $('#uploadName').val());
+				fd.append('marker_id', focusOn.id);
+				fd.append('text', $('#uploadText').val());
+				if(document.getElementById("uploadimage").files[0] != null){
+					fd.append('type','1');
+					fd.append('file', document.getElementById("uploadimage").files[0]);
+					}
+				else fd.append('type','0');
+									
+				
+				$.ajax({
+					type: 'POST',
+					url: "/new_post/",
+					data: fd,
+					processData: false,
+					contentType: false,
+					async: false,		//try sync
+					success: function (data) {
+						
+					}
+				});
+				closeLoadPostPanel();
+				return false;
+	}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function addLikeComment(id){
+				$.ajax({
+					type: 'POST',
+					url: "/like_comment/",
+					data: {"id": id},
+					success: function (data) {
+					
+					data=JSON.parse(data);
+					document.getElementById('LikeC'+id).innerHTML="<img class=\"limg\" src=\"../static/img/like.png\">"+data.l;
+					}
+				});
+		}
+		
+		function addLikePost(id){
+				$.ajax({
+					type: 'POST',
+					url: "/like_photo/",
+					data: {"id": id},
+					success: function (data) {
+						document.getElementById("LikeP"+id).innerHTML=data.l;
+					}
+				});
+		}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//onscroll ajax query 
+		var count = 10;  //rel to query limit in map.py,need sync on change
+		var begin = count;
+		var isLast;
+		document.getElementById("showPostsButton").onclick=function(){
+			closeMarkerPanel();
+			begin=count;
+			$('#ph').animate({'left':'0'},100);
+			$('#ph').on("scroll", scrolling);
+			document.getElementById("ws").innerHTML='';
+			isLast=false;
+			loader();
+		}
+
+		
+		function scrolling(){
+			var currentHeight = $(this).children("#ws").height();
+
+			if($(this).scrollTop() >= (currentHeight - $(this).height()-100)){
+				$(this).unbind("scroll");
+				loader();
+				}
+		}
+		
+	
+		
+		function loader(){   
+			$.ajax({
+				type:"POST",
+				url:"/get_post/",
+				data:{
+					"begin": begin,
+					"id": focusOn.id
+				},
+
+				success:onAjaxSuccess
+			});
+			
+			function onAjaxSuccess(data){
+
+				if(data=="[]")
+					isLast=true;
+				data=JSON.parse(data);
+
+				var newD = document.createElement('div');
+				for(var i=0;i<data.length;i++){
+					info = data[i];
+					var id=info.id;
+					var newLi = document.createElement('li');
+					if(info.photo_ref != "No photo")		
+						newLi.innerHTML ="<div><li>" + info.title + "</li>"+ "<li>" + info.date + "</li>" + "<li>" 
+							+ info.author + "</li>" +"<li>" +  info.text + "</li>" + 
+							"<li><div id= \"LikeP"+id+"\">Like "+info.likes+"</div> </li>"+
+							"<img src=\""+info.photo_ref+"\" alt=\""+info.title+"\"height=\"300\" width=\"300\"/></div>";
+					else
+						newLi.innerHTML ="<div><li>" + info.title + "</li>" + "<li>" + info.date + "</li>" +
+							"<li>" + info.author + "</li>" +"<li>" +  info.text + "</li>" + 
+							"<li><div id= \"LikeP"+id+"\" >Like "+info.likes+"</div> </li></div>";
+					
+					
+					newD.appendChild(newLi);
+          			var container=document.getElementById('ws');
+					
+					container.insertBefore(newD, container.firstChild);
+					document.getElementById('LikeP'+id).addEventListener('click', function(id) {
+						return function() { addLikePost(id); }
+					}(id));
+					
+				}
+				if(isLast==false)
+					$("#ph").on("scroll", scrolling);
+				}
+				begin+=count;
+		}
+
+			
+			
+	
+	</script>
 	
 	<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script>
