@@ -20,7 +20,7 @@ mod = Blueprint('map', __name__, template_folder='templates')
 
 POST_COUNT=0
 end=0
-STATIC_FOLDER="../../static/img/"
+STATIC_FOLDER="../../static/img/" #note: may change on heroku
 
 @mod.route('/map')
 def map():
@@ -39,18 +39,42 @@ def get_locations():
     
     jsonrespond =[]
     for loc in locs:
-        jsonrespond.append({'id':loc.post_id, 'author':loc.author.login,'author_id': loc.author_id,
-                                'title': loc.title,'lat': loc.lat, 'lng' : loc.lng, 'description': loc.description}) #,'dateTime':loc.dateTime
+        jsonrespond.append({'id':loc.post_id,'author_id': loc.author_id,
+                                'title': loc.title,'lat': loc.lat, 'lng' : loc.lng, 'description': loc.description,'priv':loc.privacy}) #,'dateTime':loc.dateTime
     return json.dumps(jsonrespond)
+
 
 @mod.route("/focus_pin/", methods = ["POST"])
 def focus_pin():
+    id=request.form.get("id")
     global end
     global POST_COUNT
     POST_COUNT=database.Photos.query.filter(database.Photos.post_id==id).count()
     end=0
+    return json.dumps({'c':POST_COUNT})
 
 
+@mod.route("/update_private/", methods = ["POST"])
+def update_private():
+    Id=int(request.form.get("id"))
+    lat =  request.form.get("c1")
+    lng = request.form.get("c2")
+    mark=database.Posts.query.filter(database.Posts.post_id==Id).all()
+    mark[0].lat=lat
+    mark[0].lng=lng
+    database.db.session.commit()
+    return ''''''
+
+@mod.route("/delete_pin/", methods = ["POST"])
+def delete_pin():
+    Id=int(request.form.get("id"))
+    print(Id)
+    mark=database.Posts.query.filter(database.Posts.post_id==Id).all()
+    database.db.session.delete(mark[0])
+    database.db.session.commit()
+    return ''''''
+
+    
 @mod.route("/add_pin/", methods = ["POST"])
 def add_pin(): 
     lat =  request.form.get("c1")
@@ -72,10 +96,14 @@ comments=[]
 @mod.route("/get_comments/", methods = ["GET"])
 def get_comments():
     arg=request.args.get("id")
-    comments= database.Comments.query.filter((database.Comments.post_id==arg) & (database.Comments.photo_id==None)).all()
+    typ=request.args.get("type")
+    if typ == "0":
+        comments= database.Comments.query.filter((database.Comments.post_id==arg) & (database.Comments.photo_id==None)).all()
+    else:
+        comments= database.Comments.query.filter(database.Comments.photo_id==arg).all()
     jsonrespond =[]
     for loc in comments:
-        jsonrespond.append({'author':loc.author.login,'id':loc.comment_id,'text':loc.text,'likes':loc.likes,'date':cur_time()})
+        jsonrespond.append({'author':loc.author.login,'id':loc.comment_id,'text':loc.text,'likes':loc.likes,'date':loc.date})
     return json.dumps(jsonrespond)  
 
 
@@ -83,10 +111,15 @@ def get_comments():
 @mod.route("/add_pin_comment/", methods = ["POST"])
 def add_pin_comment():
     text=request.form.get("text")
-    postId=request.form.get("id")
-    backComment={'author':g.user.login,'id':postId,'text':text,'likes':0}#,'ava':"../../static/img/user"+str(g.user.ava_ref)
-    comment = database.Comments(author_id=g.user.user_id, post_id=postId,photo_id=None,
+    Id=request.form.get("id")
+    typ=request.form.get("type")
+    backComment={'author':g.user.login,'id':Id,'text':text,'likes':0}#,'ava':"../../static/img/user"+str(g.user.ava_ref)
+    if typ=="0":
+        comment = database.Comments(author_id=g.user.user_id, post_id=Id,photo_id=None,
                         text=text,likes=0,date=cur_time()) #no photo id
+    else:
+         comment = database.Comments(author_id=g.user.user_id, post_id=None,photo_id=Id,
+                        text=text,likes=0,date=cur_time())
     database.db.session.add(comment)
     database.db.session.commit()
     backComment={'author':g.user.login,'id':comment.comment_id,'text':text,'likes':0,'date':cur_time()}
@@ -175,15 +208,21 @@ def get_post():
     if begin==lim:
         end=0
     jsonrespond=[]
+    
     if start <=0 and end==0:
         lim=lim-(-start%10)+1
         start=0
         end=1
     elif start <= 0:
-        return json.dumps(jsonrespond) 
-    photos=database.Photos.query.filter(database.Photos.post_id==id).limit(lim).offset(start).all()
-    jsonrespond=[]
-    for i in range (len(photos)-1,0,-1):
+        return json.dumps(jsonrespond)
+    
+    
+    if POST_COUNT<10 or lim<10:
+        photos=database.Photos.query.filter(database.Photos.post_id==id).all()
+    else: 
+        photos=database.Photos.query.filter(database.Photos.post_id==id).limit(lim).offset(start).all()
+    jsonrespond=[]   
+    for i in range (len(photos)-1,-1,-1):
         loc=photos[i]
         if loc.photo_ref is not None:
             jsonrespond.append({'title':loc.title,'author':loc.author.login,'id':loc.photo_id,'text':loc.text,'likes':loc.likes,'date':loc.date,
