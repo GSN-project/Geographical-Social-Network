@@ -257,6 +257,79 @@ padding-left: 5px;}
     height: 40px;
     margin-top: 0;
 }
+
+/*Сообщения*/
+#msg-box{
+  overflow:auto;
+   width:750px; 
+   height:500px; 
+   border:1px solid #DFE5EC; 
+   padding:5px;
+   margin-top:5%; 
+   display:inline-block;
+   background:#FFF; 
+   margin-left:1%;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+ }
+#msg-box li{
+  list-style:none; 
+  padding:0px; 
+  margin:0px;
+}
+#t-box{
+
+}
+#sideDialogPanel{
+  display: flex;
+  flex-direction: column-reverse;
+  list-style:none; 
+  overflow:auto;
+ border:1px solid #DFE5EC; 
+
+ max-height: 500px;
+ padding:5px;
+ width: 300px;
+ margin-top: 5%; 
+ margin-left: 10%
+  
+}
+#sideDialogPanel div{
+  margin: 5px;
+}
+#sideDialogPanel:hover{
+  background:#E7EBF0;
+  cursor: pointer;
+}
+#lll{
+   display: inline-flex;
+   flex-wrap: nowrap;
+ }
+
+ #t-box #msg{
+ }
+ #t-box .button{
+  margin-top: 20px;
+  padding-left: 5px;
+  width: 15%;
+ }
+ #t-box input{
+  border:1px solid #DFE5EC; 
+  width: 80%;
+  font-size: 12px;
+  overflow-y: scroll;
+
+  line-height: 20px;
+  min-height: 32px;
+  max-height: 123px;
+  
+  height: auto;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  margin: 0;
+  padding: 0;
+ }
 /*Карта*/
 #map {
   position: absolute;
@@ -696,4 +769,16 @@ textarea{
 	display: flex;
 	flex-direction: column-reverse;
 	list-style:none;
+}
+.pac-input1{
+  padding-top: 10px;
+  width: 200px;
+  height: 30px;
+  background: url(../static/img/search.png) no-repeat right;
+  background-color: #fff;
+  background-size: 30px;
+ }
+
+ .thumb{ max-width: 300px;
+  max-height: 300px;
 }

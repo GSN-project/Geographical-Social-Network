@@ -210,14 +210,14 @@ def get_post():
     jsonrespond=[]
     
     if start <=0 and end==0:
-        lim=lim-(-start%10)+1
+        lim=lim-(-start%10)
         start=0
         end=1
     elif start <= 0:
         return json.dumps(jsonrespond)
     
     
-    if POST_COUNT<10 or lim<10:
+    if POST_COUNT<10:
         photos=database.Photos.query.filter(database.Photos.post_id==id).all()
     else: 
         photos=database.Photos.query.filter(database.Photos.post_id==id).limit(lim).offset(start).all()

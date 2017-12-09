@@ -1,7 +1,7 @@
   {% extends "Header.html" %}
   {% block content %}
         <section>
-        	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+        	<input class="pac-input1" id="pac-input" class="controls" type="text" placeholder="Search Box">
 		<div id= "ph">
 				<span class="close" onclick="closePostsPanel()"></span>
 				<button class="button" id= "addPostButton">Добавить пост</button>
@@ -13,9 +13,10 @@
 		    <form id="loadImg" enctype=multipart/form-data>
 			<span class="close" onclick="closeLoadPostPanel()"></span>
 				<input id="uploadName" class="input" type="text" name="markerTitle" placeholder="Введите название" required="">
-				<input id="uploadimage" type=file name=file>
+				<input id="uploadimage"  type=file name=file>
 				<input id="uploadText" class="input" type="text" name="markerTitle" placeholder="Введите текст" required="">
-				<input id="addPost" type=submit value=Upload>
+				<input class="button" id="addPost" type=submit value=Upload>
+				<span id = "insertSpan"></span>
 			</form>
 				
           <form id="hidden_panel">
@@ -75,10 +76,12 @@
     }
 		function closeMarkerCommentPanel(){
 			focusPhoto=-1;
+			$('#ph').animate({'left':'0'},100);
 			$("#cIn").val('');
 			$('#mCP').animate({'left':'-320px'},100);
     }
 		function closeLoadPostPanel(){
+		document.getElementById('insertSpan').innerHTML='';
 		$('#uploadName').val("");
 		$('#uploadText').val("");
 		$('#uploadimage').val("");
@@ -262,6 +265,7 @@
 		};		
 
 		function getCommentsPhoto(id) {    
+			$('#ph').animate({'left':'320'},100);
 			$('#mCP').animate({'left':'0'},100);
 			document.getElementById('mCP1').innerHTML='';
 			document.getElementById('cIn').innerHTML='';
@@ -352,6 +356,7 @@
 		
 		document.getElementById("addPost").onclick=addPost;
 		    function addPost() {
+		    	document.getElementById('insertSpan').innerHTML='';
 				event.stopPropagation(); // Stop stuff happening
 				event.preventDefault();
 				//var $input = $("#uploadimage");
@@ -497,8 +502,29 @@
 				begin+=count;
 		}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-			
+//displaying photo on post load
+function handleFileSelect(evt) {
+	document.getElementById('insertSpan').innerHTML='';
+    var file = evt.target.files; // FileList object
+    var f = file[0];
+    // Only process image files.
+    if (f.type.match('image.*')) {
+    
+    var reader = new FileReader();
+    // Closure to capture the file information.
+    reader.onload = (function(theFile) {
+        return function(e) {
+            // Render thumbnail.
+            var span = document.getElementById('insertSpan');
+            span.innerHTML = ["<img class=\"thumb\" src=\"" + e.target.result + "\" />"].join('');
+            document.getElementById('loadImg').appendChild(span);
+        };
+    })(f);
+    // Read in the image file as a data URL.
+    reader.readAsDataURL(f);}
+}
+document.getElementById('uploadimage').addEventListener('change', handleFileSelect, false);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
 	
 	</script>
