@@ -19,9 +19,10 @@ from GSN.logout import logout
 from GSN.profile import profile
 from GSN.friends import friends
 from GSN.user import user
+
 from .config import photos
-
-
+from flask_socketio import SocketIO
+socketio = SocketIO()
 
 def create_app(config = None):
 	# App
@@ -48,6 +49,9 @@ def create_app(config = None):
 	app.config['UPLOADED_PHOTOS_DEST'] = 'GSN/static/img/user'
 	app.config['MAX_CONTENT_LENGTH'] = 24 * 1024 * 1024
 	
+	# messages
+	app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
+
 	# Blueprints
 	app.register_blueprint(application.mod)
 	app.register_blueprint(login.mod)
@@ -71,7 +75,7 @@ def create_app(config = None):
 			g.user = database.Users.query.filter_by(user_id=session['user_id']).first()
 			g.user_info = database.UsersInfo.query.filter_by(user_id=session['user_id']).first()
 		
-	
+	socketio.init_app(app)
 	return app
 
 	

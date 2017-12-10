@@ -1,0 +1,165 @@
+{% extends "Header.html" %}
+{% block content %}
+<div id = 'lll'>
+  <div  id = 'sideDialogPanel'>
+
+  </div>
+  <div id="msg-box" >
+    <input type="text" id='msg' name="text">
+    <button class= "button" type="submit"  value="отправить" id="sendbutton">Отправить</button>
+  </div>
+</div>
+
+
+		
+<script type="text/javascript">
+/*
+function tpl(t) {
+  html = ' <div class="msg>';
+  html += '    <div class="img"><img src="'+t.img+'" /></div>';
+  html += '    <div class="info">';
+  html += '         <div class="name"><a href="#">' + t.name + '</a></div>';
+  html += '        <div class="text">'+t.text+'</div>';
+  html += '    /div>';
+  html += '</div>';
+  
+  return html;
+}
+
+
+var count = 0;
+// Текущее значение chat_id
+var main_chat_id;
+
+
+// Function initialization ch
+initDialogs();
+    function initDialog(name){
+    $.ajax({
+            type: 'GET',
+            url: "/get_messages/" + name.getAttribute('name') ,
+            async:false,
+            success: function(data) {
+              main_chat_id = name.getAttribute('name');
+              data = JSON.parse(data);
+              for(var i=0; i<data.length;i++) {
+                var info = data[i];
+                var newLi = document.createElement('li');
+                newLi.innerHTML ="<div>" + "<li class = \"boldName\">" +info.author_fullname+ "</li>" +"<li>" +info.text+"</li>" + "</div>";
+                document.getElementById('t-box').insertBefore(newLi, document.getElementById('msg'));
+              }
+            }
+    });
+}
+
+// Function initialization chats
+function initDialogs(){
+  $.ajax({
+          type: 'GET',
+          url: "/get_chats/",
+          async:false,
+          success: function(data) {
+            data = JSON.parse(data);
+            for(var i=0; i<data.length;i++){
+              var info = data[i];
+              var newLi = document.createElement('li');
+              inform.push(newLi);
+              newLi.innerHTML ="<div>" + "<li>" + info.member + "</li>" +"<li>" +  info.last_message_body +"</li>" + "</div>";
+              newLi.setAttribute('name', info.chat_id);
+              document.getElementById('sideDialogPanel').appendChild(newLi);
+            }
+   }
+  });
+  addListeneres();
+}
+
+
+function addListeneres(){  
+  for (var i = count; i < inform.length; i++) {
+    var newLi=inform[i];
+    count++;
+    newLi.addEventListener( 'click' ,  function(newLi) {
+    return function() {
+      initDialog(newLi);
+    }
+    }(newLi))
+  }
+}
+
+// Ловим отправку сообщения и отсылаем его на сервер
+$("#t-box").submit(function(){
+  var str = $(this).serialize();
+  str = str + '&chat_id=' + main_chat_id;
+  console.log(str)
+  $.ajax({
+    type: 'POST',
+    url: '/send/',
+    data: str,
+    success: function(str){
+      // Добавить новое сообщение в окно чата
+    },
+    error: function(str){
+      // Вывести оповещение о проблемах
+    }
+  })
+})
+*/
+var socket;
+var count = 0;
+$(document).ready(function() {
+  var inform = [];
+
+  socket = io.connect('http://' + document.domain + ':' + location.port);
+
+  socket.on('connect', function() {
+    //socket.send('User has connected!');
+      $.ajax({
+          type: 'GET',
+          url: "/get_chats/",
+          async:false,
+          success: function(data) {
+            data = JSON.parse(data);
+            for(var i=0; i<data.length;i++){
+              var info = data[i];
+              var newLi = document.createElement('li');
+              inform.push(newLi);
+              newLi.innerHTML ="<div>" + "<li class = \"boldName\">" + info.member + "</li>" +"<li>" +  info.last_message_body +"</li>" + "</div>";
+              newLi.setAttribute('name', info.chat_id);
+              document.getElementById('sideDialogPanel').appendChild(newLi);
+            }
+          }
+      });
+      addListeneres();
+  });
+
+  socket.on('message', function(msg) {
+
+    $("#msg-box").append('<li>'+ msg +'</li>');
+
+    console.log('Received message');
+  });
+
+  $('#sendbutton').on('click', function() {
+    // Ye;ty chat_id
+    socket.send($('#msg').val());
+
+    $('#msg').val('');
+
+  });
+
+  function addListeneres(){  
+  for (var i = count; i < inform.length; i++) {
+    var newLi=inform[i];
+    count++;
+    newLi.addEventListener( 'click' ,  function(newLi) {
+    return function() {
+      initDialog(newLi);
+    }
+    }(newLi))
+  }
+}
+});
+</script>
+</body>
+</html>
+{% endblock %}

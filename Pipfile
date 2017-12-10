@@ -12,6 +12,7 @@ flask-mail = "*"
 flask-uploads = "*"
 flask-sqlalchemy = "*"
 werkzeug = "*"
+flask-socketio = "*"
 
 
 [dev-packages]
