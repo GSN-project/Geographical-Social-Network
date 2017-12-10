@@ -15,5 +15,5 @@ app = create_app()
 #app.run()
 
 #Heroku config
-#port = int(environ.get('PORT', 5000))
-#app.run(host='0.0.0.0', port=port, debug=False)
+port = int(environ.get('PORT', 5000))
+app.run(host='0.0.0.0', port=port, debug=False)
