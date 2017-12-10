@@ -11,15 +11,15 @@
 			<li>
 				<li>
 					<label for="name">Имя пользователя</label>
-					<input type="text" name="name" value={{name}} required="">
+					<input type="text" name="name" {% if name!= None %} value="{{name}}" {% endif %} required="">
 				</li>
 				<li>
 					<label for="surname">Фамилия</label>
-					<input type="text" name="surname" value={{surname}} placeholder="Иванов">
+					<input type="text" name="surname" {% if surname!= None %} value="{{surname}}" {% endif %} >
 				</li>
 				<li>
 					<label for="email">E-mail</label>
-					<input type="email" value={{email}} name="email" maxlength="30">
+					<input type="email" {% if email!= None %} value="{{email}}" {% endif %} name="email" maxlength="30">
 				</li>
 				<li>
 				<label for="sex">Пол</label>
@@ -30,23 +30,23 @@
 				</li>
 				<li>
 					<label for="country">Страна</label>
-					<input type="text" name="country" placeholder="Украина" value={{country}}>
+					<input type="text" name="country" placeholder="Украина" {% if country!= None %} value="{{country}}" {% endif %}>
 				</li>
 				<li>
 					<label for="city">Город</label>
-					<input type="text" name="city" placeholder="Одесса" value={{city}}>
+					<input type="text" name="city" placeholder="Одесса" {% if city!= None %} value="{{city}}" {% endif %} >
 				</li>
 				<li>
 					<label>Дата рождения</label>
-					<input type="date" id="date" name="date" value={{date}}>
+					<input type="date" id="date" name="date" {% if date!= None %} value="{{date}}" {% endif %} >
 				</li>
 				<li>
 					<label for="tel">Номер телефона</label>
-					<input type="tel" name="telephone" id="tel" value={{telephone}} maxlength="20" value="+38(063)-000-00-00">
+					<input type="tel" name="telephone" id="tel" {% if telephone!= None %} value="{{telephone}}" {% endif %} maxlength="20">
 				</li>
 				<li>
 					<label for="about">О себе</label>
-					<textarea name="about" rows="4" cols="40" maxlength="200">{{about}}</textarea>
+					<textarea name="about" rows="4" cols="40" maxlength="200"> {% if about!= None %} {{about}} {% endif %} </textarea>
 				</li>
 				<li>
 				<button class="submit" type="submit">Отправить</button>
