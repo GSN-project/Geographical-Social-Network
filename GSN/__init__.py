@@ -29,13 +29,9 @@ def create_app(config = None):
 	app.config.from_object(__name__)
 	# Database:
 	#  - Heroku
-	#    If you youse it, all objects "User" have to be "Users"
+
 	app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://r01bghd36z2ld54q:i0kfbhifxcnyrf0r@x3ztd854gaa7on6s.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/lreehpo3s6bwktzb'
-	#  - freemysqlhosting.net
-	#    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://sql11202817:VjJvatfyw2@sql11.freemysqlhosting.net/sql11202817'
-	#  - local (Slavik)
-	#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:aist2371@localhost/gsn'
-	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] =  False
+
 	database.db.init_app(app)
 	# Mail
 	app.config['MAIL_SERVER']='smtp.gmail.com'
@@ -47,8 +43,9 @@ def create_app(config = None):
 	mail.mail.init_app(app)
 
 	#photos = UploadSet('photos', IMAGES)
-	
+	app.config['UPLOAD_FOLDER'] = 'GSN\\static\\img'
 	app.config['UPLOADED_PHOTOS_DEST'] = 'GSN/static/img/user'
+	app.config['MAX_CONTENT_LENGTH'] = 24 * 1024 * 1024
 	
 	# Blueprints
 	app.register_blueprint(application.mod)
