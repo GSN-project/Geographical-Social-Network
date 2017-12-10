@@ -7,14 +7,11 @@ name = "pypi"
 
 [packages]
 
-gunicorn = "*"
 flask = "*"
-flask-mysql = "*"
-pymysql = "*"
-flask-mysqldb = "*"
 flask-mail = "*"
 flask-uploads = "*"
 flask-sqlalchemy = "*"
+werkzeug = "*"
 
 
 [dev-packages]

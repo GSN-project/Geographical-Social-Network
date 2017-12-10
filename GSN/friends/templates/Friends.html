@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="../../static/style.css">
+        <title>Geographical social network (GSN)</title>
+    </head>
+    <body>
+      <header>
+        <div>
+           <div class="title"><img src="../../static/img/logo.png" height="45">Geographic social network</div>
+            <ul id="main-menu">
+              <li>
+                <a href="MyProfile.html"><img src="../../static/img/avatar.png" height="45"></a>
+                <ul>
+                  <li><a href="Map.html">Карта</a></li>
+                  <li><a href="Friends.html">Друзья</a></li>
+                  <li><a href="Message.html">Сообщения</a></li>
+                  <li><a href="#">Комментарии</a></li>
+                  <li><a href="MySettings.html">Настройки</a></li>
+                  <li><a href="Main.html">Выход</a></li>
+                </ul>
+              </li>
+            </ul>
+        </div>
+    </header>
+      <section class="list"> <!--  Friends list   !-->
+        <h3>Ваши друзья</h3>
+        {% for user1 in friends %}
+        <div class="friend">
+               <div class="avatar"><img src="{{user1.userpic()}}"></div>
+               <a href= "{{ url_for('user.user', user_login=user1.login) }}" ></a>
+                   <div class="friend-name">{{user1.login}}</div>
+               </a>
+        <div class="message"><button type="button" name="message-button">Cообщение</button></div>
+        <br>
+        <a href="{{ url_for('user.unfollow', user_login=user1.login) }}"><button>Отписаться</button></a>
+        </div>
+        {% endfor %}
+    </section>
+
+    <section class="list"> <!--  Sent friends requests list   !-->
+      <h3>Отправленные заявки</h3>
+      {% for user2 in follows %}
+      <div class="friend">
+          <div class="avatar"><img src="{{user2.userpic()}}"></div>
+          <a href="{{ url_for('user.user', user_login=user2.login) }}">  
+             <div class="friend-name">{{user2.login}}</div>
+          </a>
+      <div class="message"><button type="button" name="message-button">Cообщение</button></div>
+      <br>
+      <a href="{{ url_for('user.unfollow', user_login=user2.login) }}"><button type="button">Отменить заявку</button></a>  
+    </div>
+      {% endfor %}
+  </section>
+
+  <section class="list"> <!--  Received friends requests list   !-->
+    <h3>Полученные заявки</h3>
+    {% for user3 in followers %}
+    <div class="friend">
+        <div class="avatar"><img src="{{user3.userpic()}}"></div>
+        <a href="{{ url_for('user.user', user_login=user3.login) }}">  
+           <div class="friend-name">{{user3.login}}</div>
+        </a>
+    <div class="message"><button type="button" name="message-button">Cообщение</button></div>
+    <br>
+    <a href="{{ url_for('user.follow', user_login=user3.login) }}"><button>Подтвердить заявку</button></a>
+    </div>
+    {% endfor %}
+</section>
+  </body>
+</html>
+

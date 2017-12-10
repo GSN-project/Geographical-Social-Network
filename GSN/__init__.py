@@ -9,14 +9,16 @@ from GSN import database
 # Mail
 from GSN import mail
 # Blueprints
-from GSN.application.application import mod
-from GSN.login.login import mod
-from GSN.registration.registration import mod
-from GSN.logout.logout import mod
-from GSN.profile.profile import mod
-from GSN.map.map import mod
-from GSN.logout.logout import mod
-from GSN.profile.profile import mod
+from GSN.application import application
+from GSN.login import login
+from GSN.registration import registration
+from GSN.logout import logout
+from GSN.profile import profile
+from GSN.map import map
+from GSN.logout import logout
+from GSN.profile import profile
+from GSN.friends import friends
+from GSN.user import user
 from .config import photos
 
 
@@ -49,12 +51,14 @@ def create_app(config = None):
 	app.config['UPLOADED_PHOTOS_DEST'] = 'GSN/static/img/user'
 	
 	# Blueprints
-	app.register_blueprint(application.application.mod)
-	app.register_blueprint(login.login.mod)
-	app.register_blueprint(registration.registration.mod)
-	app.register_blueprint(map.map.mod)
-	app.register_blueprint(logout.logout.mod)
-	app.register_blueprint(profile.profile.mod)
+	app.register_blueprint(application.mod)
+	app.register_blueprint(login.mod)
+	app.register_blueprint(registration.mod)
+	app.register_blueprint(map.mod)
+	app.register_blueprint(logout.mod)
+	app.register_blueprint(profile.mod)
+	app.register_blueprint(friends.mod)
+	app.register_blueprint(user.mod)
 	# Session
 	app.secret_key = os.urandom(24)
 	
