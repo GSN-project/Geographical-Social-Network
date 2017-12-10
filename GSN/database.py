@@ -69,15 +69,16 @@ class UsersInfo(db.Model):
     user = db.relationship('Users', backref=db.backref('user_info', lazy='dynamic'))
 
 class Posts(db.Model):
-	post_id = db.Column(db.Integer, primary_key=True)
-	author_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-	title = db.Column(db.String(150))
-	lat = db.Column(db.Float)
-	lng = db.Column(db.Float)
-	privacy = db.Column(db.Integer)
-	description = db.Column(db.Text)
+    post_id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    title = db.Column(db.String(150))
+    lat = db.Column(db.Float)
+    lng = db.Column(db.Float)
+    privacy = db.Column(db.Integer)
+    description = db.Column(db.Text)
+    date = db.Column(db.String(50), default=datetime.datetime.utcnow)
 
-	author = db.relationship('Users', backref=db.backref('posts'))
+    author = db.relationship('Users', backref=db.backref('posts'))
 
 
 class Comments(db.Model):
@@ -114,3 +115,8 @@ class Chat(db.Model):
     member = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
     chat_name = db.Column(db.String(150))
     memb = db.relationship('Users', backref=db.backref('Chat', lazy=True))
+
+class Likes(db.Model):
+    comment_id=db.Column(db.Integer, db.ForeignKey('comments.comment_id'), primary_key=True)
+    user_id=db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    photo_id=db.Column(db.Integer, db.ForeignKey('photos.photo_id'))

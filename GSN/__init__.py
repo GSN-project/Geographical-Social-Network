@@ -4,8 +4,9 @@ import os
 import random
 import string
 from flask_uploads import configure_uploads
+from flask_migrate import Migrate
 # Database
-from GSN import database
+from GSN.database import db
 # Mail
 from GSN import mail
 # Blueprints
@@ -33,7 +34,9 @@ def create_app(config = None):
 	app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://r01bghd36z2ld54q:i0kfbhifxcnyrf0r@x3ztd854gaa7on6s.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/lreehpo3s6bwktzb'
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-	database.db.init_app(app)
+	db.init_app(app)
+	migrate = Migrate(app, db)
+
 	# Mail
 	app.config['MAIL_SERVER']='smtp.gmail.com'
 	app.config['MAIL_PORT'] = 465
