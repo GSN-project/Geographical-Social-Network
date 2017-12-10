@@ -31,6 +31,7 @@ def create_app(config = None):
 	#  - Heroku
 
 	app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://r01bghd36z2ld54q:i0kfbhifxcnyrf0r@x3ztd854gaa7on6s.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/lreehpo3s6bwktzb'
+	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 	database.db.init_app(app)
 	# Mail
