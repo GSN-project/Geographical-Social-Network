@@ -31,7 +31,8 @@ def map():
 
 
 def cur_time():
-    return strftime("%m-%d %H:%M", gmtime())
+    now = datetime.datetime.now()
+    return ( (('0'+str(now.hour))if (now.hour<10) else str(now.hour))+':'+(('0'+str(now.minute))if (now.minute<10) else str(now.minute))+' '+str(now.day)+'/'+str(now.month))
 
 @mod.route("/get_locations/", methods = ["GET"])
 def get_locations():
@@ -39,8 +40,8 @@ def get_locations():
     
     jsonrespond =[]
     for loc in locs:
-        jsonrespond.append({'id':loc.post_id,'author_id': loc.author_id,
-                                'title': loc.title,'lat': loc.lat, 'lng' : loc.lng, 'description': loc.description,'priv':loc.privacy}) #,'dateTime':loc.dateTime
+        jsonrespond.append({'id':loc.post_id,'author_id': loc.author_id,'date': loc.date,
+                                'title': loc.title,'lat': loc.lat, 'lng' : loc.lng, 'description': loc.description,'priv':loc.privacy}) 
     return json.dumps(jsonrespond)
 
 
@@ -68,9 +69,14 @@ def update_private():
 @mod.route("/delete_pin/", methods = ["POST"])
 def delete_pin():
     Id=int(request.form.get("id"))
-    print(Id)
-    mark=database.Posts.query.filter(database.Posts.post_id==Id).all()
-    database.db.session.delete(mark[0])
+    photos=database.Photos.query.filter(database.Photos.post_id==Id).all()
+    for photo in photos:
+        database.Comments.query.filter(database.Comments.photo_id==photo.photo_id).delete()
+        database.Likes.query.filter(database.Likes.photo_id==photo.photo_id).delete()
+        
+    database.Photos.query.filter(database.Photos.post_id==Id).delete()
+    database.Comments.query.filter(database.Comments.post_id==Id).delete()
+    database.Posts.query.filter(database.Posts.post_id==Id).delete()
     database.db.session.commit()
     return ''''''
 
@@ -84,7 +90,7 @@ def add_pin():
     dsp=request.form.get("dsp")
           
     pin = database.Posts(author_id=g.user.user_id, title=title, lat=lat, lng=lng,
-                         privacy=priv, description=dsp) #dateTime=cur_time()
+                         privacy=priv, description=dsp,date=cur_time()) 
     database.db.session.add(pin)
     database.db.session.commit()
     return json.dumps('')
@@ -103,7 +109,10 @@ def get_comments():
         comments= database.Comments.query.filter(database.Comments.photo_id==arg).all()
     jsonrespond =[]
     for loc in comments:
-        jsonrespond.append({'author':loc.author.login,'id':loc.comment_id,'text':loc.text,'likes':loc.likes,'date':loc.date})
+        comment={'author':loc.author.login,'id':loc.comment_id,'text':loc.text,'likes':loc.likes,'date':loc.date,'deletable':False}
+        if loc.author.user_id==g.user.user_id or g.user.user_id==0:
+            comment['deletable']=True
+        jsonrespond.append(comment)
     return json.dumps(jsonrespond)  
 
 
@@ -122,18 +131,29 @@ def add_pin_comment():
                         text=text,likes=0,date=cur_time())
     database.db.session.add(comment)
     database.db.session.commit()
-    backComment={'author':g.user.login,'id':comment.comment_id,'text':text,'likes':0,'date':cur_time()}
+    backComment={'author':g.user.login,'id':comment.comment_id,'text':text,'likes':0,'date':cur_time(),'deletable':True}
     return json.dumps(backComment)
 
 
 
 @mod.route('/like_comment/', methods=['POST'])
 def like_comment():
-    #TODO: remember who likes, stop multiple
     c_id=request.form.get('id')
+    p_id=int(request.form.get('p_id'))
+    print(p_id)
+    if p_id==-1:
+        p_id=1 #fill 1 comment and photo in db
+    liked=database.Likes.query.filter((database.Likes.user_id==g.user.user_id) & (database.Likes.comment_id==c_id) & (database.Likes.photo_id==p_id)).all()
     comment=database.Comments.query.filter(database.Comments.comment_id==c_id).all()
     comment=comment[0]
-    comment.likes=comment.likes+1
+
+    if len(liked) is 0:
+        comment.likes=comment.likes+1
+        like=database.Likes(user_id=g.user.user_id,comment_id=c_id,photo_id=p_id)
+        database.db.session.add(like)
+    else:
+        comment.likes=comment.likes-1
+        database.db.session.delete(liked[0])
     database.db.session.commit()
     return json.dumps({'l':comment.likes})
     
@@ -174,7 +194,7 @@ def new_post():
                 return "Extension not allowed" #error page
 
         database.db.session.add(post)
-        database.db.session.commit()
+        database.db.session.commit() 
         return "OK"
 
     
@@ -189,12 +209,21 @@ def send_file(filename):
 @mod.route('/like_photo/', methods=['POST'])
 def like_photo():
     photo_id=request.form.get("id")
+    liked=database.Likes.query.filter((database.Likes.user_id==g.user.user_id) & (database.Likes.photo_id==photo_id) & (database.Likes.comment_id==1)).all()
     photo=database.Photos.query.filter(database.Photos.photo_id==photo_id).all()
     photo=photo[0]
-    photo.likes=photo.likes+1
+    if len(liked) is 0:
+        photo.likes=photo.likes+1
+        like=database.Likes(user_id=g.user.user_id,photo_id=photo_id,comment_id=1)
+        database.db.session.add(like)
+    else:
+        photo.likes=photo.likes-1
+        database.db.session.delete(liked[0])
     database.db.session.commit()
     return json.dumps({'l':photo.likes})
-    #TODO: remember who likes, stop multiple
+
+    
+
 
 
 #new
@@ -225,15 +254,34 @@ def get_post():
     for i in range (len(photos)-1,-1,-1):
         loc=photos[i]
         if loc.photo_ref is not None:
-            jsonrespond.append({'title':loc.title,'author':loc.author.login,'id':loc.photo_id,'text':loc.text,'likes':loc.likes,'date':loc.date,
-                                  'photo_ref':STATIC_FOLDER+str(loc.photo_ref)})
+            post={'title':loc.title,'author':loc.author.login,'id':loc.photo_id,'text':loc.text,'likes':loc.likes,'date':loc.date,
+                                  'photo_ref':STATIC_FOLDER+str(loc.photo_ref),'deletable':False}
         else:
-            jsonrespond.append({'title':loc.title,'author':loc.author.login,'id':loc.photo_id,'text':loc.text,'likes':loc.likes,'date':loc.date,
-                            'photo_ref':"No photo"})
+            post={'title':loc.title,'author':loc.author.login,'id':loc.photo_id,'text':loc.text,'likes':loc.likes,'date':loc.date,
+                            'photo_ref':"No photo",'deletable':False}
+        if loc.author.user_id==g.user.user_id or g.user.user_id==0:
+            post['deletable']=True
+        jsonrespond.append(post)
     lim=10
     return json.dumps(jsonrespond)
     
 
 
-           
+
+@mod.route("/delete_photo/", methods = ["POST"])
+def delete_photo():
+    Id=int(request.form.get("id"))
+    database.Comments.query.filter(database.Comments.photo_id==Id).delete()
+    database.Likes.query.filter(database.Likes.photo_id==Id).delete()
+    database.Photos.query.filter(database.Photos.photo_id==Id).delete()
+    database.db.session.commit()
+    return ''''''
+
+@mod.route("/delete_comment/", methods = ["POST"])
+def delete_comment():
+    Id=int(request.form.get("id"))
+    database.Likes.query.filter(database.Likes.comment_id==Id).delete()
+    database.Comments.query.filter(database.Comments.comment_id==Id).delete()
+    database.db.session.commit()
+    return ''''''
 

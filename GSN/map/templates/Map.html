@@ -27,7 +27,6 @@
               <div id="privacyList">
               <select  id="prIn">
                 <option value="2">Все</option>
-                <option  value="1">Только друзья</option>
                 <option value="0">Только я</option>
               </select>
               </div>
@@ -58,41 +57,70 @@
           <div id="map"></div>
               <script type="text/javascript">
 			  
-			
-		var focusOn;
-		var focusPhoto=-1;	  
-		function closePostsPanel(){
-			$('#ph').animate({'left':'-550px'},100);
-		}
-		function closePanel(){
+		
+		var focusOn;	//last clicked marker
+		var focusPhoto=-1;		//photo id
+
+		//panels closing functions
+
+		function closePanel(){     //panel to add marker
 			$('#hidden_panel').animate({'left':'-320px'},100);
 			$("#tIn").val("");
 			$('#prIn').val(2);
 			$("#dIn").val("");
 		}
+
 		function closeMarkerPanel(){
-			document.getElementById('del').style.display = 'none';
 			$('#markerHiddenPanel').animate({'left':'-320px'},100);
-    }
-		function closeMarkerCommentPanel(){
+   	     }
+
+		function closePostsPanel(){
 			focusPhoto=-1;
-			$('#ph').animate({'left':'0'},100);
+			$('#markerHiddenPanel').animate({'left':'0px'},100);
+			$('#ph').animate({'left':'-550px'},100);
+		}
+		function closeMarkerCommentPanel(){
+			if(focusPhoto!=-1)
+				$('#ph').animate({'left':'0'},100);
+			else
+				$('#markerHiddenPanel').animate({'left':'0px'},100);
+
 			$("#cIn").val('');
 			$('#mCP').animate({'left':'-320px'},100);
-    }
+   		 }
+
 		function closeLoadPostPanel(){
-		document.getElementById('insertSpan').innerHTML='';
-		$('#uploadName').val("");
-		$('#uploadText').val("");
-		$('#uploadimage').val("");
-        $('#loadImg').animate({'left':'-320px'},100);
-    }
-	
-		
+			document.getElementById('insertSpan').innerHTML='';
+			$('#ph').animate({'left':'0px'},100);
+			$('#uploadName').val("");
+			$('#uploadText').val("");
+			$('#uploadimage').val("");
+	        $('#loadImg').animate({'left':'-320px'},100);
+   		 }
+
+   		function closeAll(){
+   			closeLoadPostPanel();
+   			closePostsPanel();
+   			closeMarkerCommentPanel();
+   			closeMarkerPanel();
+   		}
+		//updates icon on marker focus change
+		function updateIcon(){
+			if(focusOn!=undefined)
+				if(focusOn.priv==2)
+					focusOn.setIcon('../static/img//red_marker.png');
+				else
+					focusOn.setIcon('../static/img//private-icon.png');
+		}
+		// map init variables
 		var markers=[];
         var map;
 		var markerCluster;
+
+		//map initialization
         function initMap() {
+
+        //create map
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 3,
           minZoom: 2,
@@ -102,7 +130,9 @@
 		
 		getMarkers();
 		
+		//set markers on map
 		function getMarkers() {
+			
 		$.ajax({
 					
                     type: 'GET',
@@ -122,13 +152,15 @@
 							id: loc.id,
 							map: map,
 							author_id: loc.author_id,
-							priv:loc.priv
-							//,dateTime:loc.dateTime
+							priv:loc.priv,
+							dateTime:loc.date
 							});			
 
+							//special features for privat marker(icon,draggable)
 							if(marker.priv==0){
 								marker.setDraggable(true);
 								marker.setIcon('../static/img//private-icon.png');
+								//
 								google.maps.event.addListener( marker, "dragend", function(marker) {
 			  					return function() {
 								     var position = marker.getPosition();
@@ -140,14 +172,15 @@
 										"c1": position.lat(), 	
 										"c2":position.lng(),	
 										}
-									});
-									 } }(marker));
-								}
+											});
+									}
+								}(marker));
+							}
 							markers.push(marker);
                     } 
 			     }
 			 });
-				 addMarkerListeners();
+			 addMarkerListeners();
 
 				//Add a marker clusterer to manage the markers
                 markerCluster = new MarkerClusterer(map, markers,
@@ -155,6 +188,7 @@
 				
 		}
 		
+		//onclick event processing (using closure functions)
 		function addMarkerListeners() {
 
 		  if (markers.length > 0) {
@@ -163,22 +197,27 @@
 			  // function closure on the "i" variable
 			  google.maps.event.addListener(markers[i], 'click', (function(i) {
 			  return function() {
-							$("#Crt").text("Создана: "+markers[i].dateTime);
-							$("#Lbl").text("Название метки: "+markers[i].title);
-							$("#Dsp").text("Описание метки: "+markers[i].description);
-							$("#markerHiddenPanel").animate({'left':'0'},100);
-							focusOn=markers[i];	
-							$.ajax({
-							type: 'POST',
-							url: "/focus_pin/",
-							data: {  
-								"id":focusOn.id,
-								},
-							success: function(data) {
-								data=JSON.parse(data);
-								$("#Aut").text("Количество заметок: "+data.c);
-							}});	
-							if(markers[i].priv==0){
+			  		markers[i].setIcon('../static/img//green_marker.png');
+			  		document.getElementById('del').style.display = 'none';
+					$("#Crt").text("Создана: "+markers[i].dateTime);
+					$("#Lbl").text("Название метки: "+markers[i].title);
+					$("#Dsp").text("Описание метки: "+markers[i].description);
+					closeAll();
+					$("#markerHiddenPanel").animate({'left':'0'},100);
+					updateIcon();
+					focusOn=markers[i];	
+					$.ajax({
+						type: 'POST',
+						url: "/focus_pin/",
+						data: {  
+							"id":focusOn.id,
+							},
+						success: function(data) {
+							data=JSON.parse(data);
+							$("#Aut").text("Количество заметок: "+data.c);
+						}});	
+						//for private marker adding delete button and listener for it
+						if(markers[i].priv==0){
 							document.getElementById('del').style.display = 'block';			
 							document.getElementById('del').addEventListener('click', function(i) {
 								return function() { 
@@ -186,18 +225,21 @@
 										type: 'POST',
 										url: "/delete_pin/",
 										data: {  
-										"id":markers[i].id	
-										},success: function() { closeMarkerPanel();  markers[i].setMap(null);}
-									}); }
-							}(i));
-							}else document.getElementById('del').style.display = 'none';
-
+											"id":markers[i].id	
+											},
+											success: function() {
+												closeMarkerPanel(); 
+												 markers[i].setMap(null);
+												}
+										}); }
+								}(i));
+							} 
 			  }})(i));
 			}
 		  }
 		}
-
-		
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//coords of rightclick 
       	var addLocation; 
 		//place marker on rightclick
         google.maps.event.addListener(map, 'rightclick', function(event) {
@@ -206,6 +248,7 @@
 				addLocation=event.latLng;	
 				closeMarkerPanel();
 		});
+
         //search on map processing
         var input = document.getElementById("pac-input");
         var searchBox = new google.maps.places.SearchBox(input);
@@ -272,7 +315,7 @@
 			commentsRequest(id, 1);		
 			closeMarkerPanel();
 		};		
-
+		//type 0 - marker comments, 1 - photo comments
 		function commentsRequest(id,type){
 
 				$.ajax({
@@ -292,9 +335,19 @@
 							var newLi = document.createElement('li');
 							
           					newLi.innerHTML ="<div class=\"border\">" +  "<li class=\"postData\">" + info.date
-          					 	+ "</li>" + "<li class=\"boldName\">" + info.author + "</li>" +"<li>" +  info.text 
+          					 	+ "</li>" + "<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" +"<li>" +  info.text 
           					 	+ "</li>" +"<li><div class = \"likes\" id= \"LikeC"+id+"\">"
           					 	+"<img class=\"limg\"  src=\"../static/img/like.png\">"+info.likes+"</div> </li>"+"</div>";
+          					 	if(data[i].deletable==true){
+									var del=document.createElement('div');
+									del.innerHTML='delete';
+									newLi.insertBefore(del,newLi.firstChild);
+									del.addEventListener('click',function(id,newLi) {
+									return function() { 
+										alert();
+										deleteComment(id,newLi) }
+										}(id,newLi));
+								}
 							
           					document.getElementById('mCP1').appendChild(newLi);
 							
@@ -306,7 +359,7 @@
 				document.getElementById('mCP1').scrollTo(0,0);
 		}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//adding comment to pin
+	//adding comment to photo or marker(type=0 - marker,1-photo)
 		document.getElementById("mCP").onsubmit=function(){
 			var comm=$("#cIn").val();
 			$("#cIn").val('');
@@ -333,10 +386,21 @@
 						var newLi = document.createElement('li');
 							
           				newLi.innerHTML ="<div class=\"border\">"+ "<li class=\"postData\">" + info.date + "</li>"
-          				  + "<li class=\"boldName\">" + info.author + "</li>" 
+          				  + "<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>"  
           				  +"<li>" +  info.text +"</li>" 
-          				  +"<li><div class=\"likes\" id=\"LikeC"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li>"+"</div>";
+          				  +"<li><div class=\"likes\" id=\"LikeC"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li></div>";
+							//delete button
+							var del=document.createElement('div');
+							del.innerHTML='delete';
+							//style....
+							newLi.insertBefore(del,newLi.firstChild);
+							del.addEventListener('click',function(id,newLi) {
+							return function() { 
+								alert();
+								deleteComment(id,newLi) }
+								}(id,newLi));
 						
+
           				document.getElementById('mCP1').appendChild(newLi);
 						document.getElementById('LikeC'+id).addEventListener('click', function(id) {
 							return function() {   addLikeComment(id); }
@@ -348,14 +412,16 @@
 			return false;
 		}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			//add post functions
+			//add photo functions
 			document.getElementById("addPostButton").onclick=function(){
-			closePostsPanel();
+			$('#ph').animate({'left':'320'},100);
 			$('#loadImg').animate({'left':'0'},100);
 		}
 		
-		document.getElementById("addPost").onclick=addPost;
+		document.getElementById("addPost").addEventListener("click", addPost);
+
 		    function addPost() {
+		    	document.getElementById("addPost").removeEventListener("click", addPost); //prevent multiple click
 		    	document.getElementById('insertSpan').innerHTML='';
 				event.stopPropagation(); // Stop stuff happening
 				event.preventDefault();
@@ -384,8 +450,21 @@
 						
 					}
 				});
-				showPosts();
+
+				$.ajax({
+							type: 'POST',
+							url: "/focus_pin/",
+							data: {  
+								"id":focusOn.id,
+								},
+							success: function(data) {
+								data=JSON.parse(data);
+								$("#Aut").text("Количество заметок: "+data.c);
+							}});
+
 				closeLoadPostPanel();
+				showPosts();
+				document.getElementById("addPost").addEventListener("click", addPost);
 				return false;
 	}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -394,7 +473,8 @@
 				$.ajax({
 					type: 'POST',
 					url: "/like_comment/",
-					data: {"id": id},
+					data: {"id": id,
+						   "p_id":focusPhoto },
 					success: function (data) {
 					
 					data=JSON.parse(data);
@@ -416,11 +496,10 @@
 		}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//onscroll ajax query 
-		var count = 10;  //rel to query limit in map.py,need sync on change
+		//onscroll ajax query to load photos
+		var count = 10;  //rel to query limit in map.py, need sync on change
 		var begin = count;
-		var isLast;
+		var isLast;		//to prevent requests when all photos are loaded
 		document.getElementById("showPostsButton").onclick=function(){
 			closeMarkerPanel();
 			showPosts();
@@ -434,19 +513,19 @@
 			loader();
 		}
 
-		
+		//set scroll listener
 		function scrolling(){
 			var currentHeight = $(this).children("#ws").height();
-
 			if($(this).scrollTop() >= (currentHeight - $(this).height()-100)){
-				$(this).unbind("scroll");
+				$(this).unbind("scroll");	//to prevent multiple requests
 				loader();
 				}
 		}
 		
 	
 		
-		function loader(){   
+		function loader(){  
+	
 			$.ajax({
 				type:"POST",
 				url:"/get_post/",
@@ -458,46 +537,59 @@
 				success:onAjaxSuccess
 			});
 			
-			function onAjaxSuccess(data){
+			function onAjaxSuccess(data){	//posts displaying
 
-				if(data=="[]")
-					isLast=true;
-				data=JSON.parse(data);
+					if(data=="[]")
+						isLast=true;
 
-				var newD = document.createElement('div');
-				for(var i=0;i<data.length;i++){
-					info = data[i];
-					var id=info.id;
-					var newLi = document.createElement('li');
-					if(info.photo_ref != "No photo")		
-						newLi.innerHTML ="<div class=\"border\"><li>" + info.title + "</li>"+ "<li class=\"postData\">" + info.date + "</li>" 
-							+"<li class=\"boldName\" >" + info.author + "</li>" 
-						    +"<div class=\"imageBlock\"><img  class=\"imageBlock2\" src=\""+info.photo_ref+"\" alt=\""+info.title+"\"/>"
-							+"<li class=\"textBlock\">" +  info.text + "</li></div>"
-							+"<li><div class = \"likes\" id= \"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li>"
-							+"<li id=\"CommP"+id+"\">Comments</li></div>";
-					else
-						newLi.innerHTML ="<div class=\"border\"><li>" + info.title + "</li>" + "<li class=\"postData\">" + info.date + "</li>" 
-							+"<li class=\"boldName\">" + info.author + "</li>" +"<li>" +  info.text + "</li>" 
-							+"<li><div class = \"likes\" id= \"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li>"
-							+"<li id=\"CommP"+id+"\">Comments</li></div>";
-					
-					
-					newD.appendChild(newLi);
-          			var container=document.getElementById('ws');
-					
-					container.insertBefore(newD, container.firstChild);
-					document.getElementById('LikeP'+id).addEventListener('click', function(id) {
-						return function() { addLikePost(id); }
-					}(id));
+					data=JSON.parse(data);
 
-					document.getElementById('CommP'+id).addEventListener('click', function(id) {
-						return function() { focusPhoto=id; getCommentsPhoto(id); }
-					}(id));
-					
-				}
-				if(isLast==false)
-					$("#ph").on("scroll", scrolling);
+					var newD = document.createElement('div');
+					for(var i=0;i<data.length;i++){
+						info = data[i];
+						var id=info.id;
+						var newLi = document.createElement('li');
+						if(info.photo_ref != "No photo")		
+							newLi.innerHTML ="<div class=\"border\"><li>" + info.title + "</li>"+ "<li class=\"postData\">" + info.date + "</li>" 
+								+"<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
+							    +"<div class=\"imageBlock\"><img  class=\"imageBlock2\" src=\""+info.photo_ref+"\" alt=\""+info.title+"\"/>"
+								+"<li class=\"textBlock\">" +  info.text + "</li></div>"
+								+"<li><div class=\"likes\" id=\"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li>"
+								+"<li id=\"CommP"+id+"\">Comments</li></div>";
+						else
+							newLi.innerHTML ="<div class=\"border\"><li>" + info.title + "</li>" + "<li class=\"postData\">" + info.date + "</li>" 
+								+"<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
+							    +"<li>" +  info.text + "</li>" 
+								+"<li><div class=\"likes\" id=\"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li> </li>"
+								+"<li id=\"CommP"+id+"\">Comments</li></div>";
+						
+						if(data[i].deletable==true){
+							var del=document.createElement('div');
+							del.innerHTML='delete';
+							//TODO: style for del 
+							newLi.insertBefore(del,newLi.firstChild);
+							del.addEventListener('click',function(id,newLi) {
+							return function() { 
+								deletePhoto(id,newLi) }
+								}(id,newLi));
+						}
+						
+						newD.appendChild(newLi);
+	          			var container=document.getElementById('ws');
+						
+						container.insertBefore(newD, container.firstChild);
+						document.getElementById('LikeP'+id).addEventListener('click', function(id) {
+							return function() { addLikePost(id); }
+						}(id));
+
+						document.getElementById('CommP'+id).addEventListener('click', function(id) {
+							return function() { focusPhoto=id; getCommentsPhoto(id); }
+						}(id));
+						
+					}
+
+					if(isLast==false)
+						$("#ph").on("scroll", scrolling);		
 				}
 				begin+=count;
 		}
@@ -514,7 +606,6 @@ function handleFileSelect(evt) {
     // Closure to capture the file information.
     reader.onload = (function(theFile) {
         return function(e) {
-            // Render thumbnail.
             var span = document.getElementById('insertSpan');
             span.innerHTML = ["<img class=\"thumb\" src=\"" + e.target.result + "\" />"].join('');
             document.getElementById('loadImg').appendChild(span);
@@ -525,7 +616,34 @@ function handleFileSelect(evt) {
 }
 document.getElementById('uploadimage').addEventListener('change', handleFileSelect, false);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
+	//post deleting
+	function deletePhoto(id,newLi){
+		$.ajax({
+				type:"POST",
+				url:"/delete_photo/",
+				data:{
+					"id": id
+				},
+				success:function(data){
+					newLi.style.display = "none";
+				}
+			});
+
+	}
+	//comment deleting
+	function deleteComment(id,newLi){
+		$.ajax({
+				type:"POST",
+				url:"/delete_comment/",
+				data:{
+					"id": id
+				},
+				success:function(data){
+					newLi.style.display = "none";
+				}
+			});
+
+	}				
 	
 	</script>
 	
