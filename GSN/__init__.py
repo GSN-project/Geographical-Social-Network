@@ -45,7 +45,7 @@ def create_app(config = None):
 	app.config['MAIL_PASSWORD'] = 'GeographicalSocialNetwork'
 	app.config['MAIL_USE_TLS'] = False
 	app.config['MAIL_USE_SSL'] = True
-	mail.init_app(app)
+	mail.mail.init_app(app)
 
 	#photos = UploadSet('photos', IMAGES)
 	app.config['UPLOAD_FOLDER'] = 'GSN\\static\\img'
