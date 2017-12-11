@@ -118,164 +118,171 @@
 		var markerCluster;
 
 		//map initialization
-        function initMap() {
 
-        //create map
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 3,
-          minZoom: 2,
-          center: {lat: 46.024, lng: 40.887}
-        });
+   		function initMap() {
+
+	        //create map
+	        map = new google.maps.Map(document.getElementById('map'), {
+	          zoom: 3,
+	          minZoom: 2,
+	          center: {lat: 46.024, lng: 40.887}
+	        });
 
 		
-		getMarkers();
+			getMarkers();
 		
-		//set markers on map
-		function getMarkers() {
-			
-		$.ajax({
+			//set markers on map
+			function getMarkers() {
 					
-                    type: 'GET',
-                    url: "/get_locations/",
+				$.ajax({
+							
+		            type: 'GET',
+		            url: "/get_locations/",
 					async:false,
-                    success: function(data) {
+		            success: function(data) {
 						markers=[];
 						data=JSON.parse(data);
 						for(var i=0;i<data.length;i++){
 							var loc=data[i];
 							var marker=new google.maps.Marker({
-							position: {
-							lat: loc.lat, 
-							lng: loc.lng},
-							title: loc.title,
-							description: loc.description,
-							id: loc.id,
-							map: map,
-							author_id: loc.author_id,
-							priv:loc.priv,
-							dateTime:loc.date
+								position: {
+									lat: loc.lat, 
+									lng: loc.lng
+								},
+								title: loc.title,
+								description: loc.description,
+								id: loc.id,
+								map: map,
+								author_id: loc.author_id,
+								priv:loc.priv,
+								dateTime:loc.date
 							});			
 
-							//special features for privat marker(icon,draggable)
+									//special features for private marker(icon,draggable)
 							if(marker.priv==0){
 								marker.setDraggable(true);
 								marker.setIcon('../static/img//private-icon.png');
-								//
+										
 								google.maps.event.addListener( marker, "dragend", function(marker) {
-			  					return function() {
-								     var position = marker.getPosition();
-								     $.ajax({
-										type: 'POST',
-										url: "/update_private/",
-										data: {  
-										"id":marker.id,
-										"c1": position.lat(), 	
-										"c2":position.lng(),	
-										}
-											});
+					  				return function() {
+						    			var position = marker.getPosition();
+									    $.ajax({
+											type: 'POST',
+											url: "/update_private/",
+											data: {  
+												"id":marker.id,
+												"c1": position.lat(), 	
+												"c2":position.lng(),	
+											}
+										});
 									}
 								}(marker));
 							}
 							markers.push(marker);
-                    } 
-			     }
-			 });
-			 addMarkerListeners();
+		                } 
+			    	}
+				});
 
-				//Add a marker clusterer to manage the markers
-                markerCluster = new MarkerClusterer(map, markers,
-				{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});				
-				
-		}
-		
-		//onclick event processing (using closure functions)
-		function addMarkerListeners() {
+			    addMarkerListeners();
 
-		  if (markers.length > 0) {
-			for (var i = 0; i < markers.length; i++) {
-
-			  // function closure on the "i" variable
-			  google.maps.event.addListener(markers[i], 'click', (function(i) {
-			  return function() {
-			  		markers[i].setIcon('../static/img//green_marker.png');
-			  		document.getElementById('del').style.display = 'none';
-					$("#Crt").text("Создана: "+markers[i].dateTime);
-					$("#Lbl").text("Название метки: "+markers[i].title);
-					$("#Dsp").text("Описание метки: "+markers[i].description);
-					closeAll();
-					$("#markerHiddenPanel").animate({'left':'0'},100);
-					updateIcon();
-					focusOn=markers[i];	
-					$.ajax({
-						type: 'POST',
-						url: "/focus_pin/",
-						data: {  
-							"id":focusOn.id,
-							},
-						success: function(data) {
-							data=JSON.parse(data);
-							$("#Aut").text("Количество заметок: "+data.c);
-						}});	
-						//for private marker adding delete button and listener for it
-						if(markers[i].priv==0){
-							document.getElementById('del').style.display = 'block';			
-							document.getElementById('del').addEventListener('click', function(i) {
-								return function() { 
-										$.ajax({
-										type: 'POST',
-										url: "/delete_pin/",
-										data: {  
-											"id":markers[i].id	
-											},
-											success: function() {
-												closeMarkerPanel(); 
-												 markers[i].setMap(null);
-												}
-										}); }
-								}(i));
-							} 
-			  }})(i));
+					//Add a marker clusterer to manage the markers
+		        markerCluster = new MarkerClusterer(
+		        	map, 
+		        	markers,
+					{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'}
+				);								
 			}
-		  }
-		}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//coords of rightclick 
-      	var addLocation; 
-		//place marker on rightclick
-        google.maps.event.addListener(map, 'rightclick', function(event) {
-		        $('#hidden_panel').animate({'left':'0'},100);
-                map.setCenter(event.latLng);
+			
+			//onclick event processing (using closure functions)
+			function addMarkerListeners() {
+
+			    if (markers.length > 0) {
+					for (var i = 0; i < markers.length; i++) {
+					    // function closure on the "i" variable
+					    google.maps.event.addListener(markers[i], 'click', function(i) {
+						    return function() {
+						  		markers[i].setIcon('../static/img//green_marker.png');
+						  		document.getElementById('del').style.display = 'none';
+								$("#Crt").text("Создана: "+markers[i].dateTime);
+								$("#Lbl").text("Название метки: "+markers[i].title);
+								$("#Dsp").text("Описание метки: "+markers[i].description);
+								closeAll();
+								$("#markerHiddenPanel").animate({'left':'0'},100);
+								updateIcon();
+								focusOn=markers[i];	
+								$.ajax({
+									type: 'POST',
+									url: "/focus_pin/",
+									data: {  
+										"id":focusOn.id,
+									},
+									success: function(data) {
+										data=JSON.parse(data);
+										$("#Aut").text("Количество заметок: "+data.c);
+									}
+								});	
+									//for private marker adding delete button and listener for it
+								if(markers[i].priv==0){
+									document.getElementById('del').style.display = 'block';			
+									document.getElementById('del').addEventListener('click', function(i) {
+										return function() { 
+											$.ajax({
+												type: 'POST',
+												url: "/delete_pin/",
+												data: {  
+													"id":markers[i].id	
+												},
+												success: function() {
+													closeMarkerPanel(); 
+													markers[i].setMap(null);
+												}
+											}); 
+										}
+									}(i));
+								} 
+							} 
+						}(i));
+					}
+				}
+			}
+	
+			//coords of rightclick 
+	      	var addLocation; 
+			//place marker on rightclick
+	        google.maps.event.addListener(map, 'rightclick', function(event) {
+			    $('#hidden_panel').animate({'left':'0'},100);
+	            map.setCenter(event.latLng);
 				addLocation=event.latLng;	
 				closeMarkerPanel();
-		});
+			});
 
-        //search on map processing
-        var input = document.getElementById("pac-input");
-        var searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+	        //search on map processing
+	        var input = document.getElementById("pac-input");
+	        var searchBox = new google.maps.places.SearchBox(input);
+	        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-         searchBox.addListener('places_changed', function() {
-          		var places = searchBox.getPlaces();
-	     		
-            	 var bounds= new google.maps.LatLngBounds();
+	        searchBox.addListener('places_changed', function() {
+	          	var places = searchBox.getPlaces();
+		     		
+	            var bounds= new google.maps.LatLngBounds();
 
-            	 if (places[0].geometry.viewport) {
-            		  bounds.union(places[0].geometry.viewport);
-            	} else {
-              		bounds.extend(places[0].geometry.location);
-            	}
-          		map.fitBounds(bounds);
-         	});
-   
-		//add marker 
-		document.getElementById("hidden_panel").onsubmit=placeMarker;
-		function placeMarker() {
-			
-			var marker=new google.maps.Marker({
-					position: addLocation});
-			$.ajax({
-                    type: 'POST',
-                    url: "/add_pin/",
+	          	if (places[0].geometry.viewport) 
+	                bounds.union(places[0].geometry.viewport);
+	            else 
+	              	bounds.extend(places[0].geometry.location);
+	            	
+	          	map.fitBounds(bounds);
+	        });
+	   
+			//add marker 
+			document.getElementById("hidden_panel").onsubmit=placeMarker;
+			function placeMarker() {
+				
+				var marker=new google.maps.Marker({
+						position: addLocation});
+				$.ajax({
+	                type: 'POST',
+	                url: "/add_pin/",
 					async: false,
 				    data: {  
 						"c1": marker.getPosition().lat(), 	
@@ -283,20 +290,21 @@
 						"title":$("#tIn").val(),	
 						"priv":$('#prIn').val(),	
 						"dsp":$("#dIn").val()
-						},
-                    success: function(data) {
-                    }});
-			closePanel();
-			addLocation=null;
-			$("#tIn").val("");
-			$('#prIn').val(2);
-			$("#dIn").val("");
-			getMarkers(); 
-			return false;
-		};
-	  		
-	}
+					},
+	                success: function(data) {
+	                }
+	            });
+				closePanel();
+				addLocation=null;
+				$("#tIn").val("");
+				$('#prIn').val(2);
+				$("#dIn").val("");
+				getMarkers(); 
+				return false;
+			};
+		}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		//displaying comments 
 		document.getElementById("showCommentsButton").onclick=getComments;
 		function getComments() {    
@@ -318,47 +326,51 @@
 		//type 0 - marker comments, 1 - photo comments
 		function commentsRequest(id,type){
 
-				$.ajax({
-                    type: 'GET',
-                    url: "/get_comments/",
-					async: false,
-				    data: {  
-						"id": id,
-						"type": type
-						},
-                    success: function(data) {
+			$.ajax({
+                type: 'GET',
+                url: "/get_comments/",
+				async: false,
+			    data: {  
+					"id": id,
+					"type": type
+				},
+                success: function(data) {
 
-						data = JSON.parse(data);
-						for(var i = 0; i<data.length; i++ ){
-							info = data[i];
-							var id=info.id;
-							var newLi = document.createElement('li');
+					data = JSON.parse(data);
+					for(var i = 0; i<data.length; i++ ){
+						info = data[i];
+						var id=info.id;
+						var newLi = document.createElement('li');
 							
-          					newLi.innerHTML ="<div class=\"border\">" +  "<li class=\"postData\">" + info.date
-          					 	+ "</li>" + "<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" +"<li>" +  info.text 
-          					 	+ "</li>" +"<li><div class = \"likes\" id= \"LikeC"+id+"\">"
-          					 	+"<img class=\"limg\"  src=\"../static/img/like.png\">"+info.likes+"</div> </li>"+"</div>";
-          					 	if(data[i].deletable==true){
-									var del=document.createElement('div');
-									del.innerHTML='delete';
-									newLi.insertBefore(del,newLi.firstChild);
-									del.addEventListener('click',function(id,newLi) {
+          				newLi.innerHTML ="<div class=\"border\">" +  "<li class=\"postData\">" + info.date
+          				 	+ "</li>" + "<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" +"<li>" +  info.text 
+          				 	+ "</li>" +"<li><div class = \"likes\" id= \"LikeC"+id+"\">"
+          				 	+"<img class=\"limg\"  src=\"../static/img/like.png\">"+info.likes+"</div> </li>"+"</div>";
+          				 	if(data[i].deletable==true){
+								var del=document.createElement('div');
+								del.innerHTML='delete';
+								newLi.insertBefore(del,newLi.firstChild);
+								del.addEventListener('click',function(id,newLi) {
 									return function() { 
-										alert();
-										deleteComment(id,newLi) }
-										}(id,newLi));
-								}
+										deleteComment(id,newLi) 
+									}
+								}(id,newLi));
+							}
 							
           					document.getElementById('mCP1').appendChild(newLi);
 							
 							document.getElementById('LikeC'+id).addEventListener('click', function(id) {
-								return function() { addLikeComment(id); }
+								return function() { 
+									addLikeComment(id); 
+								}
 							}(id));
 						}
-                    }});
-				document.getElementById('mCP1').scrollTo(0,0);
+                }
+            });
+			document.getElementById('mCP1').scrollTo(0,0);
 		}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	//adding comment to photo or marker(type=0 - marker,1-photo)
 		document.getElementById("mCP").onsubmit=function(){
 			var comm=$("#cIn").val();
@@ -370,129 +382,129 @@
 				type=1;
 			} else
 				id=focusOn.id;
+
 			$.ajax({
-                    type: 'POST',
-                    url: "/add_pin_comment/",
-                    async:false,
-				    data: {  
-						"text": comm,
-						"id": id,
-						"type":type
-						},
-					success: function(data) {
+                type: 'POST',
+                url: "/add_pin_comment/",
+                async:false,
+			    data: {  
+					"text": comm,
+					"id": id,
+					"type":type
+				},
+				success: function(data) {
 
-						info=JSON.parse(data);
-						var id=info.id;
-						var newLi = document.createElement('li');
+					info=JSON.parse(data);
+					var id=info.id;
+					var newLi = document.createElement('li');
 							
-          				newLi.innerHTML ="<div class=\"border\">"+ "<li class=\"postData\">" + info.date + "</li>"
-          				  + "<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>"  
-          				  +"<li>" +  info.text +"</li>" 
-          				  +"<li><div class=\"likes\" id=\"LikeC"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li></div>";
-							//delete button
-							var del=document.createElement('div');
-							del.innerHTML='delete';
-							//style....
-							newLi.insertBefore(del,newLi.firstChild);
-							del.addEventListener('click',function(id,newLi) {
-							return function() { 
-								alert();
-								deleteComment(id,newLi) }
-								}(id,newLi));
+       				newLi.innerHTML ="<div class=\"border\">"+ "<li class=\"postData\">" + info.date + "</li>"
+         				+ "<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>"  
+          				+"<li>" +  info.text +"</li>" 
+          				+"<li><div class=\"likes\" id=\"LikeC"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li></div>";
+					//delete button
+					var del=document.createElement('div');
+					del.innerHTML='delete';
+					//style....
+					newLi.insertBefore(del,newLi.firstChild);
+					del.addEventListener('click',function(id,newLi) {
+					return function() { 
+						deleteComment(id,newLi) }
+					}(id,newLi));
 						
-
-          				document.getElementById('mCP1').appendChild(newLi);
-						document.getElementById('LikeC'+id).addEventListener('click', function(id) {
-							return function() {   addLikeComment(id); }
-						}(id));
-						document.getElementById('mCP1').scrollTo(0,0);
-                    }
+          			document.getElementById('mCP1').appendChild(newLi);
+					document.getElementById('LikeC'+id).addEventListener('click', function(id) {
+						return function() {   
+							addLikeComment(id); 
+						}
+					}(id));
+					document.getElementById('mCP1').scrollTo(0,0);
+                }
 			});
-			
 			return false;
 		}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 			//add photo functions
-			document.getElementById("addPostButton").onclick=function(){
+		document.getElementById("addPostButton").onclick=function(){
 			$('#ph').animate({'left':'320'},100);
 			$('#loadImg').animate({'left':'0'},100);
 		}
 		
 		document.getElementById("addPost").addEventListener("click", addPost);
 
-		    function addPost() {
-		    	document.getElementById("addPost").removeEventListener("click", addPost); //prevent multiple click
-		    	document.getElementById('insertSpan').innerHTML='';
-				event.stopPropagation(); // Stop stuff happening
-				event.preventDefault();
-				//var $input = $("#uploadimage");
-				var fd = new FormData;
-				var mtd;
-				
-				fd.append('title', $('#uploadName').val());
-				fd.append('marker_id', focusOn.id);
-				fd.append('text', $('#uploadText').val());
-				if(document.getElementById("uploadimage").files[0] != null){
-					fd.append('type','1');
-					fd.append('file', document.getElementById("uploadimage").files[0]);
-					}
-				else fd.append('type','0');
-									
-				
-				$.ajax({
-					type: 'POST',
-					url: "/new_post/",
-					data: fd,
-					processData: false,
-					contentType: false,
-					async: false,		//try sync
-					success: function (data) {
-						
-					}
-				});
+		function addPost() {
+		   	document.getElementById("addPost").removeEventListener("click", addPost); //prevent multiple click
+		   	document.getElementById('insertSpan').innerHTML='';
+			event.stopPropagation(); // Stop stuff happening
+			event.preventDefault();
+			//var $input = $("#uploadimage");
+			var fd = new FormData;
+			var mtd;
+			
+			fd.append('title', $('#uploadName').val());
+			fd.append('marker_id', focusOn.id);
+			fd.append('text', $('#uploadText').val());
+			if(document.getElementById("uploadimage").files[0] != null){
+				fd.append('type','1');
+				fd.append('file', document.getElementById("uploadimage").files[0]);
+			}
+			else fd.append('type','0');
+								
+			
+			$.ajax({
+				type: 'POST',
+				url: "/new_post/",
+				data: fd,
+				processData: false,
+				contentType: false,
+				async: false,		//try sync
+				success: function (data) {	
+				}
+			});
+			$.ajax({
+				type: 'POST',
+				url: "/focus_pin/",
+				data: {  
+		       		"id":focusOn.id,
+				},
+				success: function(data) {
+					data=JSON.parse(data);
+					$("#Aut").text("Количество заметок: "+data.c);
+				}});
 
-				$.ajax({
-							type: 'POST',
-							url: "/focus_pin/",
-							data: {  
-								"id":focusOn.id,
-								},
-							success: function(data) {
-								data=JSON.parse(data);
-								$("#Aut").text("Количество заметок: "+data.c);
-							}});
-
-				closeLoadPostPanel();
-				showPosts();
-				document.getElementById("addPost").addEventListener("click", addPost);
-				return false;
-	}
+			closeLoadPostPanel();
+			showPosts();
+			document.getElementById("addPost").addEventListener("click", addPost);
+			return false;
+		}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//likes functions
 		function addLikeComment(id){
-				$.ajax({
-					type: 'POST',
-					url: "/like_comment/",
-					data: {"id": id,
-						   "p_id":focusPhoto },
-					success: function (data) {
-					
+			$.ajax({
+				type: 'POST',
+				url: "/like_comment/",
+				data: {
+					"id": id,
+				    "p_id":focusPhoto
+				},
+				success: function (data) {		
 					data=JSON.parse(data);
 					document.getElementById('LikeC'+id).innerHTML="<img class=\"limg\" src=\"../static/img/like.png\">"+data.l;
-					}
-				});
+				}
+			});
 		}
 		
 		function addLikePost(id){
-				$.ajax({
-					type: 'POST',
-					url: "/like_photo/",
-					data: {"id": id},
-					success: function (data) {
-						data=JSON.parse(data);
-						document.getElementById("LikeP"+id).innerHTML="<img class=\"limg\" src=\"../static/img/like.png\">"+data.l;
-					}
-				});
+			$.ajax({
+				type: 'POST',
+				url: "/like_photo/",
+				data: {"id": id},
+				success: function (data) {
+					data=JSON.parse(data);
+					document.getElementById("LikeP"+id).innerHTML="<img class=\"limg\" src=\"../static/img/like.png\">"+data.l;
+				}
+			});
 		}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -519,7 +531,7 @@
 			if($(this).scrollTop() >= (currentHeight - $(this).height()-100)){
 				$(this).unbind("scroll");	//to prevent multiple requests
 				loader();
-				}
+			}
 		}
 		
 	
@@ -539,59 +551,64 @@
 			
 			function onAjaxSuccess(data){	//posts displaying
 
-					if(data=="[]")
-						isLast=true;
+				if(data=="[]")
+					isLast=true;
 
-					data=JSON.parse(data);
+				data=JSON.parse(data);
 
-					var newD = document.createElement('div');
-					for(var i=0;i<data.length;i++){
-						info = data[i];
-						var id=info.id;
-						var newLi = document.createElement('li');
-						if(info.photo_ref != "No photo")		
-							newLi.innerHTML ="<div class=\"border\"><li>" + info.title + "</li>"+ "<li class=\"postData\">" + info.date + "</li>" 
-								+"<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
-							    +"<div class=\"imageBlock\"><img  class=\"imageBlock2\" src=\""+info.photo_ref+"\" alt=\""+info.title+"\"/>"
-								+"<li class=\"textBlock\">" +  info.text + "</li></div>"
-								+"<li><div class=\"likes\" id=\"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li>"
-								+"<li id=\"CommP"+id+"\">Comments</li></div>";
-						else
-							newLi.innerHTML ="<div class=\"border\"><li>" + info.title + "</li>" + "<li class=\"postData\">" + info.date + "</li>" 
-								+"<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
-							    +"<li>" +  info.text + "</li>" 
-								+"<li><div class=\"likes\" id=\"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li> </li>"
-								+"<li id=\"CommP"+id+"\">Comments</li></div>";
+				var newD = document.createElement('div');
+				for(var i=0;i<data.length;i++){
+					info = data[i];
+					var id=info.id;
+					var newLi = document.createElement('li');
+					if(info.photo_ref != "No photo")		
+						newLi.innerHTML ="<div class=\"border\"><li>" + info.title + "</li>"+ "<li class=\"postData\">" + info.date + "</li>" 
+							+"<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
+						    +"<div class=\"imageBlock\"><img  class=\"imageBlock2\" src=\""+info.photo_ref+"\" alt=\""+info.title+"\"/>"
+							+"<li class=\"textBlock\">" +  info.text + "</li></div>"
+							+"<li><div class=\"likes\" id=\"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li>"
+							+"<li id=\"CommP"+id+"\">Comments</li></div>";
+					else
+						newLi.innerHTML ="<div class=\"border\"><li>" + info.title + "</li>" + "<li class=\"postData\">" + info.date + "</li>" 
+							+"<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
+						    +"<li>" +  info.text + "</li>" 
+							+"<li><div class=\"likes\" id=\"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li> </li>"
+							+"<li id=\"CommP"+id+"\">Comments</li></div>";
 						
-						if(data[i].deletable==true){
-							var del=document.createElement('div');
-							del.innerHTML='delete';
-							//TODO: style for del 
-							newLi.insertBefore(del,newLi.firstChild);
-							del.addEventListener('click',function(id,newLi) {
-							return function() { 
-								deletePhoto(id,newLi) }
-								}(id,newLi));
-						}
-						
-						newD.appendChild(newLi);
-	          			var container=document.getElementById('ws');
-						
-						container.insertBefore(newD, container.firstChild);
-						document.getElementById('LikeP'+id).addEventListener('click', function(id) {
-							return function() { addLikePost(id); }
-						}(id));
-
-						document.getElementById('CommP'+id).addEventListener('click', function(id) {
-							return function() { focusPhoto=id; getCommentsPhoto(id); }
-						}(id));
-						
+					if(data[i].deletable==true){
+						var del=document.createElement('div');
+						del.innerHTML='delete';
+						//TODO: style for del 
+						newLi.insertBefore(del,newLi.firstChild);
+						del.addEventListener('click',function(id,newLi) {
+						return function() { 
+							deletePhoto(id,newLi) }
+						}(id,newLi));
 					}
+						
+					newD.appendChild(newLi);
+	       			var container=document.getElementById('ws');
+					
+					container.insertBefore(newD, container.firstChild);
+					document.getElementById('LikeP'+id).addEventListener('click', function(id) {
+						return function() { 
+							addLikePost(id); 
+						}
+					}(id));
 
-					if(isLast==false)
-						$("#ph").on("scroll", scrolling);		
+					document.getElementById('CommP'+id).addEventListener('click', function(id) {
+						return function() { 
+							focusPhoto=id;
+							getCommentsPhoto(id); 
+						}
+					}(id));
+						
 				}
-				begin+=count;
+
+				if(isLast==false)
+					$("#ph").on("scroll", scrolling);		
+			}
+			begin+=count;
 		}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //displaying photo on post load
@@ -602,18 +619,20 @@ function handleFileSelect(evt) {
     // Only process image files.
     if (f.type.match('image.*')) {
     
-    var reader = new FileReader();
-    // Closure to capture the file information.
-    reader.onload = (function(theFile) {
-        return function(e) {
-            var span = document.getElementById('insertSpan');
-            span.innerHTML = ["<img class=\"thumb\" src=\"" + e.target.result + "\" />"].join('');
-            document.getElementById('loadImg').appendChild(span);
-        };
-    })(f);
-    // Read in the image file as a data URL.
-    reader.readAsDataURL(f);}
+    	var reader = new FileReader();
+   		// Closure to capture the file information.
+    	reader.onload = (function(theFile) {
+        	return function(e) {
+        	    var span = document.getElementById('insertSpan');
+            	span.innerHTML = ["<img class=\"thumb\" src=\"" + e.target.result + "\" />"].join('');
+            	document.getElementById('loadImg').appendChild(span);
+        	};
+	    })(f);
+	    // Read in the image file as a data URL.
+	    reader.readAsDataURL(f);
+	}
 }
+
 document.getElementById('uploadimage').addEventListener('change', handleFileSelect, false);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//post deleting
