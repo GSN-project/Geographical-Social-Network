@@ -27,7 +27,7 @@
         <h3> <a href="{{url_for('.user', user_login=user.login)}}">  {{user.login}} </a> подписан на:</h3>
         {% for followed in follows %}
         <div class="friend">
-            <div class="avatar"><img src="{{userpic(followed.user_id)}}"></div>
+            <div class="avatar"><img src="{{followed.userpic()}}"></div>
             <a href="{{url_for('.user', user_login=followed.login)}}">  
             <div class="friend-name">{{followed.login}}</div>
             </a>

@@ -6,7 +6,7 @@ import string
 from flask_uploads import configure_uploads
 from flask_migrate import Migrate
 # Database
-from GSN.database import db
+from GSN import database
 # Mail
 from GSN import mail
 # Blueprints
@@ -20,6 +20,7 @@ from GSN.logout import logout
 from GSN.profile import profile
 from GSN.friends import friends
 from GSN.user import user
+from GSN.message import message
 from .config import photos
 
 
@@ -34,8 +35,8 @@ def create_app(config = None):
 	app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://r01bghd36z2ld54q:i0kfbhifxcnyrf0r@x3ztd854gaa7on6s.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/lreehpo3s6bwktzb'
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-	db.init_app(app)
-	migrate = Migrate(app, db)
+	database.db.init_app(app)
+	migrate = Migrate(app, database.db)
 
 	# Mail
 	app.config['MAIL_SERVER']='smtp.gmail.com'
@@ -44,7 +45,7 @@ def create_app(config = None):
 	app.config['MAIL_PASSWORD'] = 'GeographicalSocialNetwork'
 	app.config['MAIL_USE_TLS'] = False
 	app.config['MAIL_USE_SSL'] = True
-	mail.mail.init_app(app)
+	mail.init_app(app)
 
 	#photos = UploadSet('photos', IMAGES)
 	app.config['UPLOAD_FOLDER'] = 'GSN\\static\\img'
@@ -60,6 +61,7 @@ def create_app(config = None):
 	app.register_blueprint(profile.mod)
 	app.register_blueprint(friends.mod)
 	app.register_blueprint(user.mod)
+	app.register_blueprint(message.mod)
 	# Session
 	app.secret_key = os.urandom(24)
 	

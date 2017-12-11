@@ -72,7 +72,7 @@
               <ul class="photos">
                 {% for photo in photos %}
                 <div class="photo">
-                  <a href="#"><img class="image" src="{{'/static/img/' + photo.photo_ref }}"></a>
+                  <a href="#"> {% if photo.photo_ref != None %} <img class="image" src="{{'/static/img/' + photo.photo_ref }}"> {% endif %}</a>
                 </div>
                 {% endfor %}
               </ul>
