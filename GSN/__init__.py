@@ -39,13 +39,13 @@ def create_app(config = None):
 	migrate = Migrate(app, database.db)
 
 	# Mail
-    app.config['MAIL_SERVER']='smtp.gmail.com'
-    app.config['MAIL_PORT'] = 465
-    app.config['MAIL_USERNAME'] =    'geographicalsocialnetwork@gmail.com'
-    app.config['MAIL_PASSWORD'] = 'Geosocnetwork'
-    app.config['MAIL_USE_TLS'] = False
-    app.config['MAIL_USE_SSL'] = True
-    mail.mail.init_app(app)
+	app.config['MAIL_SERVER']='smtp.gmail.com'
+	app.config['MAIL_PORT'] = 465
+	app.config['MAIL_USERNAME'] =    'geographicalsocialnetwork@gmail.com'
+	app.config['MAIL_PASSWORD'] = 'Geosocnetwork'
+	app.config['MAIL_USE_TLS'] = False
+	app.config['MAIL_USE_SSL'] = True
+	mail.mail.init_app(app)
 
 	#photos = UploadSet('photos', IMAGES)
 	app.config['UPLOAD_FOLDER'] = 'GSN\\static\\img'
