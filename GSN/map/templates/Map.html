@@ -2,11 +2,13 @@
   {% block content %}
         <section>
         	<input class="pac-input1" id="pac-input" class="controls" type="text" placeholder="Search Box">
-		<div id= "ph">
-				<span class="close" onclick="closePostsPanel()"></span>
+        	<div id="postPanel">
+        		<span class="close" onclick="closePostsPanel()"></span>
 				<button class="button" id= "addPostButton">Добавить пост</button>
+			<div id= "ph">
 				<div id="ws">
 				</div>
+       	 </div>
         </div>
 
         <div id="panel"> 
@@ -55,6 +57,7 @@
 				</div>
             </form>
           <div id="map"></div>
+        <span id="opPanel">Для добавления новой отметки нажмите правой кнопкой мыши на карте</span>
               <script type="text/javascript">
 			  
 		
@@ -77,11 +80,11 @@
 		function closePostsPanel(){
 			focusPhoto=-1;
 			$('#markerHiddenPanel').animate({'left':'0px'},100);
-			$('#ph').animate({'left':'-550px'},100);
+			$('#postPanel').animate({'left':'-370px'},100);
 		}
 		function closeMarkerCommentPanel(){
 			if(focusPhoto!=-1)
-				$('#ph').animate({'left':'0'},100);
+				$('#postPanel').animate({'left':'0'},100);
 			else
 				$('#markerHiddenPanel').animate({'left':'0px'},100);
 
@@ -91,7 +94,7 @@
 
 		function closeLoadPostPanel(){
 			document.getElementById('insertSpan').innerHTML='';
-			$('#ph').animate({'left':'0px'},100);
+			$('#postPanel').animate({'left':'0px'},100);
 			$('#uploadName').val("");
 			$('#uploadText').val("");
 			$('#uploadimage').val("");
@@ -233,7 +236,8 @@
 												data: {  
 													"id":markers[i].id	
 												},
-												success: function() {
+												success: function(){
+													markers[i].setIcon(null);
 													closeMarkerPanel(); 
 													markers[i].setMap(null);
 												}
@@ -317,7 +321,7 @@
 		};		
 
 		function getCommentsPhoto(id) {    
-			$('#ph').animate({'left':'320'},100);
+			$('#postPanel').animate({'left':'320'},100);
 			$('#mCP').animate({'left':'0'},100);
 			document.getElementById('mCP1').innerHTML='';
 			document.getElementById('cIn').innerHTML='';
@@ -352,7 +356,8 @@
 
           				 	if(data[i].deletable==true){
 								var del=document.createElement('div');
-								del.innerHTML='delete';
+								del.classList.add('close');
+								del.classList.add('delete');
 								newLi.insertBefore(del,newLi.firstChild);
 								del.addEventListener('click',function(id,newLi) {
 									return function() { 
@@ -407,14 +412,16 @@
           				+"<li>" +  info.text +"</li>" 
           				+"<li><div class=\"likes\" id=\"LikeC"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li></div>";
 					//delete button
-					var del=document.createElement('div');
-					del.innerHTML='delete';
-					//style....
-					newLi.insertBefore(del,newLi.firstChild);
-					del.addEventListener('click',function(id,newLi) {
-					return function() { 
-						deleteComment(id,newLi) }
-					}(id,newLi));
+						var del=document.createElement('div');
+						del.classList.add('close');
+						del.classList.add('delete');
+						newLi.insertBefore(del,newLi.firstChild);
+						del.addEventListener('click',function(id,newLi) {
+							return function() { 
+								deleteComment(id,newLi) 
+							}
+						}(id,newLi));
+					
 						
           			document.getElementById('mCP1').appendChild(newLi);
 					document.getElementById('LikeC'+id).addEventListener('click', function(id) {
@@ -431,7 +438,7 @@
 
 			//add photo functions
 		document.getElementById("addPostButton").onclick=function(){
-			$('#ph').animate({'left':'320'},100);
+			$('#postPanel').animate({'left':'320'},100);
 			$('#loadImg').animate({'left':'0'},100);
 		}
 		
@@ -522,7 +529,7 @@
 		}
 		function showPosts(){
 			begin=count;
-			$('#ph').animate({'left':'0'},100);
+			$('#postPanel').animate({'left':'0'},100);
 			$('#ph').on("scroll", scrolling);
 			document.getElementById("ws").innerHTML='';
 			isLast=false;
@@ -565,16 +572,18 @@
 					var id=info.id;
 					var newLi = document.createElement('li');
 					if(info.photo_ref != "No photo")		
-						newLi.innerHTML = "<div class=\"border\"><img class=\"smallAvatar\" src=\"../static/img/user/"+info.ava+"\" width=\"50\" height=\"50\" />"
-							+"<li>" + info.title + "</li>"+ "<li class=\"postData\">" + info.date + "</li>" 
+						newLi.innerHTML = "<div class=\"border\"><li class=\"postData\">" + info.date + "</li>"
+							+"<img class=\"smallAvatar\" src=\"../static/img/user/"+info.ava+"\" width=\"50\" height=\"50\" />"
+							+"<li>" + info.title + "</li>"
 							+"<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
 						    +"<div class=\"imageBlock\"><img  class=\"imageBlock2\" src=\""+info.photo_ref+"\" alt=\""+info.title+"\"/>"
 							+"<li class=\"textBlock\">" +  info.text + "</li></div>"
 							+"<li><div class=\"likes\" id=\"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li>"
 							+"<li id=\"CommP"+id+"\">Comments</li></div>";
 					else
-						newLi.innerHTML = "<div class=\"border\"><img class=\"smallAvatar\" src=\"../static/img/user/"+info.ava+"\" width=\"50\" height=\"50\" />"
-							+"<li>" + info.title + "</li>" + "<li class=\"postData\">" + info.date + "</li>" 
+						newLi.innerHTML = "<div class=\"border\"><li class=\"postData\">" + info.date + "</li>"
+							+"<img class=\"smallAvatar\" src=\"../static/img/user/"+info.ava+"\" width=\"50\" height=\"50\" />"
+							+"<li>" + info.title + "</li>"
 							+"<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
 						    +"<li>" +  info.text + "</li>" 
 							+"<li><div class=\"likes\" id=\"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li> </li>"
@@ -582,8 +591,9 @@
 						
 					if(data[i].deletable==true){
 						var del=document.createElement('div');
-						del.innerHTML='delete';
-						//TODO: style for del 
+						del.classList.add('close');
+						del.classList.add('delete');
+
 						newLi.insertBefore(del,newLi.firstChild);
 						del.addEventListener('click',function(id,newLi) {
 						return function() { 
