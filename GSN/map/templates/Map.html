@@ -155,14 +155,15 @@
 								map: map,
 								author_id: loc.author_id,
 								priv:loc.priv,
-								dateTime:loc.date
+								dateTime:loc.date,
+								deletable: loc.deletable
 							});			
 
 									//special features for private marker(icon,draggable)
 							if(marker.priv==0){
 								marker.setDraggable(true);
 								marker.setIcon('../static/img//private-icon.png');
-										
+							
 								google.maps.event.addListener( marker, "dragend", function(marker) {
 					  				return function() {
 						    			var position = marker.getPosition();
@@ -222,7 +223,7 @@
 									}
 								});	
 									//for private marker adding delete button and listener for it
-								if(markers[i].priv==0){
+								if(markers[i].deletable==true){
 									document.getElementById('del').style.display = 'block';			
 									document.getElementById('del').addEventListener('click', function(i) {
 										return function() { 
@@ -342,10 +343,13 @@
 						var id=info.id;
 						var newLi = document.createElement('li');
 							
-          				newLi.innerHTML ="<div class=\"border\">" +  "<li class=\"postData\">" + info.date
-          				 	+ "</li>" + "<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" +"<li>" +  info.text 
-          				 	+ "</li>" +"<li><div class = \"likes\" id= \"LikeC"+id+"\">"
+          				newLi.innerHTML ="<div class=\"border\"><img class=\"smallAvatar\" src=\"../static/img/user/"+info.ava+"\" width=\"50\" height=\"50\" />"
+          					+ "<li class=\"postData\">" + info.date + "</li>" 
+          					+ "<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
+          					+"<li>" +  info.text + "</li>" 
+          					+"<li><div class = \"likes\" id= \"LikeC"+id+"\">"
           				 	+"<img class=\"limg\"  src=\"../static/img/like.png\">"+info.likes+"</div> </li>"+"</div>";
+
           				 	if(data[i].deletable==true){
 								var del=document.createElement('div');
 								del.innerHTML='delete';
@@ -372,7 +376,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//adding comment to photo or marker(type=0 - marker,1-photo)
-		document.getElementById("mCP").onsubmit=function(){
+		document.getElementById("mCP").onsubmit=function() {
 			var comm=$("#cIn").val();
 			$("#cIn").val('');
 			var type=0;
@@ -397,8 +401,8 @@
 					info=JSON.parse(data);
 					var id=info.id;
 					var newLi = document.createElement('li');
-							
-       				newLi.innerHTML ="<div class=\"border\">"+ "<li class=\"postData\">" + info.date + "</li>"
+       				newLi.innerHTML ="<div class=\"border\"><img class=\"smallAvatar\" src=\"../static/img/user/"+info.ava+"\" width=\"50\" height=\"50\" />"
+       					+ "<li class=\"postData\">" + info.date + "</li>"
          				+ "<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>"  
           				+"<li>" +  info.text +"</li>" 
           				+"<li><div class=\"likes\" id=\"LikeC"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li></div>";
@@ -534,7 +538,6 @@
 			}
 		}
 		
-	
 		
 		function loader(){  
 	
@@ -562,14 +565,16 @@
 					var id=info.id;
 					var newLi = document.createElement('li');
 					if(info.photo_ref != "No photo")		
-						newLi.innerHTML ="<div class=\"border\"><li>" + info.title + "</li>"+ "<li class=\"postData\">" + info.date + "</li>" 
+						newLi.innerHTML = "<div class=\"border\"><img class=\"smallAvatar\" src=\"../static/img/user/"+info.ava+"\" width=\"50\" height=\"50\" />"
+							+"<li>" + info.title + "</li>"+ "<li class=\"postData\">" + info.date + "</li>" 
 							+"<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
 						    +"<div class=\"imageBlock\"><img  class=\"imageBlock2\" src=\""+info.photo_ref+"\" alt=\""+info.title+"\"/>"
 							+"<li class=\"textBlock\">" +  info.text + "</li></div>"
 							+"<li><div class=\"likes\" id=\"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li>"
 							+"<li id=\"CommP"+id+"\">Comments</li></div>";
 					else
-						newLi.innerHTML ="<div class=\"border\"><li>" + info.title + "</li>" + "<li class=\"postData\">" + info.date + "</li>" 
+						newLi.innerHTML = "<div class=\"border\"><img class=\"smallAvatar\" src=\"../static/img/user/"+info.ava+"\" width=\"50\" height=\"50\" />"
+							+"<li>" + info.title + "</li>" + "<li class=\"postData\">" + info.date + "</li>" 
 							+"<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
 						    +"<li>" +  info.text + "</li>" 
 							+"<li><div class=\"likes\" id=\"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li> </li>"
@@ -612,7 +617,7 @@
 		}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //displaying photo on post load
-function handleFileSelect(evt) {
+	function handleFileSelect(evt) {
 	document.getElementById('insertSpan').innerHTML='';
     var file = evt.target.files; // FileList object
     var f = file[0];
@@ -631,9 +636,9 @@ function handleFileSelect(evt) {
 	    // Read in the image file as a data URL.
 	    reader.readAsDataURL(f);
 	}
-}
+	}
 
-document.getElementById('uploadimage').addEventListener('change', handleFileSelect, false);
+	document.getElementById('uploadimage').addEventListener('change', handleFileSelect, false);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//post deleting
 	function deletePhoto(id,newLi){
