@@ -118,5 +118,10 @@ class Chat(db.Model):
 
 class Likes(db.Model):
     comment_id=db.Column(db.Integer, db.ForeignKey('comments.comment_id'), primary_key=True)
-    user_id=db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    photo_id=db.Column(db.Integer, db.ForeignKey('photos.photo_id'))
+    user_id=db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
+class LikesPhoto(db.Model):
+    photo_id=db.Column(db.Integer, db.ForeignKey('photos.photo_id'), primary_key=True)
+    user_id=db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
+
+
+    
