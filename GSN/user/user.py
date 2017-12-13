@@ -39,6 +39,18 @@ def follow(user_login):
     current_user = database.Users.query.filter_by(user_id=g.user.user_id).first()
 
     user = database.Users.query.filter_by(login=user_login).first()
+
+    #new chat
+    new_chat = database.Chat(first_member_id = current_user.user_id, second_member_id= user.user_id)
+    database.db.session.add(new_chat)
+    database.db.session.commit()
+    new_message = database.Messages(author_id = user.user_id, chat_id = new_chat.chat_id, text = "Привет. Давай общаться!", read = False)
+    database.db.session.add(new_message)
+    database.db.session.commit()
+    new_chat.last_message_id = new_message.message_id
+    database.db.session.commit()
+
+
     if user is None:
         flash('Invalid user.')
         return redirect(url_for('.index'))
