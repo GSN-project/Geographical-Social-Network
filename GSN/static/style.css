@@ -279,9 +279,7 @@ padding-left: 5px;}
     height: 40px;
     margin-top: 0;
 }
-<<<<<<< HEAD
 /*map*/
-=======
 
 /*Сообщения*/
 #msg-box{
@@ -356,7 +354,6 @@ padding-left: 5px;}
   padding: 0;
  }
 /*Карта*/
->>>>>>> upstream/master
 #map {
   position: relative;
   z-index: 0;
@@ -372,6 +369,7 @@ padding-left: 5px;}
 }
 /*Карта*/
 /* Скрытый блок */
+<<<<<<< HEAD
 #hidden_panel, #markerHiddenPanel, #mCP,#loadImg, #ph {
   position: fixed;
   top: 100px;
@@ -382,6 +380,18 @@ padding-left: 5px;}
   height: 81%;
   padding: 10px;
   text-align: left;
+=======
+#hidden_panel, #markerHiddenPanel, #mCP,#loadImg, #postPanel {
+  position: fixed; 
+  top: 100px; 
+  left: -320px; 
+  background: lavender; 
+  color: #000; 
+  width: 300px; 
+  height: 81%; 
+  padding: 10px; 
+  text-align: left; 
+>>>>>>> upstream/master
   z-index: 100;
 
   -webkit-transition-duration: 0.3s;
@@ -392,6 +402,7 @@ padding-left: 5px;}
   -webkit-border-radius: 0 5px 5px 0;
   -moz-border-radius: 0 5px 5px 0;
   border-radius: 0 5px 5px 0;
+  word-wrap: break-word;
 }
 #mCP1 {
   /*font-family: "Roboto", sans-serif;*/
@@ -404,6 +415,12 @@ padding-left: 5px;}
 	display: flex;
   flex-direction: column-reverse;
   list-style:none;
+}
+#mCP1 .postData{
+  padding-top: 5%;
+}
+#ws .postData{
+  padding-top: 8%;
 }
 .boldName{
     font-weight:bold;
@@ -427,20 +444,35 @@ display: inline-block;
 }
 
 .textBlock{
+  margin-bottom: 5px;
   padding-right: 10px;
   overflow-x: hidden;
   overflow-y:auto;
   word-wrap: break-word;
  background-color: #E7EBF0;
  opacity: 0.4;
- height: 90px;
- width: 90%;
+ height: 85px;
+ width: 65%;
  top: auto;
  bottom: 0;
  position: absolute;
   z-index: 0;
 }
+
+
+#opPanel{
+  background-color:  #E7EBF0;
+  opacity: 0.4;
+  height: 3%;
+  float: right;
+  z-index: 99;
+  margin-bottom: 0px;
+  margin-top: 8%;
+  position: relative;
+
+}
 /*Закрытие*/
+
 .close {
     position: absolute;
     right: 15px;
@@ -466,6 +498,13 @@ display: inline-block;
     .close:after {
     transform: rotate(-45deg);
     }
+   .delete{
+    height: 10px;
+    width: 10px;
+    padding-right: 5%;
+  position: relative;
+  float: right;
+}
 #hidden_panel .input{
     margin-top: 2%;
     width: 90%;
@@ -532,7 +571,6 @@ display: inline-block;
 
 
  .limg:hover {
-    background: #f7f7f7;
     border-color: #fff;
     -webkit-transform: rotate(360deg);
     -moz-transform: rotate(360deg);
@@ -541,7 +579,7 @@ display: inline-block;
     transform: rotate(360deg);
 }
 .limg{
-	 width:6%;
+	 width: 15px;
 	cursor: pointer;
 	-webkit-transition: all 400ms linear;
     -moz-transition: all 400ms linear;
@@ -554,6 +592,7 @@ display: inline-block;
   width: auto;
 }
 
+<<<<<<< HEAD
 /*FRIENDS*/
 .title_friend{
   display: flex;
@@ -565,6 +604,42 @@ display: inline-block;
   padding: 10px;
   width: 880px;
 }
+=======
+/* post holders */
+#postPanel{
+  left: -370px; 
+  width: 350px; 
+  height: 75%; 
+}
+
+#ph {
+  width: 345px; 
+  height: 85%; 
+  overflow:auto;
+}
+#ws {
+  max-width: 100%;
+    overflow: hidden;
+  height: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  list-style:none;
+}
+.pac-input1{
+  padding-top: 10px;
+  width: 200px;
+  height: 30px;
+  background: url(../static/img/search.png) no-repeat right;
+  background-color: #fff;
+  background-size: 30px;
+ }
+
+ .thumb{ max-width: 300px;
+  max-height: 300px;
+}
+
+
+>>>>>>> upstream/master
 
 .title_friend h3:hover{
   color: #6C6C76;

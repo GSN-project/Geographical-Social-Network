@@ -41,7 +41,7 @@ def follow(user_login):
     user = database.Users.query.filter_by(login=user_login).first()
 
     #new chat
-    new_chat = database.Chat(first_member_id = current_user.user_id, second_member_id= user.user_id)
+    new_chat = database.Chat(first_member_id = current_user.user_id, second_member_id= user.user_id, last_message_id=0)
     database.db.session.add(new_chat)
     database.db.session.commit()
     new_message = database.Messages(author_id = user.user_id, chat_id = new_chat.chat_id, text = "Привет. Давай общаться!", read = False, date = cur_time())
