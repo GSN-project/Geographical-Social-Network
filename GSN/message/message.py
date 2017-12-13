@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, g, redirect, session, url_for, json, jsonify, Blueprint
 # Database
 from GSN import database
+import datetime
 
 mod = Blueprint('message', __name__, template_folder='templates')
 
@@ -15,6 +16,9 @@ def messages():
 def get_chats():
 	# Take all chats where user participate 
 	chats = database.Chat.query.filter_by(first_member_id = g.user.user_id).all()
+	chats_second_member = database.Chat.query.filter_by(second_member_id = g.user.user_id).all()
+	chats = chats + chats_second_member
+	print(chats)
 	# Create json respond
 	jsonrespond =[]
 	# Check whether chats iterable or not
@@ -25,13 +29,19 @@ def get_chats():
 			# Find last chat's message 
 			last_message = database.Messages.query.filter_by(message_id = chat.last_message_id).first()
 			# Insert info into json
-			jsonrespond.append({'member': second_member.name + ' ' + second_member.surname, 'chat_id': chat.chat_id, 'last_message_body': last_message.text, 'read': last_message.read})
+
+			author = database.UsersInfo.query.filter(database.UsersInfo.user_id==last_message.author_id).first()
+
+			jsonrespond.append({'ava':author.ava_ref, 'member': second_member.name + ' ' + second_member.surname, 'chat_id': chat.chat_id, 'last_message_body': last_message.text, 'read': last_message.read})
 	else:
 		# Find second member's name and surname
 		second_member = database.UsersInfo.query.filter_by(user_id = chats.second_member_id).first()
 		# Find last chat's message 
 		last_message = database.Messages.query.filter_by(message_id = chats.last_message_id).first()
-		jsonrespond.append({'member': second_member.name + ' ' + second_member.surname, 'chat_id': chat.chat_id, 'last_message_body': last_message.text, 'read': last_message.read})
+
+		author = database.UsersInfo.query.filter(database.UsersInfo.user_id==last_message.author_id).first()
+
+		jsonrespond.append({'ava':author.ava_ref, 'member': second_member.name + ' ' + second_member.surname, 'chat_id': chat.chat_id, 'last_message_body': last_message.text, 'read': last_message.read})
 	print(jsonrespond)
 	return json.dumps(jsonrespond)
 
@@ -47,7 +57,11 @@ def get_messages(chat_id):
 	jsonrespond =[]
 	# Create array with information about chat's members
 	# TODO: Maybe we should use dict or other structure to save this information
-	members = [[g.user.user_id, g.user_info.name, g.user_info.surname]]  
+	if g.user_info.name == None or g.user_info.surname == None:
+		members = [[g.user.user_id, g.user.login, ""]]
+	else:
+		members = [[g.user.user_id, g.user_info.name, g.user_info.surname]]  
+	
 	for message in messages:
 		# if message's author is't our existing member which we add to array,
 		# TODO: Change a way we interact with array to use chat with more than 2 members
@@ -65,6 +79,7 @@ def get_messages(chat_id):
 				author_fullname = second_member.name + second_member.surname
 		# if message's author is our user we save his fullname in variable
 		elif message.author_id == members[0][0]:
+
 			author_fullname = members[0][1] + " " + members[0][2]
 		# if message's author is our second member we save his fullname in variable
 		else:
@@ -74,7 +89,7 @@ def get_messages(chat_id):
 		# Append jsonrespond
 		jsonrespond.append({'ava':author.ava_ref, 'author_fullname': author_fullname, 'text': message.text, 'time': message.date, 'message_id' : message.message_id, 'author_id' : message.author_id, 'current_user' : g.user.user_id })
 
-
+	print(jsonrespond)
 	return json.dumps(jsonrespond)
 
 
@@ -104,7 +119,10 @@ def send_message():
 
 	jsonrespond =[]
 	# добавить фото и время
-	jsonrespond.append({'name': g.user_info.name + ' ' + g.user_info.surname, 'text': text})
+	if g.user_info.name == None or g.user_info.surname == None:
+		jsonrespond.append({'name': g.user.login, 'text': text})
+	else:
+		jsonrespond.append({'name': g.user_info.name + ' ' + g.user_info.surname, 'text': text})
 	return json.dumps(jsonrespond)
 
 

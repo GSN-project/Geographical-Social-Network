@@ -42,30 +42,31 @@ function removeChildFromMemberPanel(){
     }
     }
 
-function deleteMessage(span) {
-  span = inform1[span];
-  alert(span.getAttribute('name'));
-      $.ajax({
-        type: 'GET',
-        url: "/delete/" + span.getAttribute('name') ,
-        async:false,
-        success: function() {
-          
-      }
-      });
-   }
+//function deleteMessage(span_number) {
+//  span = inform1[span_number];
+//  alert(span);
+//      $.ajax({
+//        type: 'GET',
+//        url: "/delete/" + span.getAttribute('name') ,
+//        async:false,
+//        success: function() {
+//          
+//      }
+//      });
+//   }
 
-/*function addListeneresToDeleteButton(){
-      for (var i = 0; i < inform1.length; i++) {
-        var newSpan=inform1[i];
-        inform1[i].setAttribute('onclick' , function(i) {
-        return function() {
-        deleteMessage(i);
-        }
-      }(i))
-      }
-    }
-*/
+//function addListeneresToDeleteButton(){
+//      for (var i = 0; i < inform1.length; i++) {
+//        console.log(inform1);
+//        var newSpan=inform1[i];
+//        inform1[i].setAttribute('onclick' , function(i) {
+//        return function() {
+//        deleteMessage(i);
+//        }
+//      }(i))
+//      }
+//    }
+
 
 function addListeneres(){  
   for (var i = count; i < inform.length; i++) {
@@ -103,13 +104,14 @@ initDialogs();
                 var newLi = document.createElement('li');
 
                 if(info.current_user == info.author_id){
-                  var newSpan = document.createElement('span');
-                  newSpan.classList.add('close');
-                  newSpan.classList.add('closee');
-                  newSpan.setAttribute('name' , info.message_id);
-                  newSpan.setAttribute('onclick' , deleteMessage($(this).attr('name')));
-                  newLi.appendChild(newSpan);
-                  inform1.push(newSpan);
+                  //var newSpan = document.createElement('span');
+                  //newSpan.classList.add('close');
+                  //newSpan.classList.add('closee');
+                  //newSpan.setAttribute('name' , info.message_id);
+                  //newSpan.setAttribute('onclick' , deleteMessage($(this).attr('name')));
+                  //console.log(newSpan);
+                  //newLi.appendChild(newSpan);
+                  //inform1.push(newSpan);
                   newLi.innerHTML = newLi.innerHTML + "<div> <img class=\"avaCirSiz\" src=\"../static/img/user/"+ info.ava +"\" width=\"50\" height=\"50\"/>"  + "<li class = \"postData\">" + info.time+ "</li>" + "<li class = \"boldName\">" + info.author_fullname+ "</li>" +"<li>" +info.text+"</li>"  +  "</div>";
                 }
                 else {
@@ -138,7 +140,7 @@ function initDialogs(){
               var info = data[i];
               var newLi = document.createElement('li');
               inform.push(newLi);
-              newLi.innerHTML ="<div>" + "<li class = \"boldName\">" + info.member + "</li>" +"<li>" +  info.last_message_body +"</li>" + "</div>";
+              newLi.innerHTML ="<div><img class=\"avaCirSiz\"  src=\"../static/img/user/"+ info.ava +"\" width=\"50\" height=\"50\"/>" + "<li class = \"boldName\">" + info.member + "</li>" +"<li>" +  info.last_message_body +"</li>" + "</div>";
               newLi.setAttribute('name', info.chat_id);
               newLi.setAttribute('value', info.member);
               document.getElementById('sideDialogPanel').appendChild(newLi);

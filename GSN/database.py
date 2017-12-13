@@ -113,7 +113,7 @@ class Messages(db.Model):
     author = db.relationship('Users', backref=db.backref('Messages', lazy=True))
 
 class Chat(db.Model):
-    chat_id = db.Column(db.Integer, primary_key=True)
+    chat_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_member_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     second_member_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     last_message_id = db.Column(db.Integer, db.ForeignKey('messages.message_id'))
