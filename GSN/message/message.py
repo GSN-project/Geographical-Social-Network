@@ -10,7 +10,7 @@ def messages():
 	if not g.user:
 		return redirect(url_for('registration.registration'))
 	else:
-		return render_template('message.html')
+		return render_template('message.html', username=g.user.login)
 
 @mod.route("/get_chats/", methods = ["GET"])
 def get_chats():

@@ -22,13 +22,13 @@ def login():
         login = request.form.get("login")
         user = database.Users.query.filter_by(login=login).first()
         if user is None:
-            error = 'Invalid username'
+            error = 'Неправильный логин'
         elif not check_password_hash(user.password, request.form.get("password")):
-            error = 'Invalid password'
+            error = 'Неправильный пароль'
         elif not user.activation_link == None:
-            error='Unactivated profile'
+            error='Профиль не активирован'
         else :
-            error = 'You were logged in. You will be redirected'
+            error = 'Вы залогинились и будете перенаправленны на карту'
             congrads = True
             session['user_id'] = user.user_id
     return render_template('login.html', error=error, congrads=congrads)
@@ -43,9 +43,9 @@ def activation():
 
     error = None
     if user is None:
-        error = 'Invalid activation link'
+        error = 'Неверная ссылка активации'
     else :
-        error = 'You were logged in'
+        error = 'Вы залогинились и будете перенаправленны на карту'
         session['user_id'] = user.user_id
         cur_id = session['user_id']
         user.activation_link = None

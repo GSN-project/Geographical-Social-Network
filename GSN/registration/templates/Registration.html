@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Название</title>
+		<title>GSN</title>
 		<link href = "../../static/style.css" rel = "stylesheet" type = "text/css"/>
 	</head>
 	<body class="firstpage">
@@ -21,7 +21,7 @@
 		      				<input id = 'regemail' class="input" type="text" name="email" placeholder="Электронная почта" {% if pemail %}value={{pemail}} {% endif %} title="В email должны присутствовать символы '@' и '.'" required=""  pattern="^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$" /><br /><br />
 		      				<input id = 'regpass' class="input" type="password" name="password" placeholder="Пароль" title = "Используйте минимум 1 строчную и 1 заглавную букву, 1 цифру, не менее 8 символов" required="" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*" /><br /><br />
 		      				<input id = 'regpasscheck' class="input" type="password" name="passwordcheck" placeholder="Подтверждение пароля" required="" /><br /><br />
-		      				{% if error %}<div class="error"><strong>Message:</strong> {{ error }}</div>{% endif %}
+		      				{% if error %}<div class="error"><strong>Сообщение : </strong> {{ error }}</div>{% endif %}
 							<button class="button" value = "Register">Регистрация</button></br>
 		      				<div>Регистрируясь, вы соглашаетесь с нашими Условиями и Политикой конфиденциальности.</div>
 		      				<a href="login" class = "ref">Вы уже зарегестрированы? Войти</a></br>

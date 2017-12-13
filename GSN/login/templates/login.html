@@ -2,8 +2,9 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Название</title>
+		<title>GSN</title>
 		<link href = "../static/style.css" rel = "stylesheet" type = "text/css"/>
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 		{% if congrads %}
 		<!-- Here have to be link on homepage heroku -->
 		<meta http-equiv="refresh" content="3;url=https://safe-wave-29594.herokuapp.com/">
@@ -16,9 +17,9 @@
 			</div>
     	</header>
 		<div id='AutBlock' style="display: block">
-        	<h2>Sign In</h2><br>
+        	<h2>Логин</h2><br>
 			{% if error %}
-			<div class="error"><strong>Message:</strong> {{ error }}</div>
+			<div class="error"><strong>Сообщение : </strong> {{ error }}</div>
 			{% endif %}
 		 		<form method="post" name="form" action="/login">
 		         	<input class="input" type="text" name="login" required="" placeholder="Логин"/><br /><br />

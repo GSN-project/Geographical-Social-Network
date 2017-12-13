@@ -27,13 +27,13 @@ def registration():
         used = database.Users.query.filter_by(login=login).first()
         # Checking if email is unique
         if used is not None:
-            error = ' Login is already used '
+            error = ' Такой логин уже используется \n'
             return render_template("Registration.html", error=error,plogin=login,pemail=email)
         # Selecting from database login for checking
         used = database.Users.query.filter_by(email=email).first()
         # Checking if email and login are unique
         if used is not None:
-            error = ' Email is already used '
+            error = ' Email уже используется \n'
             return render_template("Registration.html", error=error,plogin=login,pemail=email)
         # Insert into database
         activation_link = "".join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for x in range(16))

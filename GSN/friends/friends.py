@@ -33,4 +33,4 @@ def friends():
     #print ('Followers:', res_followers)
     #print ('Friends:', res_friends)
     #print ('Follows:', follows)
-    return render_template('Friends.html', friends=res_friends, followers=res_followers, follows=followsU, current_user=user)
+    return render_template('Friends.html', friends=res_friends, followers=res_followers, follows=followsU, current_user=user, username=g.user.login)

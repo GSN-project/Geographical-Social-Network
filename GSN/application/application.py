@@ -18,7 +18,7 @@ mod = Blueprint('application', __name__, template_folder='templates')
 @mod.route("/")
 def index():
     if g.user:
-        return render_template("Map.html")
+        return render_template("Map.html", username=g.user.login)
     else:
         return render_template("Registration.html")
 

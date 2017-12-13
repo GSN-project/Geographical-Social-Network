@@ -92,13 +92,15 @@ header {
   	height: 20%;
 }
 
-#RegBlock .input,
-#AutBlock .input{
+.input{
     padding: 6px 6px;
-    width: 230px;
-  	padding-bottom: 10px;
-  	border: 1px solid silver;
-    outline-color: #2C2E2D;
+    width: 250px;
+    font-size:1em;
+    background: #FFFFFF;
+    text-overflow: ellipsis;
+    padding-bottom: 10px;
+    background-color: #FAFAFA;
+    border: 1px solid silver;
 }
 
 .firstpage h2{
@@ -281,106 +283,35 @@ padding-left: 5px;}
 }
 /*map*/
 
-/*Сообщения*/
-#msg-box{
-  overflow:auto;
-   width:750px;
-   height:500px;
-   border:1px solid #DFE5EC;
-   padding:5px;
-   margin-top:5%;
-   display:inline-block;
-   background:#FFF;
-   margin-left:1%;
-   display: flex;
-   flex-direction: column;
-   justify-content: flex-end;
- }
-#msg-box li{
-  list-style:none;
-  padding:0px;
-  margin:0px;
-}
-#t-box{
 
-}
-#sideDialogPanel{
-  display: flex;
-  flex-direction: column-reverse;
-  list-style:none;
-  overflow:auto;
- border:1px solid #DFE5EC;
 
- max-height: 500px;
- padding:5px;
- width: 300px;
- margin-top: 5%;
- margin-left: 10%
 
-}
-#sideDialogPanel div{
-  margin: 5px;
-}
-#sideDialogPanel:hover{
-  background:#E7EBF0;
-  cursor: pointer;
-}
-#lll{
-   display: inline-flex;
-   flex-wrap: nowrap;
- }
 
- #t-box #msg{
- }
- #t-box .button{
-  margin-top: 20px;
-  padding-left: 5px;
-  width: 15%;
- }
- #t-box input{
-  border:1px solid #DFE5EC;
-  width: 80%;
-  font-size: 12px;
-  overflow-y: scroll;
 
-  line-height: 20px;
-  min-height: 32px;
-  max-height: 123px;
 
-  height: auto;
-  box-sizing: border-box;
-  word-wrap: break-word;
-  margin: 0;
-  padding: 0;
- }
-/*Карта*/
+
+
+
+
+
+
+
+
+
+
+
+/* НУЖНЫЕ СТИЛИ КАРТЫ. НЕ ТРОГАТЬ!!!!*/
 #map {
-  position: relative;
+  position: absolute;
   z-index: 0;
   width: 100%;
   margin-top: 55px;
-<<<<<<< HEAD
-  height: 600px;
-
-}
-/*friends list*/
-=======
   height: 94%;
 }
 /*Карта*/
+
+/*new*/
 /* Скрытый блок */
-<<<<<<< HEAD
-#hidden_panel, #markerHiddenPanel, #mCP,#loadImg, #ph {
-  position: fixed;
-  top: 100px;
-  left: -320px;
-  background: lavender;
-  color: #000;
-  width: 300px;
-  height: 81%;
-  padding: 10px;
-  text-align: left;
-=======
 #hidden_panel, #markerHiddenPanel, #mCP,#loadImg, #postPanel {
   position: fixed; 
   top: 100px; 
@@ -391,15 +322,14 @@ padding-left: 5px;}
   height: 81%; 
   padding: 10px; 
   text-align: left; 
->>>>>>> upstream/master
   z-index: 100;
 
-  -webkit-transition-duration: 0.3s;
+  -webkit-transition-duration: 0.3s; 
   -moz-transition-duration: 0.3s;
   -o-transition-duration: 0.3s;
   transition-duration: 0.3s;
 
-  -webkit-border-radius: 0 5px 5px 0;
+  -webkit-border-radius: 0 5px 5px 0; 
   -moz-border-radius: 0 5px 5px 0;
   border-radius: 0 5px 5px 0;
   word-wrap: break-word;
@@ -407,12 +337,12 @@ padding-left: 5px;}
 #mCP1 {
   /*font-family: "Roboto", sans-serif;*/
   font: 15px/20px 'Open Sans',"Lucida Grande","Lucida Sans Unicode",Arial,Helvetica,Verdana,sans-serif;
-	max-width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
-	word-wrap: break-word;
-	max-height: 95%;
-	overflow: auto;
-	display: flex;
+  word-wrap: break-word;
+  max-height: 95%;
+  overflow: auto;
+  display: flex;
   flex-direction: column-reverse;
   list-style:none;
 }
@@ -423,36 +353,44 @@ padding-left: 5px;}
   padding-top: 8%;
 }
 .boldName{
-    font-weight:bold;
+    font-weight:bold; 
+}
+
+.border {
+  padding-left: 5px;
+
 }
 
 .imageBlock2{
-  max-width: 300px;
-  max-height: 300px;
+  width: 100%;
+  max-height: 100%;
 position: relative;
  z-index:100;
 transition: transform 0.4s;
-}
+cursor: zoom-in;
+} 
 .imageBlock2:hover.imageBlock2{
  transform: translateY(-90px);
-}
+} 
 
 .imageBlock{
 width: 300px;
+height: auto;
+max-height: 800px;
 position: relative;
 display: inline-block;
 }
 
 .textBlock{
+  padding :0;
   margin-bottom: 5px;
-  padding-right: 10px;
   overflow-x: hidden;
   overflow-y:auto;
   word-wrap: break-word;
  background-color: #E7EBF0;
  opacity: 0.4;
  height: 85px;
- width: 65%;
+ width: 100%;
  top: auto;
  bottom: 0;
  position: absolute;
@@ -465,9 +403,9 @@ display: inline-block;
   opacity: 0.4;
   height: 3%;
   float: right;
-  z-index: 99;
+  z-index: 1;
   margin-bottom: 0px;
-  margin-top: 8%;
+  margin-top: 7%;
   position: relative;
 
 }
@@ -523,12 +461,12 @@ display: inline-block;
 }
 
 #privacyList{
-
+  
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   overflow: hidden;
     margin-top: 2%;
-
+         
 }
 #prIn{
    border: none;
@@ -562,14 +500,11 @@ display: inline-block;
   padding-top: 7px;
   margin: 5px;
 }
-.border li{
-  padding-left: 5px;
 
-}
 /*likes*/
 
 
-
+ 
  .limg:hover {
     border-color: #fff;
     -webkit-transform: rotate(360deg);
@@ -579,9 +514,9 @@ display: inline-block;
     transform: rotate(360deg);
 }
 .limg{
-	 width: 15px;
-	cursor: pointer;
-	-webkit-transition: all 400ms linear;
+   width: 15px;
+  cursor: pointer;
+  -webkit-transition: all 400ms linear;
     -moz-transition: all 400ms linear;
     -o-transition: all 400ms linear;
     -ms-transition: all 400ms linear;
@@ -590,21 +525,8 @@ display: inline-block;
 
 .likes{
   width: auto;
-}
+}    
 
-<<<<<<< HEAD
-/*FRIENDS*/
-.title_friend{
-  display: flex;
-  justify-content:space-around;
-  cursor: pointer;
-  font-size: 1.1em;
-  color: #3B3B3B;
-  font-family: 'Ultra', sans-serif;
-  padding: 10px;
-  width: 880px;
-}
-=======
 /* post holders */
 #postPanel{
   left: -370px; 
@@ -637,14 +559,82 @@ display: inline-block;
  .thumb{ max-width: 300px;
   max-height: 300px;
 }
+#photoHiddenPanel{
 
+  z-index: 100;
+   background-color:rgba(0,0,0,.3);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  overflow: auto;
+  display: none;
 
->>>>>>> upstream/master
-
-.title_friend h3:hover{
-  color: #6C6C76;
-  transition: 1s;
 }
+#photoHiddenPanel1 img{
+  width:100%;
+  max-height:100%;
+}
+#photoHiddenPanel1{
+  width:50%;
+  height:100%;
+  text-align: center;
+    margin-right: auto;
+  margin-left: auto;
+}
+#photoHiddenPanel1 .close{
+  position: relative;
+  float:right;
+  z-index: 1000;
+  top:55px;
+}
+#photoHiddenPanel1 .close:before , #photoHiddenPanel1 .close:after{
+  background-color:white;
+}
+#photoHiddenPanel1 div{
+  position: relative;
+  font-family: "Roboto", sans-serif;
+  width: 100%;
+  height: 30px;
+   background-color:rgba(0,0,0,.3);
+  word-wrap: break-word;
+  overflow: auto;
+}
+#authorPhotoName{
+   top:30px;
+}
+#authorPhotoText{
+  bottom: 30px;
+}
+/*конец карте*/
+
+
+
+
+
+
+
+/* НУЖНЫЕ СТИЛИ КАРТЫ ЗАКОНЧИЛИСЬ!!!!*/
+
+
+
+
+
+
+/* НАЧАЛО СТИЛЕЙ ДРУЗЕЙ*/
+.title_friend{
+  width: 900px;
+  display: flex;
+  justify-content:space-around;
+  cursor: pointer;
+  font-size: 1.1em;
+  color: #3B3B3B;
+  font-family: 'Ultra', sans-serif;
+
+}
+
 
 .follow,
 .title_friend {
@@ -665,9 +655,23 @@ display: inline-block;
   width: 900px;
 }
 
-.title_friend1 h3{
-  font-size: 1.2em;
+.title_friend button{
+padding: 20px;
+width: 300px;
+height: 100%;
+cursor: pointer;
+font-size: 1.2em;
+color: #3B3B3B;
+font-family: 'Ultra', sans-serif;
+font-weight: bolder;
+background: inherit;
+box-shadow: 0 0 3px #999999;
+border: none;
 }
+.title_friend button:focus{
+  background-color: #EBEBEB;
+}
+
 .title_friend1 a{
     text-decoration: none;
     color: #3B3B3B;
@@ -692,6 +696,8 @@ display: inline-block;
   width: 100%;
   height: 80px;
 }
+
+
 
 .list .add,
 .list .cancel,
@@ -721,46 +727,50 @@ margin: 8px 25px;
 }
 /*BUTTONS*/
 .message button{
-    width: 130px;
+    width: 120px;
     height: 25px;
-    border-radius: 4px;
-    font-family: 'Roboto', sans-serif;
-    background-color: #74D27F;
+    border-radius: 3px;
+    background-color: #fff;
     text-align: center;
     float: left;
-    margin:7px;
+    margin:8px 14px;;
     border: 1px solid #9898AC;
     cursor: pointer;
     color: #21252B;
+    font-size: 14px;
+    font-weight: 600;
+    color: #5B5B65;
 }
 .message button:focus,
-.delete button:focus{
+.delete button:focus,
+.title_friend button:focus{
     outline: none;
 }
 
 .message button:active{
-    border: none;
+
 }
 
 .add,
 .cancel,
 .confirm{
     width: 120px;
-  	background: #74D27F;
-  	border-color: #9F9F9F;
-  	color: #5B5B65;
-  	border-radius: 3px;
-  	border: 0;
-  	font-size: 14px;
-  	font-weight: 600;
+    background: #74D27F;
+    border-color: #9F9F9F;
+    color: #5B5B65;
+    border-radius: 3px;
+    border: 0;
+    font-size: 14px;
+    font-weight: 600;
     line-height: 26px;
     cursor: pointer;
     margin-top: 20px;
 }
 
-.cancel,
-.confirm{
-  background: #A39DE9;
+.list .add,
+.list .cancel,
+.list .confirm{
+  float: right;
 }
 
 .add:focus,
@@ -769,7 +779,8 @@ margin: 8px 25px;
     outline: none;
 }
 
-.del{
+.del,
+.cancel{
     background: #3897f0;
     color: #fff;
 }
@@ -783,7 +794,9 @@ margin: 8px 25px;
 .user-info2{
     position: absolute;
 }
-
+.user-info2 .message button{
+  margin: 0;
+}
 .user-info2 a{
     text-decoration: none;
     color: inherit;
@@ -795,6 +808,13 @@ margin: 8px 25px;
 .myprofile li{
   padding-bottom: 3px;
 }
+/* КОНЕЦ СТИЛЕЙ ДРУЗЕЙ*/
+
+
+
+
+
+
 
 .myprofile{
     font-family: 'Century Gothic', sans-serif;
@@ -1042,12 +1062,21 @@ textarea{
 
 
 /* post holders */
-#ph {
-  left: -550px;
-  width: 530px;
-  height: 75%;
-  overflow:auto;
+
+
+
+
+/* Был конфликт с сообщениями */
+#postPanel{
+  left: -370px; 
+  width: 350px; 
+  height: 75%; 
 }
+
+
+
+
+
 #ws {
 	max-width: 100%;
     overflow: hidden;

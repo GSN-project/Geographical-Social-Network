@@ -153,7 +153,7 @@ def like_comment():
 
 #photos uploading and post processing
 
-ALLOWED_EXTENSIONS = set([ 'png', 'jpg', 'jpeg'])
+ALLOWED_EXTENSIONS = set([ 'jpg', 'jpeg','JPG','JPEG'])
 
 def allowed_file(filename):
     return '.' in filename and \
