@@ -25,7 +25,7 @@ STATIC_FOLDER="../../static/img/" #note: may change on heroku
 @mod.route('/map')
 def map():
     if g.user:
-        return render_template("Map.html")
+        return render_template("Map.html", username=g.user.login)
     else: 
         return render_template("Registration.html")
 
