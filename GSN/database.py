@@ -102,19 +102,24 @@ class Photos(db.Model):
     title = db.Column(db.String(150))
     author = db.relationship('Users', backref=db.backref('photos'))
 
-class Massages(db.Model):
-    massage_id = db.Column(db.Integer, primary_key=True)
+class Messages(db.Model):
+    message_id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))    
     chat_id = db.Column(db.Integer, db.ForeignKey('chat.chat_id'))
-    text = db.Column(db.Text) 
+    text = db.Column(db.String(400)) 
     date = db.Column(db.String(50), default=datetime.datetime.utcnow)
-    author = db.relationship('Users', backref=db.backref('Massages', lazy=True))
+    read = db.Column(db.Boolean) 
+
+    author = db.relationship('Users', backref=db.backref('Messages', lazy=True))
 
 class Chat(db.Model):
     chat_id = db.Column(db.Integer, primary_key=True)
-    member = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
-    chat_name = db.Column(db.String(150))
-    memb = db.relationship('Users', backref=db.backref('Chat', lazy=True))
+    first_member_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    second_member_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    last_message_id = db.Column(db.Integer, db.ForeignKey('messages.message_id'))
+    first_memb = db.relationship('Users', foreign_keys=[first_member_id])
+    second_memb = db.relationship('Users', foreign_keys=[second_member_id])
+    last_message = db.relationship('Messages', backref=db.backref('Chat', lazy=True), foreign_keys=[last_message_id])
 
 class Likes(db.Model):
     comment_id=db.Column(db.Integer, db.ForeignKey('comments.comment_id'), primary_key=True)

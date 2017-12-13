@@ -7,6 +7,7 @@ from flask_uploads import configure_uploads
 from flask_migrate import Migrate
 # Database
 from GSN import database
+from GSN.database import db
 # Mail
 from GSN import mail
 # Blueprints
@@ -36,7 +37,7 @@ def create_app(config = None):
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 	database.db.init_app(app)
-	migrate = Migrate(app, database.db)
+	migrate = Migrate(app, db)
 
 	# Mail
 	app.config['MAIL_SERVER']='smtp.gmail.com'
