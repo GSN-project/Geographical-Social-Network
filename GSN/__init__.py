@@ -53,6 +53,7 @@ def create_app(config = None):
 	app.config['UPLOADED_PHOTOS_DEST'] = 'GSN/static/img/user'
 	app.config['MAX_CONTENT_LENGTH'] = 24 * 1024 * 1024
 	
+
 	# Blueprints
 	app.register_blueprint(application.mod)
 	app.register_blueprint(login.mod)

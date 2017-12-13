@@ -42,14 +42,16 @@ def follow(user_login):
     user = database.Users.query.filter_by(login=user_login).first()
 
     #new chat
-    new_chat = database.Chat(first_member_id = current_user.user_id, second_member_id= user.user_id)
-    database.db.session.add(new_chat)
-    database.db.session.commit()
-    new_message = database.Messages(author_id = user.user_id, chat_id = new_chat.chat_id, text = "Привет. Давай общаться!", read = False, date = cur_time())
-    database.db.session.add(new_message)
-    database.db.session.commit()
-    new_chat.last_message_id = new_message.message_id
-    database.db.session.commit()
+    if (database.Chat.query.filter_by(first_member_id=current_user.user_id, second_member_id=user.user_id).first() is not None and database.Chat.query.filter_by(first_member_id=user.user_id, second_member_id=current_user.user_id).first()) is not None:
+        new_chat = database.Chat(first_member_id = current_user.user_id, second_member_id= user.user_id)
+        database.db.session.add(new_chat)
+        database.db.session.commit()
+        new_message = database.Messages(author_id = user.user_id, chat_id = new_chat.chat_id, text = "Привет. Давай общаться!", read = False, date = cur_time())
+        database.db.session.add(new_message)
+        database.db.session.commit()
+        new_chat.last_message_id = new_message.message_id
+        database.db.session.commit()
+    
 
 
     if user is None:

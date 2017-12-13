@@ -48,7 +48,7 @@ def myprofget():
     user = database.Users.query.filter_by(user_id=g.user.user_id).first()
     user_info = database.UsersInfo.query.filter_by(user_id=g.user.user_id).first()
 
-    return render_template('MyProfileSettings.html', ava=user.userpic(), name=user_info.name, surname=user_info.surname, email=user.email, country=user_info.country, city=user_info.city,date=user_info.date,sex=user_info.sex,telephone=user_info.telephone, about=user_info.about)
+    return render_template('MyProfileSettings.html', ava=user.userpic(), name=user_info.name, surname=user_info.surname, email=user.email, country=user_info.country, city=user_info.city,date=user_info.date,sex=user_info.sex,telephone=user_info.telephone, about=user_info.about, username=g.user.login)
 
         
 @mod.route('/upload', methods=['POST'])

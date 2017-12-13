@@ -2,6 +2,7 @@
   {% block content %}
         <section>
         	<input class="pac-input1" id="pac-input" class="controls" type="text" placeholder="Search Box">
+
         	<div id="postPanel">
         		<span class="close" onclick="closePostsPanel()"></span>
 				<button class="button" id= "addPostButton">Добавить пост</button>
@@ -56,8 +57,16 @@
 				<div id="mCP1">
 				</div>
             </form>
-          <div id="map"></div>
+          <div id="map">  </div>
         <span id="opPanel">Для добавления новой отметки нажмите правой кнопкой мыши на карте</span>
+			<div id="photoHiddenPanel">
+			     <div id="photoHiddenPanel1">
+			      <span class="close" onclick = "closePhoto()"></span>
+			      <div id="authorPhotoName"></div>
+			      <img id="photoOnShow">
+			      <div id="authorPhotoText"></div>
+			      </div>
+			    </div>
               <script type="text/javascript">
 			  
 		
@@ -572,11 +581,11 @@
 					var id=info.id;
 					var newLi = document.createElement('li');
 					if(info.photo_ref != "No photo")		
-						newLi.innerHTML = "<div class=\"border\"><li class=\"postData\">" + info.date + "</li>"
+						newLi.innerHTML = "<div  class=\"border\"><li class=\"postData\">" + info.date + "</li>"
 							+"<img class=\"smallAvatar\" src=\"../static/img/user/"+info.ava+"\" width=\"50\" height=\"50\" />"
 							+"<li>" + info.title + "</li>"
 							+"<a href=\"\\user\\"+info.author+"\"  class=\"boldName\">" + info.author + "</a>" 
-						    +"<div class=\"imageBlock\"><img  class=\"imageBlock2\" src=\""+info.photo_ref+"\" alt=\""+info.title+"\"/>"
+						    +"<div class=\"imageBlock\"><img id=\"post"+info.id+"\" class=\"imageBlock2\" src=\""+info.photo_ref+"\" alt=\""+info.title+"\"/>"
 							+"<li class=\"textBlock\">" +  info.text + "</li></div>"
 							+"<li><div class=\"likes\" id=\"LikeP"+id+"\">"+"<img class=\"limg\" src=\"../static/img/like.png\">"+info.likes+"</div> </li>"
 							+"<li id=\"CommP"+id+"\">Comments</li></div>";
@@ -617,7 +626,17 @@
 							getCommentsPhoto(id); 
 						}
 					}(id));
-						
+
+					if(info.photo_ref != "No photo"){
+						document.getElementById('post'+info.id).addEventListener('click', function(info) {
+							return function() { 
+								id=info.id;
+								focusPhoto=id;
+								showPhoto(info);
+							}
+						}(info));
+					}
+
 				}
 
 				if(isLast==false)
@@ -625,6 +644,16 @@
 			}
 			begin+=count;
 		}
+	//photo fullscreen
+		function showPhoto(info){
+			document.getElementById("authorPhotoName").innerHTML = info.author;
+	           document.getElementById("authorPhotoText").innerHTML = info.title;
+	          document.getElementById("photoOnShow").setAttribute('src' , info.photo_ref);
+	          document.getElementById("photoHiddenPanel").style.display = 'block';
+		}
+		function closePhoto(){
+          document.getElementById("photoHiddenPanel").style.display = 'none';
+        }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //displaying photo on post load
 	function handleFileSelect(evt) {
