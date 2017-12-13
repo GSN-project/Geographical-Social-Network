@@ -12,7 +12,7 @@
              <a href= "{{ url_for('user.user', user_login=user1.login) }}">
                 <div class="friend-name">{{user1.login}}</div></a>
       <div class="message"><a href= "{{ url_for('message.messages') }}"><button type="button" name="message-button">Cообщение</button></a></div>
-      <a href="{{ url_for('user.unfollow', user_login=user1.login) }}"><button>Отписаться</button></a>
+      <a href="{{ url_for('user.unfollow', user_login=user1.login) }}"><button class="add del">Отписаться</button></a>
       </div>
       {% endfor %}
     </div>
@@ -23,7 +23,7 @@
           <a href="{{ url_for('user.user', user_login=user2.login) }}">
              <div class="friend-name">{{user2.login}}</div></a>
              <div class="message"><a href= "{{ url_for('message.messages') }}"><button type="button" name="message-button">Cообщение</button></a></div>
-      <a href="{{ url_for('user.unfollow', user_login=user2.login) }}"><button class="cancel"type="button">Отменить заявку</button></a>
+      <a href="{{ url_for('user.unfollow', user_login=user2.login) }}"><button class="add del"type="button">Отменить заявку</button></a>
     </div>
       {% endfor %}
     </div>
@@ -34,7 +34,7 @@
         <a href="{{ url_for('user.user', user_login=user3.login) }}">
            <div class="friend-name">{{user3.login}}</div></a>
            <div class="message"><a href= "{{ url_for('message.messages') }}"><button type="button" name="message-button">Cообщение</button></a></div>
-      <a href="{{ url_for('user.follow', user_login=user3.login) }}"><button class="confirm">Подтвердить заявку</button></a>
+      <a href="{{ url_for('user.follow', user_login=user3.login) }}"><button class="add">Подтвердить заявку</button></a>
       </div>
       {% endfor %}
     </div>
