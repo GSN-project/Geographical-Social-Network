@@ -6,8 +6,10 @@
         <div class="list">
             <div class="avatar"><img src="{{follower.userpic()}}"></div>
             <a href="{{url_for('.user', user_login=follower.login)}}">  <div class="friend-name">{{follower.login}} </div> </a>
-              {% if follower != current_user %}
-                  {% if not current_user.is_following(follower) %}
+              
+            {% if follower != current_user %}
+            <div class="message"><a href= "{{ url_for('message') }}"><button type="button" name="message-button">Cообщение</button></a></div>      
+            {% if not current_user.is_following(follower) %}
                   <a href="{{ url_for('.follow', user_login=follower.login) }}"><button class="add " type="button">Подписаться</button></a>
                   {% else %}
                   <a href="{{ url_for('.unfollow', user_login=follower.login) }}"><button class="add del" type="button">Отписаться</button></a>

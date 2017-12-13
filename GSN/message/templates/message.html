@@ -1,80 +1,71 @@
 {% extends "Header.html" %}
 {% block content %}
-<br />
-<br />
-<br /
 <div id = 'lll'>
-  <div  id = 'sideDialogPanel'>
+      <div  id = 'sideDialogPanel'>
+      </div>
+      <div id="msg-box0">
+        <li id = 'memberNamePanel'></li>
+      <div id="msg-box" >
+          <div id = "msg-box1">
+          <li></li>
+           </div>
+           <form id="t-box">
+                <input type="text" placeholder="Write a message..." id='msg' name='msg'>
+                <button class= "button" type="submit"  value= "отправить" >Отправить</button>
+          </form>
+       </div>
+      </div>
+      
+    </div>
 
-  </div>
-  <div id="msg-box" >
-    <input type="text" id='msg' name="text" />
-    <button class= "button" type="submit"  value="отправить" id="sendbutton">Отправить</button>
-  </div>
-</div>
-
-
-		
 <script type="text/javascript">
-function tpl(t) {
-  html = ' <div class="msg>';
-  html += '    <div class="img"><img src="'+t.img+'" /></div>';
-  html += '    <div class="info">';
-  html += '         <div class="name"><a href="#">' + t.name + '</a></div>';
-  html += '        <div class="text">'+t.text+'</div>';
-  html += '    /div>';
-  html += '</div>';
-  
-  return html;
-}
-
-
+var socket;
 var count = 0;
+var chatId;
+var inform = [];
+var inform1 = [];
+
 // Текущее значение chat_id
 var main_chat_id;
 
+function removeChild(){
+      var elem =  document.getElementById('msg-box1');
+      while (elem.lastChild) {
+             elem.removeChild(elem.lastChild);
+    }
+    }
 
-// Function initialization ch
-initDialogs();
-    function initDialog(name){
-    $.ajax({
-            type: 'GET',
-            url: "/get_messages/" + name.getAttribute('name') ,
-            async:false,
-            success: function(data) {
-              main_chat_id = name.getAttribute('name');
-              data = JSON.parse(data);
-              for(var i=0; i<data.length;i++) {
-                var info = data[i];
-                var newLi = document.createElement('li');
-                newLi.innerHTML ="<div>" + "<li class = \"boldName\">" +info.author_fullname+ "</li>" +"<li>" +info.text+"</li>" + "</div>";
-                document.getElementById('t-box').insertBefore(newLi, document.getElementById('msg'));
-              }
-            }
-    });
-}
+function removeChildFromMemberPanel(){
+      var elem =  document.getElementById('memberNamePanel');
+      while (elem.lastChild) {
+             elem.removeChild(elem.lastChild);
+    }
+    }
 
-// Function initialization chats
-function initDialogs(){
-  $.ajax({
-          type: 'GET',
-          url: "/get_chats/",
-          async:false,
-          success: function(data) {
-            data = JSON.parse(data);
-            for(var i=0; i<data.length;i++){
-              var info = data[i];
-              var newLi = document.createElement('li');
-              inform.push(newLi);
-              newLi.innerHTML ="<div>" + "<li>" + info.member + "</li>" +"<li>" +  info.last_message_body +"</li>" + "</div>";
-              newLi.setAttribute('name', info.chat_id);
-              document.getElementById('sideDialogPanel').appendChild(newLi);
-            }
+function deleteMessage(span) {
+  span = inform1[span];
+  alert(span.getAttribute('name'));
+      $.ajax({
+        type: 'GET',
+        url: "/delete/" + span.getAttribute('name') ,
+        async:false,
+        success: function() {
+          
+      }
+      });
    }
-  });
-  addListeneres();
-}
 
+/*function addListeneresToDeleteButton(){
+      for (var i = 0; i < inform1.length; i++) {
+        var newSpan=inform1[i];
+        inform1[i].setAttribute('onclick' , function(i) {
+        return function() {
+        deleteMessage(i);
+        }
+      }(i))
+      }
+    }
+*/
 
 function addListeneres(){  
   for (var i = count; i < inform.length; i++) {
@@ -88,23 +79,99 @@ function addListeneres(){
   }
 }
 
+
+
+// Function initialization dialog
+initDialogs();
+    function initDialog(name){
+    chatId = name.getAttribute('name');
+    removeChild();
+    removeChildFromMemberPanel()
+    var memberName = name.getAttribute('value');
+    var newSpan1 = document.createElement('span');
+    newSpan1.innerHTML = memberName;
+    document.getElementById('memberNamePanel').appendChild(newSpan1);
+    $.ajax({
+            type: 'GET',
+            url: "/get_messages/" + name.getAttribute('name') ,
+            async:false,
+            success: function(data) {
+              main_chat_id = name.getAttribute('name');
+              data = JSON.parse(data);
+              for(var i=0; i<data.length;i++) {
+                var info = data[i];
+                var newLi = document.createElement('li');
+
+                if(info.current_user == info.author_id){
+                  var newSpan = document.createElement('span');
+                  newSpan.classList.add('close');
+                  newSpan.classList.add('closee');
+                  newSpan.setAttribute('name' , info.message_id);
+                  newSpan.setAttribute('onclick' , deleteMessage($(this).attr('name')));
+                  newLi.appendChild(newSpan);
+                  inform1.push(newSpan);
+                  newLi.innerHTML = newLi.innerHTML + "<div> <img class=\"avaCirSiz\" src=\"../static/img/user/"+ info.ava +"\" width=\"50\" height=\"50\"/>"  + "<li class = \"postData\">" + info.time+ "</li>" + "<li class = \"boldName\">" + info.author_fullname+ "</li>" +"<li>" +info.text+"</li>"  +  "</div>";
+                }
+                else {
+                  newLi.innerHTML = "<div> <img class=\"avaCirSiz\"  src=\"../static/img/user/"+ info.ava +"\" width=\"50\" height=\"50\"/>" + "<li class = \"postData\">" + info.time+ "</li>" + "<li class = \"boldName\">" + info.author_fullname+ "</li>" +"<li>" +info.text+"</li>"  +  "</div>";
+                }
+                newLi.setAttribute('name',info.message_id);
+                document.getElementById('msg-box1').appendChild(newLi);
+              }
+            }
+    });
+    //addListeneresToDeleteButton();
+}
+
+
+
+
+// Function initialization chats
+function initDialogs(){
+  $.ajax({
+          type: 'GET',
+          url: "/get_chats/",
+          async:false,
+          success: function(data) {
+            data = JSON.parse(data);
+            for(var i=0; i<data.length;i++){
+              var info = data[i];
+              var newLi = document.createElement('li');
+              inform.push(newLi);
+              newLi.innerHTML ="<div>" + "<li class = \"boldName\">" + info.member + "</li>" +"<li>" +  info.last_message_body +"</li>" + "</div>";
+              newLi.setAttribute('name', info.chat_id);
+              newLi.setAttribute('value', info.member);
+              document.getElementById('sideDialogPanel').appendChild(newLi);
+            }
+   }
+  });
+  addListeneres();
+}
+
+
+
+
 // Ловим отправку сообщения и отсылаем его на сервер
 $("#t-box").submit(function(){
   var str = $(this).serialize();
   str = str + '&chat_id=' + main_chat_id;
-  console.log(str)
   $.ajax({
     type: 'POST',
     url: '/send/',
+    async:false,
     data: str,
-    success: function(str){
-      // Добавить новое сообщение в окно чата
+    success: function(data){
+        data = JSON.parse(data);
+        var newLi = document.createElement('li');
+        newLi.innerHTML ="<div><img class=\"avaCirSiz\" src = \""  + "\" >" + "<li class = \"boldName\">" + data.name+ "</li>" +"<li>" +data.text+"</li>" + "</div>";
+        document.getElementById('msg-box1').appendChild(newLi);
     },
-    error: function(str){
-      // Вывести оповещение о проблемах
-    }
   })
+  return false;
 })
+
+
+
 
 </script>
 </body>

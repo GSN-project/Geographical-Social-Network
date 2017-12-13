@@ -1,0 +1,116 @@
+/*Сообщения*/
+#msg-box0{
+  margin-top:5%;
+  border:1px solid #DFE5EC; 
+  width:70%; 
+  height:500px; 
+  background:#FFF; 
+  margin-left:1%;
+}
+#msg-box{
+   height: 91%;
+   width: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   max-height: 500px;
+ }
+#msg-box1{
+  height: 100%;
+  width: 100%;
+  overflow:auto;
+  display: flex;
+   flex-direction: column-reverse;
+
+ }
+#msg-box1{
+  height: 100%;
+  width: 100%;
+  overflow:auto;
+  display: flex;
+   flex-direction: column;
+   list-style: none;
+
+ }
+#t-box{
+
+}
+#sideDialogPanel{
+  display: flex;
+  flex-direction: column-reverse;
+  list-style:none; 
+  overflow:auto;
+ border:1px solid #DFE5EC; 
+
+ max-height: 500px;
+ padding:5px;
+ width: 25%;
+ margin-top: 5%; 
+ margin-left: 10%
+  
+}
+#sideDialogPanel div{
+  margin: 5px;
+}
+#sideDialogPanel div:hover{
+  background:#E7EBF0;
+  cursor: pointer;
+}
+#lll{
+  height: 85%;
+  width: 80%;
+  font-family: "Roboto", sans-serif;
+   display: inline-flex;
+   flex-wrap: nowrap;
+ }
+
+ #t-box #msg{
+ }
+ #t-box .button{
+  margin-top: 20px;
+  padding-left: 5px;
+  width: 15%;
+ }
+ #t-box input{
+  border:1px solid #DFE5EC; 
+  width: 80%;
+  font-size: 12px;
+  overflow-y: scroll;
+
+  line-height: 20px;
+  min-height: 32px;
+  max-height: 123px;
+  
+  height: auto;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  margin: 0;
+  padding: 0;
+ }
+ .avaCirSiz{
+  width: 40px;
+  height: 40px;
+  float: left;
+  border-radius: 50px;
+ }
+ #memberNamePanel{
+  list-style: none;
+  height: inherit - 95%;
+    background-color: #3D3D45;
+    padding-top:2%;
+    padding-bottom: 2%; 
+    padding-left: 2px;
+    font-weight: bold;
+    
+    color: #fff;
+    text-overflow: ellipsis;
+ }
+
+.closee{
+  position: relative;
+  float:right;
+  width: 10px;
+  height: 10px;
+
+}
+/* Конец стилей сообщений */
