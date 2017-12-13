@@ -11,7 +11,7 @@
           <div class="avatar"><img src="{{user1.userpic()}}"></div>
              <a href= "{{ url_for('user.user', user_login=user1.login) }}">
                 <div class="friend-name">{{user1.login}}</div></a>
-      <div class="message"><a href= "{{ url_for('message') }}"><button type="button" name="message-button">Cообщение</button></a></div>
+      <div class="message"><a href= "{{ url_for('message.message') }}"><button type="button" name="message-button">Cообщение</button></a></div>
       <a href="{{ url_for('user.unfollow', user_login=user1.login) }}"><button>Отписаться</button></a>
       </div>
       {% endfor %}
@@ -22,7 +22,7 @@
             <div class="avatar"><img src="{{user2.userpic()}}"></div>
           <a href="{{ url_for('user.user', user_login=user2.login) }}">
              <div class="friend-name">{{user2.login}}</div></a>
-             <div class="message"><a href= "{{ url_for('message') }}"><button type="button" name="message-button">Cообщение</button></a></div>
+             <div class="message"><a href= "{{ url_for('message.message') }}"><button type="button" name="message-button">Cообщение</button></a></div>
       <a href="{{ url_for('user.unfollow', user_login=user2.login) }}"><button class="cancel"type="button">Отменить заявку</button></a>
     </div>
       {% endfor %}
@@ -33,7 +33,7 @@
           <div class="avatar"><img src="{{user3.userpic()}}"></div>
         <a href="{{ url_for('user.user', user_login=user3.login) }}">
            <div class="friend-name">{{user3.login}}</div></a>
-           <div class="message"><a href= "{{ url_for('message') }}"><button type="button" name="message-button">Cообщение</button></a></div>
+           <div class="message"><a href= "{{ url_for('message.message') }}"><button type="button" name="message-button">Cообщение</button></a></div>
       <a href="{{ url_for('user.follow', user_login=user3.login) }}"><button class="confirm">Подтвердить заявку</button></a>
       </div>
       {% endfor %}

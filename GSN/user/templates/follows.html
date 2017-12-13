@@ -9,7 +9,7 @@
             <div class="friend-name">{{followed.login}}</div>
             </a>
               {% if followed != current_user %}
-              <div class="message"><a href= "{{ url_for('message') }}"><button type="button" name="message-button">Cообщение</button></a></div>    
+              <div class="message"><a href= "{{ url_for('message.message') }}"><button type="button" name="message-button">Cообщение</button></a></div>    
               {% if not current_user.is_following(followed) %}
                   <a href="{{ url_for('.follow', user_login=followed.login) }}"><button class="add" type="button">Подписаться</button></a>
                   {% else %}

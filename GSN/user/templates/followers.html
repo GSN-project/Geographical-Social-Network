@@ -8,7 +8,7 @@
             <a href="{{url_for('.user', user_login=follower.login)}}">  <div class="friend-name">{{follower.login}} </div> </a>
               
             {% if follower != current_user %}
-            <div class="message"><a href= "{{ url_for('message') }}"><button type="button" name="message-button">Cообщение</button></a></div>      
+            <div class="message"><a href= "{{ url_for('message.message') }}"><button type="button" name="message-button">Cообщение</button></a></div>      
             {% if not current_user.is_following(follower) %}
                   <a href="{{ url_for('.follow', user_login=follower.login) }}"><button class="add " type="button">Подписаться</button></a>
                   {% else %}
