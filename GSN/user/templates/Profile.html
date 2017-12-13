@@ -24,40 +24,38 @@
   		</div>
     </header>
     <section class="myprofile">
-     <div>
+     <div class="prof">
         <div class="nick">{{user.login}}</div>
        <img id="myavatar" src="{{ava}}" width="150" height="150"/>
        {% if user.is_following(current_user) %}
        <div>Follows you</div>
        {% endif %}
-      
-       <ul>
-          <li>Имя: {{name}} </li>
-          <li>Фамилия: {{surname}} </li>
-          <li>Дата рождения: {{date}} </li>
-          <li>Страна: {{country}} </li>
-          <li>Город: {{city}} </li>
-          <li><a href="{{ url_for('user.followers', user_login=user.login) }}">
-              Followers: <span class="">{{ user.followers.count() }}</span>
+       <ul class="user-info">
+          <li>{{name}} </li>
+          <li>{{surname}} </li>
+          <li>{{date}} </li>
+          <li>{{country}} </li>
+          <li>{{city}} </li>
+        </ul>
+          <ul class="user-info2">
+            <li><a href="{{ url_for('user.followers', user_login=user.login) }}">
+              Подписчики: <span class="">{{ user.followers.count() }}</span>
               </a></li>
-          <li><a href="{{ url_for('user.follows', user_login=user.login) }}">
-              Following: <span class="">{{ user.follows.count() }}</span>
+            <li><a href="{{ url_for('user.follows', user_login=user.login) }}">
+              Подписки: <span class="">{{ user.follows.count() }}</span>
               </a></li>
           {% if user != current_user %}
-          <li>
-              {% if current_user.is_following(user) %}
-              <a href="{{ url_for('user.unfollow', user_login=user.login) }}"><button type="button">Отписаться</button></a>
-               {% else %}
-               <a href="{{ url_for('user.follow', user_login=user.login) }}"><button type="button">Подписаться</button></a>
-              {% endif %}
-          </li>
-          {% endif %} 
-      </ul>
+            <li>
+          {% if current_user.is_following(user) %}
+              <a href="{{ url_for('user.unfollow', user_login=user.login) }}"><button class="add del" type="button">Отписаться</button></a>
+                {% else %}
+              <a href="{{ url_for('user.follow', user_login=user.login) }}"><button  class="add " type="button">Подписаться</button></a>
+                {% endif %}
+            </li>
+          {% endif %}
+        </ul>
     </div>
-       
-       
     </section>
-    
     <section class="content">
       <div class="slider" id="main-slider">
         <div class="slider-nav"><!-- Previous and Next  -->
@@ -75,6 +73,7 @@
                   <a href="#"> {% if photo.photo_ref != None %} <img class="image" src="{{'/static/img/' + photo.photo_ref }}"> {% endif %}</a>
                 </div>
                 {% endfor %}
+
               </ul>
           </div>
           <div class="slide">

@@ -71,45 +71,36 @@ header {
     text-align: center;
 }
 
-#RegBlock{
+#RegBlock,
+#AutBlock{
     display: block;
-  	width: 400px; /* Ширина слоя */
-  	margin: 0 auto;
-    margin-top: 50px;/* Значение отступов */
-  	text-align: center;
+  	width: 350px;
+    margin-top: 45px;
   	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  	color: #273159;
-  	font-size: 14px;
-  	background-color: #FFFFFF;
-    box-shadow: 0 0 3px black;
+    font-weight: 400;
+  	color: #1E1E1E;
+  	font-size: 0.9em;
     padding: 5px;
 }
+
 #AutBlock {
-  display: block;
-  float: left;
-  width: 350px; /* Ширина слоя */
-  margin: 85px auto;
-  margin-left: 50px;
-  text-align: center;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  color: #273159;
-  font-size: 14px;
+    margin-top: 80px;
 }
+
 #firstpageavatar{
   	width: 30%;
   	height: 20%;
 }
 
- .input{
+#RegBlock .input,
+#AutBlock .input{
     padding: 6px 6px;
-    width: 250px;
-  	font-size:1em;
-  	background: #FFFFFF;
-  	text-overflow: ellipsis;
+    width: 230px;
   	padding-bottom: 10px;
-  	background-color: #FAFAFA;
   	border: 1px solid silver;
+    outline-color: #2C2E2D;
 }
+
 .firstpage h2{
     color: #3B3B3B;
     font-family: "Сomic Sans MS", sans-serif;
@@ -119,9 +110,11 @@ header {
 .firstpage strong{
     font-family: Noto Sans, sans-serif;
 }
+
 .input:valid{
     border-color: silver;
 }
+
 .input:required:invalid{
     border-color: silver;
 }
@@ -129,6 +122,7 @@ header {
 .input::-webkit-input-placeholder {
     font-size: 14px;
 }
+
 .input:focus::-webkit-input-placeholder {
     color: transparent;
 }
@@ -292,21 +286,21 @@ padding-left: 5px;}
 /*Сообщения*/
 #msg-box{
   overflow:auto;
-   width:750px; 
-   height:500px; 
-   border:1px solid #DFE5EC; 
+   width:750px;
+   height:500px;
+   border:1px solid #DFE5EC;
    padding:5px;
-   margin-top:5%; 
+   margin-top:5%;
    display:inline-block;
-   background:#FFF; 
+   background:#FFF;
    margin-left:1%;
    display: flex;
    flex-direction: column;
    justify-content: flex-end;
  }
 #msg-box li{
-  list-style:none; 
-  padding:0px; 
+  list-style:none;
+  padding:0px;
   margin:0px;
 }
 #t-box{
@@ -315,16 +309,16 @@ padding-left: 5px;}
 #sideDialogPanel{
   display: flex;
   flex-direction: column-reverse;
-  list-style:none; 
+  list-style:none;
   overflow:auto;
- border:1px solid #DFE5EC; 
+ border:1px solid #DFE5EC;
 
  max-height: 500px;
  padding:5px;
  width: 300px;
- margin-top: 5%; 
+ margin-top: 5%;
  margin-left: 10%
-  
+
 }
 #sideDialogPanel div{
   margin: 5px;
@@ -346,7 +340,7 @@ padding-left: 5px;}
   width: 15%;
  }
  #t-box input{
-  border:1px solid #DFE5EC; 
+  border:1px solid #DFE5EC;
   width: 80%;
   font-size: 12px;
   overflow-y: scroll;
@@ -354,7 +348,7 @@ padding-left: 5px;}
   line-height: 20px;
   min-height: 32px;
   max-height: 123px;
-  
+
   height: auto;
   box-sizing: border-box;
   word-wrap: break-word;
@@ -379,23 +373,23 @@ padding-left: 5px;}
 /*Карта*/
 /* Скрытый блок */
 #hidden_panel, #markerHiddenPanel, #mCP,#loadImg, #ph {
-  position: fixed; 
-  top: 100px; 
-  left: -320px; 
-  background: lavender; 
-  color: #000; 
-  width: 300px; 
-  height: 81%; 
-  padding: 10px; 
-  text-align: left; 
+  position: fixed;
+  top: 100px;
+  left: -320px;
+  background: lavender;
+  color: #000;
+  width: 300px;
+  height: 81%;
+  padding: 10px;
+  text-align: left;
   z-index: 100;
 
-  -webkit-transition-duration: 0.3s; 
+  -webkit-transition-duration: 0.3s;
   -moz-transition-duration: 0.3s;
   -o-transition-duration: 0.3s;
   transition-duration: 0.3s;
 
-  -webkit-border-radius: 0 5px 5px 0; 
+  -webkit-border-radius: 0 5px 5px 0;
   -moz-border-radius: 0 5px 5px 0;
   border-radius: 0 5px 5px 0;
 }
@@ -412,7 +406,7 @@ padding-left: 5px;}
   list-style:none;
 }
 .boldName{
-    font-weight:bold; 
+    font-weight:bold;
 }
 
 .imageBlock2{
@@ -421,16 +415,16 @@ padding-left: 5px;}
 position: relative;
  z-index:100;
 transition: transform 0.4s;
-} 
+}
 .imageBlock2:hover.imageBlock2{
  transform: translateY(-90px);
-} 
+}
 
 .imageBlock{
 width: 300px;
 position: relative;
 display: inline-block;
-} 
+}
 
 .textBlock{
   padding-right: 10px;
@@ -490,12 +484,12 @@ display: inline-block;
 }
 
 #privacyList{
-  
+
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   overflow: hidden;
     margin-top: 2%;
-         
+
 }
 #prIn{
    border: none;
@@ -536,7 +530,7 @@ display: inline-block;
 /*likes*/
 
 
- 
+
  .limg:hover {
     background: #f7f7f7;
     border-color: #fff;
@@ -558,41 +552,91 @@ display: inline-block;
 
 .likes{
   width: auto;
-}    
+}
 
+/*FRIENDS*/
+.title_friend{
+  display: flex;
+  justify-content:space-around;
+  cursor: pointer;
+  font-size: 1.1em;
+  color: #3B3B3B;
+  font-family: 'Ultra', sans-serif;
+  padding: 10px;
+  width: 880px;
+}
 
-/*стили друзей*/
->>>>>>> upstream/master
-.list {
-    width: 900px;
-    margin: 50px auto;
-    padding: 15px;
-    padding-bottom: 0;
+.title_friend h3:hover{
+  color: #6C6C76;
+  transition: 1s;
+}
+
+.follow,
+.title_friend {
+    margin: 55px auto 0;
     box-shadow: 0 0 3px #999999;
     background: #F3F3F1;
 }
-
-.list a{
-    text-decoration: none;
+.title_friend1{
+  margin: 55px auto 0;
+  border-bottom: 1.5px solid #E3E3E3;
+  padding: 10px;
+  color: #3B3B3B;
+  font-family: 'Ultra', sans-serif;
 }
 
-.friend{
-    border-top: 1.5px solid #E3E3E3;
-    width: 100%;
-    height: 80px;
+.follow{
+  margin: 0 auto;
+  width: 900px;
+}
+
+.title_friend1 h3{
+  font-size: 1.2em;
+}
+.title_friend1 a{
+    text-decoration: none;
+    color: #3B3B3B;
+    font-style: italic;
+    font-family: 'Century Gothic', sans-serif;
+    font-weight: lighter;
+}
+
+.list a{
+  font-size: 1em;
+  color: #3B3B3B;
+  font-family: 'Ultra', sans-serif;
+  text-decoration: none;
+}
+
+.hidden{
+  display: none;
+}
+
+.list{
+  border-bottom: 1.5px solid #E3E3E3;
+  width: 100%;
+  height: 80px;
+}
+
+.list .add,
+.list .cancel,
+.list .confirm,
+.list .dell{
+float: left;
+padding: 0;
+margin: 8px 25px;
 }
 
 .friend-name{
   padding-left: 90px;
   font-family: 'Century Gothic', sans-serif;
   font-style: italic;
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 .avatar {
     float: left;
     width: 80px;
     height: 80px;
-
 }
 
 .avatar img{
@@ -600,12 +644,7 @@ display: inline-block;
     height: 100%;
     border-radius: 100px;
 }
-
-.friend-menu a{
-    float:right;
-    color: #444444;
-}
-
+/*BUTTONS*/
 .message button{
     width: 130px;
     height: 25px;
@@ -614,7 +653,7 @@ display: inline-block;
     background-color: #74D27F;
     text-align: center;
     float: left;
-    margin:5px;
+    margin:7px;
     border: 1px solid #9898AC;
     cursor: pointer;
     color: #21252B;
@@ -623,28 +662,71 @@ display: inline-block;
 .delete button:focus{
     outline: none;
 }
-.message button:active
-{
+
+.message button:active{
     border: none;
 }
-.delete button{
-    float: right;
-    margin-right: 10px;
-    width: 32px;
-    height: 32px;
-    background:url('../static/img/5.png') no-repeat;
-    border: none;
+
+.add,
+.cancel,
+.confirm{
+    width: 120px;
+  	background: #74D27F;
+  	border-color: #9F9F9F;
+  	color: #5B5B65;
+  	border-radius: 3px;
+  	border: 0;
+  	font-size: 14px;
+  	font-weight: 600;
+    line-height: 26px;
     cursor: pointer;
+    margin-top: 20px;
 }
-.delete button:active{
-    width: 30px;
-    height: 30px;
+
+.cancel,
+.confirm{
+  background: #A39DE9;
 }
+
+.add:focus,
+.cancel:focus,
+.confirm:focus{
+    outline: none;
+}
+
+.del{
+    background: #3897f0;
+    color: #fff;
+}
+
 /*My profile*/
+.user-info{
+    margin: 0;
+    width: 30%;
+}
+
+.user-info2{
+    position: absolute;
+}
+
+.user-info2 a{
+    text-decoration: none;
+    color: inherit;
+}
+.user-info2 span{
+  font-weight: bolder;
+  color: #3D3D45;
+}
+.myprofile li{
+  padding-bottom: 3px;
+}
+
 .myprofile{
-    font-family: "Roboto", sans-serif;
-    font-stretch: semi-condensed;
+    font-family: 'Century Gothic', sans-serif;
+    font-size: 0.9em;
     margin: 55px auto 5px;
+    display: flex;
+    flex-direction: column;
 }
 
 .myprofile,
@@ -653,14 +735,13 @@ display: inline-block;
     padding: 20px;
     box-shadow: 0 0 9px #999999;
     background: #FFFFFF;
-
 }
 
-#myavatar img{
+#myavatar {
     border-radius: 50%;
     width: 180px;
     height: 180px;
-
+    float: left;
 }
 
 .nick{
@@ -671,48 +752,54 @@ display: inline-block;
     font-style: italic;
     text-align: center;
 }
+
 .myprofile ul{
     list-style: none;
     display: inline-block;
-    float: right;
-    margin-right: 66%;
-    margin-top: 7%;
+    margin-top:30px;
+    text-align: left;
+}
+
+.myprofile.user-info li{
+  font-weight: 500;
 }
 
 .content{
   margin: 10px auto 0;
-
 }
 
 .notes {
     overflow-x:hidden;
     padding: 2.5px;
-    width: 220px;
-    height: 220px;
     box-shadow: 0 0 2px #999999;
-
-
+    text-align: center;
 }
+
 .notes a{
     text-decoration: none;
     color: black;
     font-family: "Century Gothic";
 }
+
 .photo,
 .notes{
-    margin: 3px;
-    text-align: center;
-    float: left;
+    margin: 5px;
+    display: inline-block;
+}
 
-  }
+.photos{
+  padding-left: 5px;
+  margin: 0;
+}
 
-.image {
-    width: 230px;
-    height: 230px;
+.photo img,
+.notes{
+    width: 220px;
+    height: 220px;
     border-radius: 4px;
 }
 
-h3 {
+.content h3 {
     font-size: 23px;
     color: #3B3B3B;
     font-family: "Сomic Sans MS", sans-serif;
@@ -720,18 +807,10 @@ h3 {
     padding-left: 70px;
 }
 
-h4 {
-    margin: 0 100px 0 0;
-    font-size: 20px;
-    color: #3B3B3B;
-    font-family: "Сomic Sans MS", serif;
-}
 
 .slider {
   	width:950px;
   	overflow:hidden;
-
-
 }
 
 .slider-wrapper {
@@ -742,10 +821,8 @@ h4 {
 
 .slide {
   	float:left;
-  	width:950px;
-
+  	width:1000px;
 }
-
 
 .slider-nav {
     height: 45px;
@@ -887,15 +964,13 @@ textarea{
     font-family: "Roboto", sans-serif;
     font-size: 1.5em;
 }
-<<<<<<< HEAD
-=======
 
 
 /* post holders */
 #ph {
-  left: -550px; 
-  width: 530px; 
-  height: 75%; 
+  left: -550px;
+  width: 530px;
+  height: 75%;
   overflow:auto;
 }
 #ws {
@@ -918,4 +993,3 @@ textarea{
  .thumb{ max-width: 300px;
   max-height: 300px;
 }
->>>>>>> upstream/master

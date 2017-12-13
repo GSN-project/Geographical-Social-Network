@@ -1,51 +1,95 @@
 {% extends "Header.html" %}
-{% block content %}
-<br />
-<br />
-<br />
-<section class="list"> <!--  Friends list   !-->
-  <h3>Ваши друзья</h3>
-  {% for user1 in friends %}
-  <div class="friend">
-         <div class="avatar"><img src="{{user1.userpic()}}"></div>
-         <a href= "{{ url_for('user.user', user_login=user1.login) }}" >
-             <div class="friend-name">{{user1.login}}</div>
-         </a>
-  <div class="message"><button type="button" name="message-button">Cообщение</button></div>
-  <br>
-  <a href="{{ url_for('user.unfollow', user_login=user1.login) }}"><button>Отписаться</button></a>
-  </div>
-  {% endfor %}
-</section>
+    {% block content %}
+    <div class="title_friend">
+     <h3 class="friend friend-1">Мои друзья</h3>
+     <h3 class="friend friend-2">Отправленные заявки</h3>
+     <h3 class="friend friend-3">Полученные заявки</h3>
+    </div>
+    <div class="follow follow-1">
+      {% for user1 in friends %}
+      <div class="list" >
+          <div class="avatar"><img src="{{user1.userpic()}}"></div>
+             <a href= "{{ url_for('user.user', user_login=user1.login) }}">
+                <div class="friend-name">{{user1.login}}</div></a>
+      <div class="message"><a href= "{{ url_for('message') }}"><button type="button" name="message-button">Cообщение</button></a></div>
+      <a href="{{ url_for('user.unfollow', user_login=user1.login) }}"><button>Отписаться</button></a>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="follow follow-2">
+      {% for user2 in follows %}
+      <div class="list" >
+            <div class="avatar"><img src="{{user2.userpic()}}"></div>
+          <a href="{{ url_for('user.user', user_login=user2.login) }}">
+             <div class="friend-name">{{user2.login}}</div></a>
+             <div class="message"><a href= "{{ url_for('message') }}"><button type="button" name="message-button">Cообщение</button></a></div>
+      <a href="{{ url_for('user.unfollow', user_login=user2.login) }}"><button class="cancel"type="button">Отменить заявку</button></a>
+    </div>
+      {% endfor %}
+    </div>
+    <div class="follow follow-3">
+      {% for user3 in followers %}
+      <div class="list" >
+          <div class="avatar"><img src="{{user3.userpic()}}"></div>
+        <a href="{{ url_for('user.user', user_login=user3.login) }}">
+           <div class="friend-name">{{user3.login}}</div></a>
+           <div class="message"><a href= "{{ url_for('message') }}"><button type="button" name="message-button">Cообщение</button></a></div>
+      <a href="{{ url_for('user.follow', user_login=user3.login) }}"><button class="confirm">Подтвердить заявку</button></a>
+      </div>
+      {% endfor %}
+    </div>
+     <script>
+     var HIDDEN = 'hidden'
+    var FOLLOW = 'follow'
+    var FRIEND = 'friend'
 
-<section class="list"> <!--  Sent friends requests list   !-->
-<h3>Отправленные заявки</h3>
-{% for user2 in follows %}
-<div class="friend">
-    <div class="avatar"><img src="{{user2.userpic()}}"></div>
-    <a href="{{ url_for('user.user', user_login=user2.login) }}">  
-       <div class="friend-name">{{user2.login}}</div>
-    </a>
-<div class="message"><button type="button" name="message-button">Cообщение</button></div>
-<br>
-<a href="{{ url_for('user.unfollow', user_login=user2.login) }}"><button type="button">Отменить заявку</button></a>  
-</div>
-{% endfor %}
-</section>
+    var followIdToShow = 1
 
-<section class="list"> <!--  Received friends requests list   !-->
-<h3>Полученные заявки</h3>
-{% for user3 in followers %}
-<div class="friend">
-  <div class="avatar"><img src="{{user3.userpic()}}"></div>
-  <a href="{{ url_for('user.user', user_login=user3.login) }}">  
-     <div class="friend-name">{{user3.login}}</div>
-  </a>
-<div class="message"><button type="button" name="message-button">Cообщение</button></div>
-<br>
-<a href="{{ url_for('user.follow', user_login=user3.login) }}"><button>Подтвердить заявку</button></a>
-</div>
-{% endfor %}
-</section>
-{% endblock %}
+    function main() {
+    	var follows = getElements(FOLLOW)
+    	var friends = getElements(FRIEND)
+    	friends.forEach(function (friendNode) {
+    		var friendNodeId = extractId(friendNode, FRIEND)
+    		friendNode.addEventListener('click', function () {
+    			showFollow(follows, friendNodeId)
+    		})
+    	})
+    	showFollow(follows, followIdToShow)
+    }
 
+    function getElements(type) {
+    	return [].slice.call(document.querySelectorAll('.' + type)).sort(function (followNode1, followNode2) {
+    		var follow1Num = extractId(followNode1, FOLLOW)
+    		var follow2Num = extractId(followNode2, FOLLOW)
+    		return follow1Num > follow2Num
+    	})
+    }
+
+    function extractId(followNode, baseClass) {
+    	var currentClassIndex = followNode.classList.length
+    	while (currentClassIndex--) {
+    		var currentClass = followNode.classList.item(currentClassIndex)
+    		var maybeIdNum = parseInt(currentClass.split('-')[1])
+    		if (isNaN(maybeIdNum)) {
+    			continue
+    		}
+    		var classStrinToValidate = baseClass + '-' + maybeIdNum
+    		if (classStrinToValidate === currentClass) {
+    			return maybeIdNum
+    		}
+    	}
+    }
+
+    function showFollow(follows, followId) {
+    	follows.forEach(function (followNode, followIndex) {
+        var currentFollowNodeId = extractId(followNode, FOLLOW)
+    		if (currentFollowNodeId === followId) {
+    			followNode.classList.remove(HIDDEN)
+    		} else {
+    			followNode.classList.add(HIDDEN)
+    		}
+    	})
+    }
+    main()
+     </script>
+     {% endblock %}

@@ -1,47 +1,21 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <link rel="stylesheet" href="../../static/style.css">
-  </head>
-  <body>
-    <header>
-      <div>
-  			 <div class="title"><img src="../../static/img/logo.png" height="45">Geographic social network</div>
-  				<ul id="main-menu">
-  					<li>
-  						<a href="MyProfile.html"><img src="../../static/img/avatar.png" height="45"></a>
-  						<ul>
-  							<li><a href="Map.html">Карта</a></li>
-  							<li><a href="Friends.html">Друзья</a></li>
-  							<li><a href="Message.html">Сообщения</a></li>
-  							<li><a href="MySettings.html">Настройки</a></li>
-  							<li><a href="Main.html">Выход</a></li>
-  						</ul>
-  					</li>
-  				</ul>
-  		</div>
-    </header>
-    <section class="list"> 
-        <h3> <a href="{{url_for('.user', user_login=user.login)}}">  {{user.login}} </a> подписан на:</h3>
+{% extends "Header.html" %}
+{% block content %}
+    <div class="follow">
+      <div class="title_friend1"><h3> <a href="{{url_for('.user', user_login=user.login)}}">  {{user.login}} </a> подписан на:</h3></div>
         {% for followed in follows %}
-        <div class="friend">
+        <div class="list">
             <div class="avatar"><img src="{{followed.userpic()}}"></div>
-            <a href="{{url_for('.user', user_login=followed.login)}}">  
+            <a href="{{url_for('.user', user_login=followed.login)}}">
             <div class="friend-name">{{followed.login}}</div>
             </a>
-              <div class="message"><button type="button" name="message-button">Cообщение</button></div>
               {% if followed != current_user %}
-              <br>
                   {% if not current_user.is_following(followed) %}
-                  <a href="{{ url_for('.follow', user_login=followed.login) }}"><button type="button">Подписаться</button></a>
+                  <a href="{{ url_for('.follow', user_login=followed.login) }}"><button class="add" type="button">Подписаться</button></a>
                   {% else %}
-                  <a href="{{ url_for('.unfollow', user_login=followed.login) }}"><button type="button">Отписаться</button></a>
+                  <a href="{{ url_for('.unfollow', user_login=followed.login) }}"><button class="add del"type="button">Отписаться</button></a>
               {% endif %}
           {% endif %}
           </div>
         {% endfor %}
-    </section>
-  </body>
-</html>
+    </div>
+    {% endblock %}
