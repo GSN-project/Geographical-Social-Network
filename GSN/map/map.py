@@ -177,6 +177,7 @@ def new_post():
         print ('\n\n\n marker_id:', marker_id , '\n')
         if file:
             if allowed_file(file.filename):
+                filename=file.filename
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 rand_prefix = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(15))
                 os.rename(current_app.config['UPLOAD_FOLDER']+'/'+filename, app.config['UPLOAD_FOLDER'] +'/'+ rand_prefix + filename) 
