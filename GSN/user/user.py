@@ -46,7 +46,7 @@ def follow(user_login):
         new_chat = database.Chat(first_member_id = current_user.user_id, second_member_id= user.user_id)
         database.db.session.add(new_chat)
         database.db.session.commit()
-        new_message = database.Messages(author_id = user.user_id, chat_id = new_chat.chat_id, text = "Привет. Давай общаться!", read = False, date = cur_time())
+        new_message = database.Messages(author_id = current_user.user_id, chat_id = new_chat.chat_id, text = "Привет. Давай общаться!", read = False, date = cur_time())
         database.db.session.add(new_message)
         database.db.session.commit()
         new_chat.last_message_id = new_message.message_id
