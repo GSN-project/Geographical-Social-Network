@@ -171,7 +171,10 @@ def new_post():
         title=request.form.get("title")
         post = database.Photos(author_id=g.user.user_id, post_id=marker_id,
                         text=text,likes=0,title=title,date=cur_time())
-
+        
+        print ('\n\n\n ISFILE:', isFile , '\n')
+        print ('\n\n\n FILE:', file , '\n')
+        print ('\n\n\n marker_id:', marker_id , '\n')
         if file:
             if allowed_file(file.filename):
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -181,7 +184,7 @@ def new_post():
                 post.photo_ref=new_name
             else:
                 return "Extension not allowed" #error page
-
+        print ('\n\n After file download')
         database.db.session.add(post)
         database.db.session.commit() 
         return "OK"
