@@ -14,6 +14,7 @@ from flask import send_from_directory
 from time import gmtime, strftime
 # Database
 from GSN import database
+from ..config import photos
 
 mod = Blueprint('map', __name__, template_folder='templates')
 
