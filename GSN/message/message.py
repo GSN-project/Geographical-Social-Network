@@ -30,18 +30,33 @@ def get_chats():
 			last_message = database.Messages.query.filter_by(message_id = chat.last_message_id).first()
 			# Insert info into json
 
+			
+
+			if second_member.name == None or second_member.surname == None:
+				second_member_main_info = database.Users.query.filter_by(user_id = last_message.author_id).first()
+				author_fullname = second_member_main_info.login
+			else: 
+				author_fullname = second_member.name + second_member.surname			
+			
 			author = database.UsersInfo.query.filter(database.UsersInfo.user_id==last_message.author_id).first()
 
-			jsonrespond.append({'ava':author.ava_ref, 'member': second_member.name + ' ' + second_member.surname, 'chat_id': chat.chat_id, 'last_message_body': last_message.text, 'read': last_message.read})
+			jsonrespond.append({'ava':author.ava_ref, 'member': author_fullname, 'chat_id': chat.chat_id, 'last_message_body': last_message.text, 'read': last_message.read})
 	else:
 		# Find second member's name and surname
 		second_member = database.UsersInfo.query.filter_by(user_id = chats.second_member_id).first()
 		# Find last chat's message 
 		last_message = database.Messages.query.filter_by(message_id = chats.last_message_id).first()
 
+
+		if second_member.name == None or second_member.surname == None:
+			second_member_main_info = database.Users.query.filter_by(user_id = last_message.author_id).first()
+			author_fullname = second_member_main_info.login
+		else: 
+			author_fullname = second_member.name + second_member.surname	
+			
 		author = database.UsersInfo.query.filter(database.UsersInfo.user_id==last_message.author_id).first()
 
-		jsonrespond.append({'ava':author.ava_ref, 'member': second_member.name + ' ' + second_member.surname, 'chat_id': chat.chat_id, 'last_message_body': last_message.text, 'read': last_message.read})
+		jsonrespond.append({'ava':author.ava_ref, 'member': author_fullname, 'chat_id': chat.chat_id, 'last_message_body': last_message.text, 'read': last_message.read})
 	print(jsonrespond)
 	return json.dumps(jsonrespond)
 
