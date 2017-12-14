@@ -10,7 +10,6 @@ import random
 import string
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 from MySQLdb.cursors import DictCursor
-from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from time import gmtime, strftime
 # Database
@@ -174,10 +173,9 @@ def new_post():
 
         if file:
             if allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                photos.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 rand_prefix = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(15))
-                os.rename(app.config['UPLOAD_FOLDER']+"\\"+filename, app.config['UPLOAD_FOLDER'] +"\\"+ rand_prefix + filename) 
+                os.rename(app.config['UPLOAD_FOLDER']+"/"+filename, app.config['UPLOAD_FOLDER'] +"/"+ rand_prefix + filename) 
                 new_name=rand_prefix+filename
                 post.photo_ref=new_name
             else:

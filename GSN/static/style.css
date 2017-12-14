@@ -2,6 +2,7 @@
 body{
   margin: 0;
   padding: 0;
+  background: #F1F1F1;
 }
 
 header {
@@ -27,24 +28,23 @@ header {
 #main-menu {
     list-style: none;
     float: right;
-    margin: 0 90px 0 0;
+    margin: 0 150px 0 0;
 }
 
-#main-menu.name {
-
+#uname{
+  text-align: center;
 }
-
 #main-menu li a {
     width: 150px;
     display: block;
-    padding: 5px;
-    font-family: "Trebuchet MS", Arial, sans-serif;
+    padding: 7px;
+    font-family: "Roboto", Arial, sans-serif;
     font-size: 1.1em;
     color: #fff;
     background: #4B4B55;
     text-decoration: none;
     text-shadow: 1px 1px 2px #1E1E22;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
 }
 
 #main-menu ul {
@@ -55,7 +55,7 @@ header {
 
 
 #main-menu li a:hover {
-    background: rgba(75, 75, 85, 0.8);
+    background: #52525C;
 
 }
 
@@ -313,23 +313,23 @@ padding-left: 5px;}
 /*new*/
 /* Скрытый блок */
 #hidden_panel, #markerHiddenPanel, #mCP,#loadImg, #postPanel {
-  position: fixed; 
-  top: 100px; 
-  left: -320px; 
-  background: lavender; 
-  color: #000; 
-  width: 300px; 
-  height: 81%; 
-  padding: 10px; 
-  text-align: left; 
+  position: fixed;
+  top: 100px;
+  left: -320px;
+  background: lavender;
+  color: #000;
+  width: 300px;
+  height: 81%;
+  padding: 10px;
+  text-align: left;
   z-index: 100;
 
-  -webkit-transition-duration: 0.3s; 
+  -webkit-transition-duration: 0.3s;
   -moz-transition-duration: 0.3s;
   -o-transition-duration: 0.3s;
   transition-duration: 0.3s;
 
-  -webkit-border-radius: 0 5px 5px 0; 
+  -webkit-border-radius: 0 5px 5px 0;
   -moz-border-radius: 0 5px 5px 0;
   border-radius: 0 5px 5px 0;
   word-wrap: break-word;
@@ -353,7 +353,7 @@ padding-left: 5px;}
   padding-top: 8%;
 }
 .boldName{
-    font-weight:bold; 
+    font-weight:bold;
 }
 
 .border {
@@ -368,10 +368,10 @@ position: relative;
  z-index:100;
 transition: transform 0.4s;
 cursor: zoom-in;
-} 
+}
 .imageBlock2:hover.imageBlock2{
  transform: translateY(-90px);
-} 
+}
 
 .imageBlock{
 width: 300px;
@@ -461,12 +461,12 @@ display: inline-block;
 }
 
 #privacyList{
-  
+
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   overflow: hidden;
     margin-top: 2%;
-         
+
 }
 #prIn{
    border: none;
@@ -504,7 +504,7 @@ display: inline-block;
 /*likes*/
 
 
- 
+
  .limg:hover {
     border-color: #fff;
     -webkit-transform: rotate(360deg);
@@ -525,18 +525,18 @@ display: inline-block;
 
 .likes{
   width: auto;
-}    
+}
 
 /* post holders */
 #postPanel{
-  left: -370px; 
-  width: 350px; 
-  height: 75%; 
+  left: -370px;
+  width: 350px;
+  height: 75%;
 }
 
 #ph {
-  width: 345px; 
-  height: 85%; 
+  width: 345px;
+  height: 85%;
   overflow:auto;
 }
 #ws {
@@ -635,15 +635,14 @@ display: inline-block;
 
 }
 
-
 .follow,
 .title_friend {
-    margin: 55px auto 0;
-    box-shadow: 0 0 3px #999999;
-    background: #F3F3F1;
+    margin: 50px auto 0;
+    box-shadow: 0 0 5px #999999;
+    background: #F7F7F5;
 }
 .title_friend1{
-  margin: 55px auto 0;
+  margin: 50px auto 0;
   border-bottom: 1.5px solid #E3E3E3;
   padding: 10px;
   color: #3B3B3B;
@@ -664,7 +663,7 @@ font-size: 1.2em;
 color: #3B3B3B;
 font-family: 'Ultra', sans-serif;
 font-weight: bolder;
-background: inherit;
+background: #F1F1F1;
 box-shadow: 0 0 3px #999999;
 border: none;
 }
@@ -697,22 +696,21 @@ border: none;
   height: 80px;
 }
 
-
-
 .list .add,
 .list .cancel,
 .list .confirm,
 .list .dell{
 float: left;
 padding: 0;
-margin: 8px 25px;
+margin: 27px 25px;
 }
 
 .friend-name{
-  padding-left: 90px;
   font-family: 'Century Gothic', sans-serif;
   font-style: italic;
   font-size: 1.1em;
+  float: left;
+  margin-left: 10px;
 }
 .avatar {
     float: left;
@@ -733,7 +731,7 @@ margin: 8px 25px;
     background-color: #fff;
     text-align: center;
     float: left;
-    margin:8px 14px;;
+    margin: 27px -20px;
     border: 1px solid #9898AC;
     cursor: pointer;
     color: #21252B;
@@ -747,13 +745,10 @@ margin: 8px 25px;
     outline: none;
 }
 
-.message button:active{
-
-}
-
 .add,
 .cancel,
-.confirm{
+.confirm,
+.submit{
     width: 120px;
     background: #74D27F;
     border-color: #9F9F9F;
@@ -780,12 +775,12 @@ margin: 8px 25px;
 }
 
 .del,
-.cancel{
+.cancel,
+.submit{
     background: #3897f0;
     color: #fff;
 }
 
-/*My profile*/
 .user-info{
     margin: 0;
     width: 30%;
@@ -815,11 +810,11 @@ margin: 8px 25px;
 
 
 
-
+/*ПРОФИЛЬ*/
 .myprofile{
     font-family: 'Century Gothic', sans-serif;
     font-size: 0.9em;
-    margin: 55px auto 5px;
+    margin: 50px auto 5px;
     display: flex;
     flex-direction: column;
 }
@@ -829,7 +824,7 @@ margin: 8px 25px;
     width: 945px;
     padding: 20px;
     box-shadow: 0 0 9px #999999;
-    background: #FFFFFF;
+    background: #FFF;
 }
 
 #myavatar {
@@ -858,14 +853,16 @@ margin: 8px 25px;
 .myprofile.user-info li{
   font-weight: 500;
 }
+.followsyou{
 
+}
 .content{
   margin: 10px auto 0;
 }
 
 .notes {
     overflow-x:hidden;
-    padding: 2.5px;
+    padding: 2px;
     box-shadow: 0 0 2px #999999;
     text-align: center;
 }
@@ -950,6 +947,7 @@ margin: 8px 25px;
 .slider-next {
   float: right;
 }
+/*КОНЕЦ ПРОФИЛЬ*/
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 10px;
@@ -981,16 +979,16 @@ caption{
 }
 /*My profile setting*/
 .list-1{
-    width: 930px;
-    margin: 60px auto;
+    width: 800px;
+    margin: 50px auto;
     padding: 20px;
     box-shadow: 0 0 3px #999999;
-    background: #F3F3F1;
+    background: #FFFF;
     font: 1.2em "Roboto", sans-serif;
 }
 
 .contact_form *:focus{
-    outline: none;
+  outline-color: #454951;
 }
 
 .contact_form ul{
@@ -1016,25 +1014,11 @@ caption{
     height: 20px;
     padding: 4px 8px;
 }
+.contact_form input{
 
+}
 .contact_form textarea{
     padding: 8px;
-}
-
-button.submit{
-    background-color: #1DB77F;
-    padding: 10px;
-    color: #FFFFFF;
-    border: 1px solid #D3D3D3;
-}
-
-button.submit:hover{
-    opacity:.75;
-    cursor: pointer;
-}
-
-button.submit:active{
-    border: 1px solid #888C8D;
 }
 
 textarea{
@@ -1068,9 +1052,9 @@ textarea{
 
 /* Был конфликт с сообщениями */
 #postPanel{
-  left: -370px; 
-  width: 350px; 
-  height: 75%; 
+  left: -370px;
+  width: 350px;
+  height: 75%;
 }
 
 
@@ -1101,10 +1085,10 @@ textarea{
 /*Сообщения*/
 #msg-box0{
     margin-top:5%;
-    border:1px solid #DFE5EC; 
-    width:70%; 
-    height:500px; 
-    background:#FFF; 
+    border:1px solid #DFE5EC;
+    width:70%;
+    height:500px;
+    background:#FFF;
     margin-left:1%;
   }
   #msg-box{
@@ -1114,6 +1098,7 @@ textarea{
      flex-direction: column;
      justify-content: flex-end;
      max-height: 500px;
+     word-wrap:break-word;
    }
   #msg-box1{
     height: 100%;
@@ -1121,7 +1106,7 @@ textarea{
     overflow:auto;
     display: flex;
      flex-direction: column-reverse;
-  
+
    }
   #msg-box1{
     height: 100%;
@@ -1130,27 +1115,30 @@ textarea{
     display: flex;
      flex-direction: column;
      list-style: none;
-  
+
    }
   #t-box{
-  
+
   }
   #sideDialogPanel{
+
     display: flex;
     flex-direction: column-reverse;
-    list-style:none; 
+    list-style:none;
     overflow:auto;
-   border:1px solid #DFE5EC; 
-  
+   border:1px solid #DFE5EC;
+   text-overflow: ellipsis;
+
    max-height: 500px;
    padding:5px;
    width: 25%;
-   margin-top: 5%; 
+   margin-top: 5%;
    margin-left: 10%
-    
   }
   #sideDialogPanel div{
     margin: 5px;
+    text-overflow: ellipsis;
+
   }
   #sideDialogPanel div:hover{
     background:#E7EBF0;
@@ -1163,7 +1151,7 @@ textarea{
      display: inline-flex;
      flex-wrap: nowrap;
    }
-  
+
    #t-box #msg{
    }
    #t-box .button{
@@ -1172,15 +1160,15 @@ textarea{
     width: 15%;
    }
    #t-box input{
-    border:1px solid #DFE5EC; 
+    border:1px solid #DFE5EC;
     width: 80%;
     font-size: 12px;
     overflow-y: scroll;
-  
+
     line-height: 20px;
     min-height: 32px;
     max-height: 123px;
-    
+
     height: auto;
     box-sizing: border-box;
     word-wrap: break-word;
@@ -1198,18 +1186,18 @@ textarea{
     height: inherit - 95%;
       background-color: #3D3D45;
       padding-top:2%;
-      padding-bottom: 2%; 
+      padding-bottom: 2%;
       padding-left: 2px;
       font-weight: bold;
-      
+
       color: #fff;
       text-overflow: ellipsis;
    }
-  
+
   .closee{
     position: relative;
     float:right;
     width: 10px;
     height: 10px;
-  
+
   }

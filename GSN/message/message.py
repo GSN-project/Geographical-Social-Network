@@ -18,7 +18,6 @@ def get_chats():
 	chats = database.Chat.query.filter_by(first_member_id = g.user.user_id).all()
 	chats_second_member = database.Chat.query.filter_by(second_member_id = g.user.user_id).all()
 	chats = chats + chats_second_member
-	print(chats)
 	# Create json respond
 	jsonrespond =[]
 	# Check whether chats iterable or not
@@ -30,15 +29,18 @@ def get_chats():
 			last_message = database.Messages.query.filter_by(message_id = chat.last_message_id).first()
 			# Insert info into json
 
-			
+
 
 			if second_member.name == None or second_member.surname == None:
 				second_member_main_info = database.Users.query.filter_by(user_id = last_message.author_id).first()
 				author_fullname = second_member_main_info.login
 			else: 
-				author_fullname = second_member.name + second_member.surname			
+				author_fullname = second_member.name + " " + second_member.surname			
 			
 			author = database.UsersInfo.query.filter(database.UsersInfo.user_id==last_message.author_id).first()
+
+			if len(last_message.text) > 25:
+				last_message.text = last_message.text[:25] + '...'
 
 			jsonrespond.append({'ava':author.ava_ref, 'member': author_fullname, 'chat_id': chat.chat_id, 'last_message_body': last_message.text, 'read': last_message.read})
 	else:
@@ -52,12 +54,15 @@ def get_chats():
 			second_member_main_info = database.Users.query.filter_by(user_id = last_message.author_id).first()
 			author_fullname = second_member_main_info.login
 		else: 
-			author_fullname = second_member.name + second_member.surname	
+			author_fullname = second_member.name + " " + second_member.surname	
 			
 		author = database.UsersInfo.query.filter(database.UsersInfo.user_id==last_message.author_id).first()
 
+
+		if len(last_message.text) > 25:
+			last_message.text = last_message.text[:25] + '...'
+
 		jsonrespond.append({'ava':author.ava_ref, 'member': author_fullname, 'chat_id': chat.chat_id, 'last_message_body': last_message.text, 'read': last_message.read})
-	print(jsonrespond)
 	return json.dumps(jsonrespond)
 
 
@@ -104,7 +109,6 @@ def get_messages(chat_id):
 		# Append jsonrespond
 		jsonrespond.append({'ava':author.ava_ref, 'author_fullname': author_fullname, 'text': message.text, 'time': message.date, 'message_id' : message.message_id, 'author_id' : message.author_id, 'current_user' : g.user.user_id })
 
-	print(jsonrespond)
 	return json.dumps(jsonrespond)
 
 
@@ -134,26 +138,17 @@ def send_message():
 
 	jsonrespond =[]
 	# добавить фото и время
+
+	#author=database.UsersInfo.query.filter(database.UsersInfo.user_id==message.g.user.user_id).first()
+
+
 	if g.user_info.name == None or g.user_info.surname == None:
-		jsonrespond.append({'name': g.user.login, 'text': text})
+		jsonrespond.append({'ava':g.user_info.ava_ref, 'name': g.user.login, 'text': text})
 	else:
-		jsonrespond.append({'name': g.user_info.name + ' ' + g.user_info.surname, 'text': text})
+		jsonrespond.append({'ava':g.user_info.ava_ref, 'name': g.user_info.name + ' ' + g.user_info.surname, 'text': text})
 	return json.dumps(jsonrespond)
 
 
-
-
-
-
-
-
-@mod.route("/delete/<int:message_id>", methods = ["GET"])
-def delete_message():
-	print(message_id)
-	# Find message
-	message = database.Messages.query.filter_by(message_id = message_id).first()
-	db.session.delete(message)
-	database.db.session.commit()
 
 
 def cur_time():

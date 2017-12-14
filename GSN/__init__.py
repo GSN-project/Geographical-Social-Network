@@ -49,7 +49,7 @@ def create_app(config = None):
 	mail.mail.init_app(app)
 
 	#photos = UploadSet('photos', IMAGES)
-	app.config['UPLOAD_FOLDER'] = 'GSN\\static\\img'
+	app.config['UPLOAD_FOLDER'] = 'GSN/static/img'
 	app.config['UPLOADED_PHOTOS_DEST'] = 'GSN/static/img/user'
 	app.config['MAX_CONTENT_LENGTH'] = 24 * 1024 * 1024
 	

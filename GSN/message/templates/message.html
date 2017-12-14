@@ -164,9 +164,15 @@ $("#t-box").submit(function(){
     data: str,
     success: function(data){
         data = JSON.parse(data);
-        var newLi = document.createElement('li');
-        newLi.innerHTML ="<div><img class=\"avaCirSiz\" src = \""  + "\" >" + "<li class = \"boldName\">" + data.name+ "</li>" +"<li>" +data.text+"</li>" + "</div>";
-        document.getElementById('msg-box1').appendChild(newLi);
+        for(var i=0; i<data.length;i++){
+          var info = data[i];
+          var newLi = document.createElement('li');
+          newLi.innerHTML = "<div><img class=\"avaCirSiz\"  src=\"../static/img/user/"+ info.ava +"\" width=\"50\" height=\"50\"/>"  + "<li class = \"boldName\">" + info.name+ "</li>" +"<li>" + info.text +"</li>" + "</div>";
+          document.getElementById('msg-box1').appendChild(newLi);
+          //document.getElementById('msg').setAttribute('value', "Перзагрузите страницу для отправки сообщения");
+          //document.getElementById('msg').innerHTML="Перзагрузите страницу для отправки сообщения";
+          location.reload();
+        }
     },
   })
   return false;
