@@ -42,7 +42,7 @@ def registration():
         database.db.session.commit()
         # Send massage 
         send_email('Hello', 'geosocnetwork@gmail.com',[email], render_template("msg.html", user = 'User',login=login,link=activation_link))
-        return render_template("emailConfirmation.html")
+        return render_template("success.html")
     elif request.method == 'GET':
         if g.user:
             return redirect(url_for('map.map'))
