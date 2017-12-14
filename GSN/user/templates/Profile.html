@@ -55,10 +55,10 @@
               </ul>
           </div>
           <div class="slide">
-            <h3>Мои заметки</h3>
-            {% for pin in pins %}
+            <h3>Мои комментарии</h3>
+            {% for comment in comments %}
             <div class="notes">
-              {{pin.descripion}}
+              {{comment.text}}
             </div>
             {% endfor %}
         </div>

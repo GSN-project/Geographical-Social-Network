@@ -30,8 +30,8 @@ def user(user_login):
     #photos = user.photos.order_by(database.Photos.date.desc()).all()
     #pins = user.posts.order_by(database.Posts.date.desc()).all()
     photos = database.Photos.query.filter_by(author_id=user.user_id).order_by(database.Photos.date.desc())
-    pins = database.Posts.query.filter_by(author_id=user.user_id)
-    return render_template('Profile.html', ava=ref_ava, name=user_info.name, surname=user_info.surname, country=user_info.country, city=user_info.city,date=user_info.date, photos=photos, pins=pins, user=user, current_user=current_user)
+    comments = database.Comments.query.filter_by(author_id=user.user_id)
+    return render_template('Profile.html', ava=ref_ava, name=user_info.name, surname=user_info.surname, country=user_info.country, city=user_info.city,date=user_info.date, photos=photos, comments=comments, user=user, current_user=current_user)
 
 @mod.route('/follow/<user_login>')
 def follow(user_login):
